@@ -26,7 +26,7 @@ app.get('/', function (req, res) {
     });
 });
 
-//conn.end();
+conn.end();
 
 var port = process.env.PORT || 3000;
 app.listen(port, function() {
