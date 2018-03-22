@@ -16,17 +16,15 @@ var conn = mysql.createConnection({
 
 conn.connect();
 
-
 app.get('/', function (req, res) {
     conn.query('SELECT * FROM pac;', function(err, rows, fields) {
         if(err) {
-            res.send('error');
+            console.log('error', err);
         }
         res.send(['Hello World!!! Ji Woon 2!!', rows]);
     });
 });
 
-conn.end();
 
 var port = process.env.PORT || 3000;
 app.listen(port, function() {
