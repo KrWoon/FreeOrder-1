@@ -4,7 +4,7 @@ var mysql = require('mysql');
 
 var app = express();
 
-//app.set("view engine", 'ejs');
+app.set("view engine", 'ejs');
 //app.use(express.static(path.join(__dirname, 'public')));
 
 var conn = mysql.createConnection({
@@ -16,13 +16,10 @@ var conn = mysql.createConnection({
 
 conn.connect();
 
+var data = {count:0};
 app.get('/', function (req, res) {
-    conn.query('SELECT * FROM pac;', function(err, rows, fields) {
-        if(err) {
-            console.log('error', err);
-        }
-        res.send(['Hello World!!! Ji Woon 2!!', rows]);
-    });
+    data.count++;
+    res.render('my_first_ejs',data);
 });
 
 
