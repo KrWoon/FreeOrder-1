@@ -1,11 +1,10 @@
 var express = require('express');
-var path = require('path');
 var mysql = require('mysql');
 
 var app = express();
 
-app.set("view engine", 'ejs');
-app.use(express.static(path.join(__dirname, 'public')));
+//app.set("view engine", 'ejs');
+app.use(express.logger());
 
 var conn = mysql.createConnection({
     host : 'us-cdbr-iron-east-05.cleardb.net',
@@ -16,7 +15,6 @@ var conn = mysql.createConnection({
 
 conn.connect();
 
-
 app.get('/', function (req, res) {
     conn.query('select * from heroku_0623ff804c82489.pac;', function(err, rows, fields) {
         if(err) {
@@ -26,7 +24,7 @@ app.get('/', function (req, res) {
     });
 });
 
-conn.end();
+//conn.end();
 
 var port = process.env.PORT || 3000;
 app.listen(port, function() {
