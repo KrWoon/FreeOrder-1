@@ -3,7 +3,7 @@ var mysql = require('mysql');
 
 var app = express();
 
-//app.set("view engine", 'ejs');
+app.set("view engine", 'ejs');
 app.use(express.logger());
 
 var conn = mysql.createConnection({
