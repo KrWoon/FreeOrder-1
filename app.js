@@ -4,8 +4,8 @@ var mysql = require('mysql');
 
 var app = express();
 
-app.set("view engine", 'ejs');
-app.use(express.static(path.join(__dirname, 'public')));
+//app.set("view engine", 'ejs');
+//app.use(express.static(path.join(__dirname, 'public')));
 
 var conn = mysql.createConnection({
     host : 'us-cdbr-iron-east-05.cleardb.net',
@@ -26,7 +26,7 @@ app.get('/', function (req, res) {
     });
 });
 
-conn.end();
+//conn.end();
 
 var port = process.env.PORT || 3000;
 app.listen(port, function() {
