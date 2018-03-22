@@ -22,7 +22,7 @@ app.get('/', function (req, res) {
         if(err) {
             res.send('error');
         }
-        res.send(['Hello World!!! Ji Woon!!', rows]);
+        res.send(['Hello World!!! Ji Woon 2!!', rows]);
     });
 });
 
