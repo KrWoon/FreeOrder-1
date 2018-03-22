@@ -18,7 +18,7 @@ conn.connect();
 
 
 app.get('/', function (req, res) {
-    conn.query('SELECT * FROM heroku_0623ff804c82489.pac;', function(err, rows, fields) {
+    conn.query('SELECT * FROM pac;', function(err, rows, fields) {
         if(err) {
             res.send('error');
         }
