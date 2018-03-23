@@ -29,10 +29,8 @@ app.use(bodyParser.urlencoded({extended:true}));
 // set routes
 
 
-var data = {count:0};
 app.get('/', function (req, res) {
-    data.count++;
-    res.render('my_first_ejs',data);
+    res.send("hello");
 });
 
 app.get('/login', function (req, res) {
