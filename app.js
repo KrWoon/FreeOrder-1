@@ -22,12 +22,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
 
-// route URL
-app.get('/login', function (req, res) {
-    res.render('login');
-});
-
-
 // set routes
 app.use (index);
 
