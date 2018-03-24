@@ -34,7 +34,7 @@ router.post('/ajax', function(req, res){
             responseData.result = "none";
             responseData.name = "";
         }
-        res.json(responseData)
+        res.json(responseData)     
     })
 })
 
