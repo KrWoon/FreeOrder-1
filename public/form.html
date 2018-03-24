@@ -6,10 +6,9 @@
   <body>
     <form action="/email/form" method="post">
       email : <input type="text" name="email"> <br/>
-      <input type="submit">
     </form>
 
-    <button class="ajaxsend">DB에서 name 가져오기</button>
+    <button class="ajaxsend">What's your name?</button>
     <div class="result"></div>
     <script>
       document.querySelector('.ajaxsend').addEventListener('click',
@@ -31,7 +30,7 @@
             //console.log(xhr, responseText);
             var result = JSON.parse(xhr.responseText);
             var resultDiv = document.querySelector(".result");
-            if(result.result !== "ok") resultDiv.innerHTML = "your email is not found"
+            if(result.result !== "ok") resultDiv.innerHTML = "Your email is not found"
             else resultDiv.innerHTML = result.name;
         });
       }
