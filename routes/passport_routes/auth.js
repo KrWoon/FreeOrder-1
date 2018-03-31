@@ -2,7 +2,7 @@ module.exports = function(passport) {
     var router = require('express').Router();
     var bkfd2Password = require('pbkdf2-password');
     var hasher = bkfd2Password();
-    var conn = require('../../config/passport_config/db')();
+    var pool = require('../../config/passport_config/db')();
 
     router.get('/register', function(req, res){ 
         res.render('auth/register');
@@ -20,31 +20,41 @@ module.exports = function(passport) {
     });
 
     // 회원가입
-    router.post('/register', function(req, res) {  
-        hasher({password:req.body.password}, function(err, pass, salt, hash) {
-            var newuser = {
-                authId:'local:'+req.body.username,
-                username:req.body.username,
-                password:hash,
-                salt:salt,
-                displayName:req.body.displayname
-            };
-            
-            var sql = 'INSERT INTO users SET ?';
-            conn.query(sql, newuser, function(err, rows, fields) {
-                if(err) {
-                    console.log(err);
-                    res.status(500);
-                } else {
-                    // 회원가입 후 자동 로그인 주석
-                    // req.login(newuser, function(err) {
-                        req.session.save(function() {
-                            res.redirect('/home');
-                        });
-                    // });
-                }
-            });        
-        });      
+    router.post('/register', function(req, res) {       
+         if(req.body.password == req.body.confirmPassword) {
+            hasher({password:req.body.password}, function(err, pass, salt, hash) {
+                var newuser = {
+                    restaurant_code: 0,
+                    email: req.body.username,
+                    manager_pw: hash,
+                    salt: salt,
+                    power: 0
+                };
+                
+                var sql = 'INSERT INTO manager SET ?';
+                pool.getConnection(function(err, conn) {
+                    conn.query(sql, newuser, function(err, rows, fields) {
+                        if(err) {
+                            console.log(err);
+                            res.status(500);
+                        } else {
+                            // 회원가입 후 자동 로그인 주석
+                            // req.login(newuser, function(err) {
+                                req.session.save(function() {
+                                    res.redirect('/home');
+                                });
+                            // });
+                        }
+                        conn.release();
+                    });     
+                });               
+            });      
+         }
+         else {
+            req.session.save(function() {
+                res.redirect('/auth/register');
+            });
+         }
     });
 
     router.post('/login', passport.authenticate('local', {

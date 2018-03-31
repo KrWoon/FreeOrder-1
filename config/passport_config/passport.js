@@ -1,5 +1,5 @@
 module.exports = function(app) {
-    var conn = require('./db')();
+    var pool = require('./db')();
     var bkfd2Password = require('pbkdf2-password');
     var passport = require('passport');
     var LocalStrategy = require('passport-local').Strategy;
@@ -10,37 +10,45 @@ module.exports = function(app) {
 
     // 로그인
     passport.serializeUser(function(user, done) {
-        done(null, user.authId);
+        done(null, user.Email);
     });
-    passport.deserializeUser(function(id, done) {
-        var sql = 'SELECT * FROM users WHERE authId=?';
-        conn.query(sql, [id], function(err, rows, fields) {
-            if(!rows[0]) {
-                return done(null, false);
-            } else {
-                return done(null, rows[0]);
-            }
+    passport.deserializeUser(function(email, done) {
+        var sql = 'SELECT * FROM manager WHERE Email=?';
+        pool.getConnection(function(err, conn) {
+            conn.query(sql, [email], function(err, results, fields) {
+                if(!results[0]) {
+                    conn.release();
+                    return done(null, false);
+                } else {
+                    conn.release();
+                    return done(null, results[0]);
+                }
+            });
         });
     });
     passport.use(new LocalStrategy(
         function(username, password, done) {
-            var uname = username;
+            var email = username;
             var pwd = password;
 
-            var sql = 'SELECT * FROM users WHERE authId=?';
-            conn.query(sql, ['local:'+uname], function(err, rows, fields) {
-                if(!rows[0]) {
-                    return done(null, false);
-                }
-                
-                var user = rows[0];
-                return hasher({password:pwd, salt:user.salt}, function(err, pass, salt, hash) {
-                    if(hash === user.password) {
-                        done(null, user);
-                    } else {
-                        done(null, false);
+            var sql = 'SELECT * FROM manager WHERE Email=?';
+            pool.getConnection(function(err, conn) {
+                conn.query(sql, [email], function(err, results, fields) {
+                    if(!results[0]) {
+                        conn.release();
+                        return done(null, false);
                     }
-                });            
+                    
+                    var user = results[0];
+                    return hasher({password:pwd, salt:user.Salt}, function(err, pass, salt, hash) {
+                        if(hash === user.Manager_PW) {
+                            done(null, user);
+                        } else {
+                            done(null, false);
+                        }
+                        conn.release();
+                    });            
+                });
             });
         }
     ));
