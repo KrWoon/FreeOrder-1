@@ -1,33 +1,14 @@
-// import modules
-var express = require('express');
-var path = require('path');
-var bodyParser = require('body-parser');
-var app = express();
-
-
-// router
-var index = require('./router/index');
-
-// set model
-
-
-// set view
-app.set('views', path.join(__dirname, 'views'));
-app.set("view engine", 'ejs');
-
-
-// set middlewares
-app.use(express.static('public'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended:true}));
-
+var app = require('./config/passport_config/express')();
 
 // set routes
-app.use (index);
-
+var passport = require('./config/passport_config/passport')(app);
+var auth = require('./routes/passport_routes/auth')(passport);
+app.use('/auth/', auth);
+var home = require('./routes/passport_routes/home')();
+app.use('/home', home);
 
 // start server
-var port = process.env.PORT || 5000;
+var port = process.env.PORT || 3000;
 app.listen(port, function() {
     console.log('Server On!');
 });

@@ -1,0 +1,19 @@
+<% include ../layout.ejs %>
+        <artcle>
+            <form action="/home/<%=user.uid%>/edit" method="post">
+                <p>
+                    <input type="text" name="email" value="<%=user.email%>" placeholder="email">
+                </p>
+                <p>
+                    <input type="text" name="name" value="<%=user.name%>" placeholder="name">
+                </p>
+                <p>
+                    <input type="submit">
+                </p>
+            </form>
+        </artcle>
+        <ul>
+            <li> <a href="/home/add"> add </a> </li>
+        </ul>
+    </body>
+</html>

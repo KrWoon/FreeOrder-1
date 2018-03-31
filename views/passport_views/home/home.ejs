@@ -1,0 +1,17 @@
+<% include ../layout.ejs %>
+        <artcle>
+            <% if(user != 'None') {%>
+                <%=user.name%>
+            <% } else { %>
+                This is Main Page. Hello World!
+                <% } %>
+        </artcle>
+        <ul>
+            <li> <a href="/home/add"> add </a> </li>
+            <% if(user != 'None') {%>
+            <li> <a href="/home/<%=user.uid%>/edit"> edit </a> </li>
+            <li> <a href="/home/<%=user.uid%>/delete"> delete </a> </li>
+            <% } %>
+        </ul>
+    </body>
+</html>

@@ -1,0 +1,13 @@
+<% include ../layout.ejs %>
+        <artcle>
+           <h1>Delete? <%=user.email%></h1>
+           <form action="/home/<%=user.uid%>/delete" method="post">
+                <p>
+                    <input type="submit" value="YES">
+                </p>                        
+           </form>
+           <a href="/home/<%=user.uid%>"> no</a>
+        </artcle>
+
+    </body>
+</html>
