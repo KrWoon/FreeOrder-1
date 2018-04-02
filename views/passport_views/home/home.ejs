@@ -1,14 +1,14 @@
 <% include ../layout.ejs %>
         <artcle>
-            <% if(user != 'None') {%>
+            <% if(login) {%>
                 <%=user.name%>
             <% } else { %>
-                <!-- This is Login Page -->
+                This is Login Page
                 <% } %>
-        </artcle>
-        <!-- <ul>
+        <!-- </artcle>
+        <ul>
             <li> <a href="/home/add"> add </a> </li>
-            <% if(user != 'None') {%>
+            <% if(login) {%>
             <li> <a href="/home/<%=user.uid%>/edit"> edit </a> </li>
             <li> <a href="/home/<%=user.uid%>/delete"> delete </a> </li>
             <% } %>

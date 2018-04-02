@@ -4,17 +4,26 @@
         <meta charset="utf-8">
     </head>
     <body>
-        <h1><a href="/home"> Free Order</a></h1>
+        <h1><a href="/"> Free Order</a></h1>  
         <% if(login) { %>
-            <p> <a href="/auth/logout">Logout</a> </p>
+            <p>
+                I am <%= login.Email %>
+            </p>
+            <p> 
+                <a href="/auth/logout">Logout</a>
+            </p>
+            <% if(login.Power == 0) { %>
+            <p>
+                <a href="/form/apply">Apply Restaurant</a>
+            </p>
+            <% } else { %>
+                <a href="/form/permit">Permit Restaurant</a>
+            <% } %>
         <% } else { %>
             <p> 
                 <a href="/auth/login">Login</a>
+            </p>
+            <p>
                 <a href="/auth/register">Register</a>
             </p>
-        <% } %>        
-        <!-- <ul>
-            <% topics.forEach(function(item, index) { %>
-            <li><a href="/home/<%=item.uid%>"> <%=item.email%> </a></li>
-            <% }); %>        
-        </ul> -->
+        <% } %>

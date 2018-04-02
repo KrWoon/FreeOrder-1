@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        $(function () {
+            $("#btnApply").click(
+                function () {
+                    if ($("#rname").val() == "") {
+                        alert("Please enter the restaurant name");
+                        $("#rname").focus();
+                        return;
+                    }
+                    if ($("#license1").val() == "") {
+                        alert("Please enter the first number");
+                        $("#license1").focus();
+                        return;
+                    }
+                    if ($("#license2").val() == "") {
+                        alert("Please enter the second number");
+                        $("#license2").focus();
+                        return;
+                    }
+                    if ($("#license3").val() == "") {
+                        alert("Please enter the third number");
+                        $("#license3").focus();
+                        return;
+                    }
+
+                    var license = $("#license1").val() + '-' + $("#license2").val() + '-' + $("#license3").val();
+                    $("#license").val(license);
+
+                    $("#apply").submit();
+                }
+            );
+
+        });
+    </script>
+</head>
+<body>
+    <h1>Restaurant Application Form</h1>
+    <form id="apply" action="/form/apply" method="post">
+        <table width="400" border="1">
+            <tr>
+                <th>Restaurant Name</th>
+                <td align="center">
+                    <input type="text" name="rname" id="rname" size="25" maxLength="25">
+                </td>
+            </tr>
+            <tr>
+                <th>Business License</th>                
+                <td align="center">
+                    <input type="hidden" name="license" id="license">
+                    <input type="text" name="license1" id="license1" size="3" maxLength="3"> 
+                    -
+                    <input type="text" name="license2" id="license2" size="2" maxLength="2"> 
+                    -
+                    <input type="text" name="license3" id="license3" size="5" maxLength="5">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <input type="button" id="btnApply" name="apply" value="Apply">
+                    <input type="button" name="cancel" value="Cancel" onclick="history.back();">
+                </td>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>
