@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+</head>
+<body>
+    <% if(menu.length > 0) { %> 
+        <h1>My Menu List</h1>
+        <table width="400" border="0">
+            <tr>
+                <td align="center">No.</td>
+                <td align="center">Menu</td>
+                <td align="center">Delete</td>
+            </tr>
+        <%      menu.forEach(function(item, index) {%>
+            <tr>
+                <td align="center"> <%=index+1%></td>
+                <td align="center"> <a href="/menu/<%=item.Restaurant_Code%>/<%=item.Menu_Code%>/edit"> <%=item.Menu_Name%> </a></td>
+            </tr>
+        <%      })%>
+        </table>
+        <% } %>
+    <p><a href="/restaurant/<%=menu.Restaurant_Code%>"> Restaurant Home </a></p>
+</body>
+</html>

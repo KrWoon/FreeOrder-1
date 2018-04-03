@@ -7,9 +7,7 @@ module.exports = function() {
         user : 'b07725d6c368d8',
         password : 'caa62f50',
         database : 'heroku_0623ff804c82489'
-    });
-    
-    // conn.connect();
+    });    
 
     return pool;
 }

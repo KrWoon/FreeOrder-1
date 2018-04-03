@@ -7,16 +7,12 @@
         <h1><a href="/"> Free Order</a></h1>  
         <% if(login) { %>
             <p>
-                I am <%= login.Email %>
+                I am <%= login.Manager_Name %>
             </p>
             <p> 
                 <a href="/auth/logout">Logout</a>
             </p>
-            <% if(login.Power == 0) { %>
-            <p>
-                <a href="/form/apply">Apply Restaurant</a>
-            </p>
-            <% } else { %>
+            <% if(login.Power != 0) { %>
                 <a href="/form/permit">Permit Restaurant</a>
             <% } %>
         <% } else { %>

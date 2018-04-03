@@ -1,9 +1,24 @@
 module.exports = function() {
     var router = require('express').Router();
+    var pool = require('../../config/passport_config/db')();
     
     router.get('/', function(req, res){
-        // res.send('hello index');
-        res.render('index', {'login' : req.user});
+        if(req.user) {
+            var sql = 'SELECT * FROM restaurant WHERE Manager_Code = ?';
+            pool.getConnection(function(err, conn) {
+                conn.query(sql, [req.user.Manager_Code], function(err, restaurants) {
+                    
+                    sql = 'SELECT * FROM application WHERE Manager_Code = ?';
+                    conn.query(sql, [req.user.Manager_Code], function(err, applications) {
+                        res.render('index', {'login' : req.user, 'restaurants' : restaurants, 'applications' : applications});
+                    });
+
+                    conn.release();
+                });
+            });     
+        } else {
+            res.render('index', {'login' : req.user});
+        }
     }); 
 
     return router;

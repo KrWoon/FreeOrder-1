@@ -31,7 +31,7 @@ module.exports = function(passport) {
                     if(req.body.password == req.body.confirmPassword) {
                         hasher({password:req.body.password}, function(err, pass, salt, hash) {
                             var newuser = {
-                                restaurant_code: 0,
+                                manager_name: req.body.realname,
                                 email: req.body.username,
                                 manager_pw: hash,
                                 salt: salt,

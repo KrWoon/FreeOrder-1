@@ -18,8 +18,16 @@
     <h1>Restaurant Application</h1>
     <form id="permit" action="/form/permit/<%=restaurant.Application_Code%>" method="post">
         <table width="400" border="1">
-            <input type="hidden" name="appCode" id="appCode" value="<%=restaurant.Application_Code%>">
+            <input type="hidden" name="managerCode" id="managerCode" value="<%=restaurant.Manager_Code%>">
             <input type="hidden" name="rname" id="rname" value="<%=restaurant.Restaurant_Name%>">
+            <tr>
+                <td align="center">Manager Name</td>
+                <td align="center"><%=restaurant.Manager_Name%></td>
+            </tr>
+            <tr>
+                <td align="center">Manager Eamil</td>
+                <td align="center"><%=restaurant.Email%></td>
+            </tr>
             <tr>
                 <td align="center">Restaurant Name</td>
                 <td align="center"><%=restaurant.Restaurant_Name%></td>

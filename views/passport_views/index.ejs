@@ -1,3 +1,42 @@
 <% include ./layout.ejs %>
+    <% if(login) { %>
+
+        <% if(applications.length > 0) { %> 
+            <h1>My Application List</h1>
+            <table width="400" border="0">
+                <tr>
+                    <td align="center">No.</td>
+                    <td align="center">Restaurant Name</td>
+                    <td align="center">Delete</td>
+                </tr>
+        <%      applications.forEach(function(item, index) {%>
+                <tr>
+                    <td align="center"> <%=index+1%></td>
+                    <td align="center"> <a href="/form/apply/<%=item.Application_Code%>/edit"> <%=item.Restaurant_Name%> </a></td>
+                    <td align="center"> <form action="/form/apply/<%=item.Application_Code%>/delete" method="post"> <input type="submit" value="Delete"> </form></td>
+                </tr>
+        <%      })%>
+            </table>
+            <p>
+                <a href="/form/apply">Apply Restaurant</a>
+            </p>
+        <% } %>
+
+        <% if(restaurants.length > 0) { %> 
+            <h1>My Restaurant List</h1>
+            <table width="400" border="0">
+                <tr>
+                    <td align="center">No.</td>
+                    <td align="center">Restaurant Name</td>
+                </tr>
+        <%      restaurants.forEach(function(item, index) {%>
+                <tr>
+                    <td align="center"> <%=index+1%></td>
+                    <td align="center"> <a href="/restaurant/<%=item.Restaurant_Code%>"> <%=item.Signboard%> </a></td>
+                </tr>
+        <%      })%>
+            </table>
+        <% } %>
+    <% } %> 
     </body>
 </html>

@@ -16,13 +16,13 @@
             <tr>
                 <td align="center"> <%=index+1%></td>
                 <td align="center"> <a href="/form/permit/<%=restaurants[index].Application_Code%>"><%=restaurants[index].Restaurant_Name%></a></td>
-                <td align="center"> <%=restaurants[index].Manager_Code%></td>
+                <td align="center"> <%=restaurants[index].Manager_Name%></td>
             </tr>            
     <%      })%>
         </table>
     <% } else { %>
         <p>No Application </p>
     <% } %>
-    <input type="button" value="Back" onclick="history.back();">
+    <p><a href="/"> Home </a></p>
 </body>
 </html>
