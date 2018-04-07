@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        $(function () {
+            $("#btnMenu").click(
+                function () {
+                    if ($("#menuname").val() == "") {
+                        alert("Please enter the menu name");
+                        $("#menuname").focus();
+                        return;
+                    }
+                    if ($("#menuprice").val() == "") {
+                        alert("Please enter the price");
+                        $("#menuprice").focus();
+                        return;
+                    }
+
+                    $("#menuAdd").submit();
+                }
+            );
+            $("#btnOpt").click(
+                function () {
+                    if ($("#menuOptionName").val() == "") {
+                        alert("Please enter the menu option name");
+                        $("#menuOptionName").focus();
+                        return;
+                    }
+                    if ($("#optionprice").val() == "") {
+                        alert("Please enter the price");
+                        $("#optionprice").focus();
+                        return;
+                    }
+
+                    $("#optAdd").submit();
+                }
+            );
+        });
+    </script>
+</head>
+<body>
+    <table width="300" border="1">
+        <tr>
+            <td  align="center"> <% include ./menulist.ejs %> </td>
+            <% if(m_Code != 'None') { %>
+                <td  align="center"> <% include ./menudetail.ejs %> </td>
+            <% } %>
+            <td  align="center"> <% include ./menuopt.ejs %> </td>
+        </tr>
+    </table>
+    <% if(menu) { %>    
+    <p>
+        <a href="/restaurant/<%=r_Code%>"> Restaurant Home </a>
+    </p>
+    <% } %>
+    
+</body>
+</html>

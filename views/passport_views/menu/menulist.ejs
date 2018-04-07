@@ -1,25 +1,29 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-</head>
-<body>
-    <% if(menu.length > 0) { %> 
-        <h1>My Menu List</h1>
-        <table width="400" border="0">
+    
+        <h1>Menu</h1>
+        <table width="400" height="100" border="0">
             <tr>
                 <td align="center">No.</td>
                 <td align="center">Menu</td>
+                <td align="center">Price</td>
                 <td align="center">Delete</td>
             </tr>
+        <% if(menu.length > 0) { %>
         <%      menu.forEach(function(item, index) {%>
             <tr>
                 <td align="center"> <%=index+1%></td>
-                <td align="center"> <a href="/menu/<%=item.Restaurant_Code%>/<%=item.Menu_Code%>/edit"> <%=item.Menu_Name%> </a></td>
+                <td align="center"> <a href="/menu/<%=r_Code%>/<%=item.Menu_Code%>/detail"><%=item.Menu_Name%> </a></td>
+                <td align="center"> <%=item.Price%></a></td>
+                <td align="center"> <form action="/menu/<%=r_Code%>/<%=item.Menu_Code%>/delete" method="post"> <input type="submit" value="Delete"> </form></td>    
             </tr>
         <%      })%>
-        </table>
         <% } %>
-    <p><a href="/restaurant/<%=menu[0].Restaurant_Code%>"> Restaurant Home </a></p>
-</body>
-</html>
+            <form id="menuAdd" action="/menu/<%=r_Code%>/add" method="post">
+            <tr>
+                <td align="center"></td>
+                <td align="center"><input type="text" id="menuname" name="menuname" placeholder="New menu" size="15"></td>
+                <td align="center"><input type="text" id="menuprice" name="price" placeholder="Price" size="6" maxLength="6"></td>
+                <td align="center"><input type="button" id="btnMenu" name="menuAdd" value="Add"></td>
+            </tr>
+            </form>
+        </table>
+        

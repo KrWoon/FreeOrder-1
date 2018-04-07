@@ -1,0 +1,37 @@
+<% menu.forEach(function(item, index) { %>
+    <% if(m_Code == item.Menu_Code) {%>
+        <h1> <%=item.Menu_Name %></h1>
+        <%  }%>
+<% })%>
+    <table width="400" border="0">
+        <tr>
+            <td align="center">No.</td>
+            <td align="center">Menu Option</td>
+            <td align="center">Price</td>
+            <td align="center">Check</td>
+        </tr>        
+    <% if(menuOption.length > 0) { %> 
+        <form action="/menu/<%=r_Code%>/<%=m_Code%>/detail/add" method="post">
+            <%      menuOption.forEach(function(item, index) {%>
+            <tr>
+            <%checked = 0; %>
+                <td align="center"> <%=index+1%></td>                        
+                <td align="center"> <%=item.MenuOption_Name%></td>
+                <td align="center"> <%=item.Price%></td>
+            <%      menuDetail.forEach(function(item2, index2) {%>
+                <% if(item.MenuOption_Code == item2.MenuOption_Code) { %>
+                <td align="center"> <input type="checkbox" name="detail" value="<%=item.MenuOption_Code%>" checked="checked"></td>   
+                <% checked = 1; %>                         
+                <% } %>
+            <% })%>
+            <% if(!checked) { %>
+                <td align="center"> <input type="checkbox" name="detail" value="<%=item.MenuOption_Code%>"></td>
+            <% } %>
+            </tr>
+                <%      })%>
+            <tr>
+                <td colspan="4" align="right"> <input type="submit" value="Save"> </td>
+            </tr>
+        </form>
+    <% } %>      
+    </table>

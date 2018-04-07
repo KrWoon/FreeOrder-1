@@ -7,16 +7,20 @@
                 <tr>
                     <td align="center">No.</td>
                     <td align="center">Restaurant Name</td>
+                    <td align="center">Edit</td>
                     <td align="center">Delete</td>
                 </tr>
         <%      applications.forEach(function(item, index) {%>
                 <tr>
                     <td align="center"> <%=index+1%></td>
-                    <td align="center"> <a href="/form/apply/<%=item.Application_Code%>/edit"> <%=item.Restaurant_Name%> </a></td>
-                    <td align="center"> <form action="/form/apply/<%=item.Application_Code%>/delete" method="post"> <input type="submit" value="Delete"> </form></td>
+                    <td align="center"> <%=item.Restaurant_Name%></td>
+                    <td align="center"> <form action="/form/apply/<%=item.Application_Code%>/edit" method="get"> <input type="submit" value="Edit"> </form></td>
+                    <td align="center"> <form action="/form/apply/<%=item.Application_Code%>/delete" method="post"> <input type="submit" value="Delete"> </form></td>                    
                 </tr>
         <%      })%>
-            </table>
+            </table>           
+        <% } %>
+        <% if(login.Power == 0) { %>
             <p>
                 <a href="/form/apply">Apply Restaurant</a>
             </p>
