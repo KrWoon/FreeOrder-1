@@ -1,19 +1,26 @@
-<h1> Register </h1>
-    <form action="/auth/register" method="post">
+<% include ../bootstrap_up.ejs %>
+    <div class="container">
+
+      <form class="form-signin" action="/auth/register" method="post" align="center">
+        <h2 class="form-signin-heading">Register</h2>
         <p>
-            <input type="text" name="realname" placeholder="Name">
+            <label for="inputName" class="sr-only">Name</label>
+            <input type="text" id="inputName" class="form-control" name="realname" placeholder="Name" required autofocus>
         </p>
         <p>
-            <input type="text" name="username" placeholder="Email">
+            <label for="inputEmail" class="sr-only">Email address</label>
+            <input type="email" id="inputEmail" class="form-control" name="username" placeholder="Email address" required>
+        </p>       
+        <p>
+            <label for="inputPassword" class="sr-only">Password</label>
+            <input type="password" id="inputPassword" class="form-control" name="password" placeholder="Password" required>
         </p>
         <p>
-            <input type="password" name="password" placeholder="Password">
+            <label for="confirmPassword" class="sr-only">Confirm password</label>
+            <input type="password" id="confirmPassword" class="form-control" name="confirmPassword" placeholder="Confirm password" required>
         </p>
-        <p>
-            <input type="password" name="confirmPassword" placeholder="Confirm password">
-        </p>
-        <p>
-            <input type="submit" value="Submit">
-            <input type="button" value="Back" onclick="history.back();">
-        </p>
-    </form>
+        <input class="btn btn-lg btn-primary btn-block" type="submit" value="Join">
+      </form>
+
+    </div> <!-- /container -->
+<% include ../bootstrap_down.ejs %>

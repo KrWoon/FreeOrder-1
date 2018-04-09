@@ -48,12 +48,12 @@
 </head>
 <body>
     <h1>Restaurant Application Form</h1>
-    <form id="apply" action="/form/apply/<%=application.Application_Code%>>/edit" method="post">
+    <form id="apply" action="/form/apply" method="post">
         <table width="400" border="1">
             <tr>
                 <th>Restaurant Name</th>
                 <td align="center">
-                    <input type="text" name="rname" id="rname" size="25" maxLength="25" value="<%=application.Restaurant_Name%>">
+                    <input type="text" name="rname" id="rname" size="25" maxLength="25">
                 </td>
             </tr>
             <tr>
@@ -69,7 +69,7 @@
             </tr>
             <tr>
                 <td colspan="2" align="center">
-                    <input type="button" id="btnApply" name="apply" value="Edit">
+                    <input type="button" id="btnApply" name="apply" value="Apply">
                     <input type="button" name="cancel" value="Cancel" onclick="history.back();">
                 </td>
             </tr>

@@ -7,16 +7,17 @@ module.exports = function() {
     });
 
     router.post('/apply', function(req,res){
-        // 식당 중복 체크
+        var license = req.body.license1 + '-' + req.body.license2 + '-' + req.body.license3;        
+        // Check Duplication of Restaurant
         var checkSql = 'SELECT * FROM application WHERE Businesslicense = ?';
         pool.getConnection(function(err, conn) {
             conn.query(checkSql, [req.body.license], function(err, restaurant, fields) {
-                // 중복된 식당이 없다면
+                // if no duplication
                 if(!restaurant[0]) {
                     var newApply = {
                         Manager_Code: req.user.Manager_Code,
                         Restaurant_Name: req.body.rname,
-                        Businesslicense: req.body.license
+                        Businesslicense: license
                     };                         
                     
                 var sql = 'INSERT INTO application SET ?';
