@@ -1,52 +1,98 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <!-- 합쳐지고 최소화된 최신 CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<% include ../bootstrap_up.ejs %>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Free Order</a>
+          </div>
+          <% if(!login) { %>
+            <div id="navbar" class="navbar-collapse collapse">
+                <form class="navbar-form navbar-right" action="/auth/login" method="post">
+                        <label for="inputEmail" class="sr-only">Email</label>
+                        <input type="email" id="inputEmail" class="form-control" name="username" placeholder="Email" required>
 
-    <!-- 부가적인 테마 -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+                        <label for="inputPassword" class="sr-only">Password</label>
+                        <input type="password" id="inputPassword" class="form-control" name="password" placeholder="Password" required>
 
-    <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script>
-        $(function () {
-            $("#btnPermit").click(
-                function () {
-                    alert("Complete!");
-                    $("#permit").submit();
-                }
-            );
-        });
-    </script>
-</head>
-<body>
-    <h1>Restaurant Application</h1>
-    <form id="permit" action="/form/permit/<%=restaurant.Application_Code%>" method="post">
-        <table width="400" border="1">
-            <input type="hidden" name="managerCode" id="managerCode" value="<%=restaurant.Manager_Code%>">
-            <input type="hidden" name="rname" id="rname" value="<%=restaurant.Restaurant_Name%>">
-            <tr>
-                <td align="center">Manager Name</td>
-                <td align="center"><%=restaurant.Manager_Name%></td>
-            </tr>
-            <tr>
-                <td align="center">Manager Eamil</td>
-                <td align="center"><%=restaurant.Email%></td>
-            </tr>
-            <tr>
-                <td align="center">Restaurant Name</td>
-                <td align="center"><%=restaurant.Restaurant_Name%></td>
-            </tr>
-            <tr>
-                <td align="center">Business License</td>
-                <td align="center"><%=restaurant.Businesslicense%></td>
-            </tr>                
-        </table>
-        <input type="button" id="btnPermit" name="permit" value="Permit">
-        <input type="button" value="Back" onclick="history.back();">
-    </form>
-</body>
-</html>
+                        <input class="btn btn-success" type="submit" value="Login">
+                    </form>                
+                </form>
+            </div><!--/.navbar-collapse -->
+            </div>
+          <% } else { %>
+            <div id="navbar" class="navbar-collapse collapse">
+                <form class="navbar-form navbar-right" action="/auth/logout" method="get">
+                    <strong class="text-muted"><%= login.Manager_Name %>   
+                        <input class="btn btn-success" type="submit" value="Logout">    
+                    </strong>                              
+                </form>
+            </div><!--/.navbar-collapse -->
+            </div>
+          <% } %>
+      </nav>
+  
+      <!-- Main jumbotron for a primary marketing message or call to action -->
+      <div class="jumbotron">
+        <div class="container">
+        <% if(login) { %>
+            <% if(login.Power == 1) { %>
+                <h1> Permit Restaurant </h1>
+                <p>Administrator can allow new restaurant</p>
+            <% } %>            
+        <% } else { %>
+            <h1> No User</h1>
+            <p>This is a main page of application. If you want to use it, please sign in first</p>
+            <p><a class="btn btn-primary btn-lg" href="/auth/register" role="button">Sign up &raquo;</a></p>
+        <% } %>      
+        </div>
+      </div>
+  
+      
+      <div class="container">            
+          <div class="panel panel=default">
+                <% if(login && login.Power == 1) { %>
+                <div class="panel-heading"><h1><%= restaurant.Restaurant_Name%></h1></div>
+                
+                    <form action="/form/permit/<%=restaurant.Application_Code%>" method="post">
+                        <table class="table table-hover">
+                            <input type="hidden" name="managerCode" id="managerCode" value="<%=restaurant.Manager_Code%>">
+                            <input type="hidden" name="rname" id="rname" value="<%=restaurant.Restaurant_Name%>">
+                            <thead>
+                                    <tr>
+                                        <th class="text-center">Manager Name</th>
+                                        <th class="text-center">Manager Eamil</th>
+                                        <th class="text-center">Restaurant Name</th>
+                                        <th class="text-center">Business License</th>
+                                    </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-center"><%=restaurant.Manager_Name%></td>
+                                    <td class="text-center"><%=restaurant.Email%></td>
+                                    <td class="text-center"><%=restaurant.Restaurant_Name%></td>
+                                    <td class="text-center"><%=restaurant.Businesslicense%></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="pull-right">
+                            <button type="submit" class="btn btn-primary" > Permit </button>
+                            <button type="button" class="btn btn-primary" onclick="history.back();"> Back </button>
+                        </div>
+                    </form>
+                    <% } else { %>
+                        <div class="panel-heading"><h1>No Application</h1></div>
+                <% } %>    
+            </div>
+            
+        <hr>
+  
+        <footer>
+          <p>&copy; BBGoo 2018</p>
+        </footer>
+      </div> <!-- /container -->
+<% include ../bootstrap_down.ejs %>

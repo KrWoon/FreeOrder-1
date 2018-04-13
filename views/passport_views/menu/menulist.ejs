@@ -1,29 +1,25 @@
-    
-        <h1>Menu</h1>
-        <table width="400" height="100" border="0">
-            <tr>
-                <td align="center">No.</td>
-                <td align="center">Menu</td>
-                <td align="center">Price</td>
-                <td align="center">Delete</td>
-            </tr>
+<div class="panel panel=default">
+        <div class="panel-heading"><h1>Menu</h1></div>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th>Menu</th>
+            <th>Price</th>
+            <th>Delete</th>
+        </tr>
+    </thead>    
+    <tbody>
         <% if(menu.length > 0) { %>
-        <%      menu.forEach(function(item, index) {%>
-            <tr>
-                <td align="center"> <%=index+1%></td>
-                <td align="center"> <a href="/menu/<%=r_Code%>/<%=item.Menu_Code%>/detail"><%=item.Menu_Name%> </a></td>
-                <td align="center"> <%=item.Price%></a></td>
-                <td align="center"> <form action="/menu/<%=r_Code%>/<%=item.Menu_Code%>/delete" method="post"> <input type="submit" value="Delete"> </form></td>    
-            </tr>
-        <%      })%>
-        <% } %>
-            <form id="menuAdd" action="/menu/<%=r_Code%>/add" method="post">
-            <tr>
-                <td align="center"></td>
-                <td align="center"><input type="text" id="menuname" name="menuname" placeholder="New menu" size="15"></td>
-                <td align="center"><input type="text" id="menuprice" name="price" placeholder="Price" size="6" maxLength="6"></td>
-                <td align="center"><input type="button" id="btnMenu" name="menuAdd" value="Add"></td>
-            </tr>
-            </form>
-        </table>
-        
+            <% menu.forEach(function(item, index) { %>
+                <tr>                    
+                    <td><%= index+1 %></td>
+                    <td> <a href="/menu/<%=r_Code%>/<%=item.Menu_Code%>/detail"><%=item.Menu_Name%> </a>  </td>
+                    <td><%=item.Price%></td>
+                    <td><form action="/menu/<%=r_Code%>/<%=item.Menu_Code%>/delete" method="post"> <input class="btn btn-default btn-sm" type="submit" value="Delete"> </form></td>
+                </tr>
+            <% }) %>
+        <% } %>              
+    </tbody>
+</table>
+</div>

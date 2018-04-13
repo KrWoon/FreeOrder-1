@@ -1,0 +1,142 @@
+<% include ../bootstrap_up.ejs %>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+                    aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">Free Order</a>
+            </div>
+            <% if(!login) { %>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <form class="navbar-form navbar-right" action="/auth/login" method="post">
+                        <label for="inputEmail" class="sr-only">Email</label>
+                        <input type="email" id="inputEmail" class="form-control" name="username" placeholder="Email" required>
+
+                        <label for="inputPassword" class="sr-only">Password</label>
+                        <input type="password" id="inputPassword" class="form-control" name="password" placeholder="Password" required>
+
+                        <input class="btn btn-success" type="submit" value="Login">
+                    </form>
+                    </form>
+                </div>
+                <!--/.navbar-collapse -->
+        </div>
+        <% } else { %>
+            <div id="navbar" class="navbar-collapse collapse">
+                <form class="navbar-form navbar-right" action="/auth/logout" method="get">
+                    <strong class="text-muted">
+                        <%= login.Manager_Name %>
+                            <input class="btn btn-success" type="submit" value="Logout">
+                    </strong>
+                </form>
+            </div>
+            <!--/.navbar-collapse -->
+            </div>
+            <% } %>
+    </nav>
+
+    <div class="container">
+
+        <div class="masthead">
+            <h3 class="text-muted">Free Order</h3>
+            <nav>
+                <ul class="nav nav-pills nav-justified">
+                    <li>
+                        <a href="/restaurant/<%=myRestaurant.Restaurant_Code%>">Home</a>
+                    </li>
+                    <li>
+                        <a href="/restaurant/<%=myRestaurant.Restaurant_Code%>">Table</a>
+                    </li>
+                    <li>
+                        <a href="/menu/<%=myRestaurant.Restaurant_Code%>">Menu</a>
+                    </li>
+                    <li class="active">
+                        <a href="/restaurant/<%=myRestaurant.Restaurant_Code%>/info">Info</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- Jumbotron -->
+        <div class="jumbotron row">
+            <h1>Restaurant Information</h1>
+            <p class="lead">You can set your restaurant information in here</p>
+        </div>
+
+        <div class="container row">
+            <form class="form-horizontal" action="/restaurant/<%= myRestaurant.Restaurant_Code %>/info" method="post">
+                <div class="col-xs-6">
+                    <div class="form-group">
+                        <label for="inputName" class="col-sm-2 control-label"><p class="text-center">Name</p></label>
+                        <div class="col-sm-10">
+                            <input type="text" id="inputName" class="form-control" name="rname" value="<%= myRestaurant.Signboard %>" required autofocus>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputLocation" class="col-sm-2 control-label text-center"><p class="text-center">Location</p></label>
+                        <div class="col-sm-10">
+                            <input type="text" id="inputLocation" class="form-control" name="location" value="<%= myRestaurant.Location %>" required>
+                        </div>
+                    </div>
+                
+
+                    <div class="form-group">
+                        <label for="inputCategory" class="col-sm-2 control-label"><p class="text-center">Category</p></label>
+                        <div class="col-sm-10">
+                            <input type="text" id="inputCategory" class="form-control" name="category" value="<%= myRestaurant.Category %>" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-6">
+                    <div class="form-group">
+                        <label for="inputOpen1" class="col-sm-2 control-label"><p class="text-center">Open</p></label>
+                        <div class="col-sm-4">
+                            <input type="text" id="inputOpen1" class="form-control" name="opentime" value="<%= myRestaurant.openTime %>" required>
+                        </div>
+
+                        <label for="inputClose1" class="col-sm-2 control-label"><p class="text-center">Close</p></label>
+                        <div class="col-sm-4">
+                            <input type="text" id="inputClose1" class="form-control" name="closetime" value="<%= myRestaurant.closeTime %>" required>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputTables" class="col-sm-2 control-label"><p class="text-center">Tables</p></label>
+                        <div class="col-sm-10">
+                            <input type="text" id="inputTables" class="form-control" name="numoftable" value="<%= myRestaurant.NumberOfTable %>" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputStatus" class="col-sm-2 control-label"><p class="text-center">Status</p></label>
+                        <div class="col-sm-10">
+                            <input type="text" id="inputStatus" class="form-control" name="status" value="<%= myRestaurant.BusineddStatus %>" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <input class="btn btn-lg btn-primary" type="submit" value="Save">
+                </div>
+            </form>
+
+        </div>
+        <!-- /container -->
+
+        <hr>
+        <!-- Site footer -->
+        <footer class="footer">
+            <p>&copy; BBGoo 2018</p>
+        </footer>
+
+    </div>
+    <!-- /container -->
+
+    <% include ../bootstrap_down.ejs %>

@@ -59,20 +59,43 @@
   
       
       <div class="container">
-        <div class="row">
-        <% if(login) { %>
-        <!-- Example row of columns -->
-        <h1>My Restaurants</h1>
-        <% if(restaurants.length > 0) { %>
-            <%restaurants.forEach(function(item, index) {%>
-                <div class="col-md-4">
-                    <h2><%=item.Signboard%></h2>
-                    <p>You can manage the restaurant. Click the manage button and start it! </p>
-                    <p><a class="btn btn-default" href="/restaurant/<%=item.Restaurant_Code%>" role="button">Manage &raquo;</a></p>
-                </div> 
-            <% })%>
-        <% } %>         
-        </div>
+        <!-- Login and You're not Admin -->
+        <% if(login && login.Power == 0) { %>
+            <div class="row">
+            <!-- Example row of columns -->
+            <!-- Show Restaurant List -->
+                <% if(restaurants.length > 0) { %>
+                    <%restaurants.forEach(function(item, index) {%>
+                        <div class="col-md-4">
+                            <h2><%=item.Signboard%></h2>
+                            <p>You can manage the restaurant. <br/>Click the manage button and start it.</p>
+                            <p><a class="btn btn-default" href="/restaurant/<%=item.Restaurant_Code%>" role="button">Manage &raquo;</a></p>
+                        </div> 
+                <% })%>  
+                <% } else { %>
+                    <p>No restaurants</p>
+                <% } %>
+            </div>
+            <hr>
+            <div class="row">
+                <!-- Show Application List -->
+                <% if(applications.length > 0) { %>
+                    <%applications.forEach(function(item, index) {%>
+                        <div class="col-md-4">
+                            <h2><%=item.Restaurant_Name%></h2>
+                            <p>Your application is under review.<br/> To cancel or modify, click the button.</p>
+                            <p>
+                                <form action="/form/apply/<%=item.Application_Code%>/delete" method="post"> 
+                                    <a class="btn btn-default" href="/form/apply/<%=item.Application_Code%>/edit" role="button">Modify</a>
+                                    <button type="submit" class="btn btn-default">Delete</button> 
+                                </form>
+                            </p>
+                        </div> 
+                <% })%> 
+                <% } else { %>
+                    <p>No applications</p>
+                <% } %>
+            </div>   
 
         <% } %>
         <hr>

@@ -1,68 +1,120 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <!-- 합쳐지고 최소화된 최신 CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<% include ../bootstrap_up.ejs %>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+                    aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">Free Order</a>
+            </div>
+            <% if(!login) { %>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <form class="navbar-form navbar-right" action="/auth/login" method="post">
+                        <label for="inputEmail" class="sr-only">Email</label>
+                        <input type="email" id="inputEmail" class="form-control" name="username" placeholder="Email" required>
 
-    <!-- 부가적인 테마 -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+                        <label for="inputPassword" class="sr-only">Password</label>
+                        <input type="password" id="inputPassword" class="form-control" name="password" placeholder="Password" required>
 
-    <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script>
-        $(function () {
-            $("#btnMenu").click(
-                function () {
-                    if ($("#menuname").val() == "") {
-                        alert("Please enter the menu name");
-                        $("#menuname").focus();
-                        return;
-                    }
-                    if ($("#menuprice").val() == "") {
-                        alert("Please enter the price");
-                        $("#menuprice").focus();
-                        return;
-                    }
-
-                    $("#menuAdd").submit();
-                }
-            );
-            $("#btnOpt").click(
-                function () {
-                    if ($("#menuOptionName").val() == "") {
-                        alert("Please enter the menu option name");
-                        $("#menuOptionName").focus();
-                        return;
-                    }
-                    if ($("#optionprice").val() == "") {
-                        alert("Please enter the price");
-                        $("#optionprice").focus();
-                        return;
-                    }
-
-                    $("#optAdd").submit();
-                }
-            );
-        });
-    </script>
-</head>
-<body>
-    <table width="300" border="1">
-        <tr>
-            <td  align="center"> <% include ./menulist.ejs %> </td>
-            <% if(m_Code != 'None') { %>
-                <td  align="center"> <% include ./menudetail.ejs %> </td>
+                        <input class="btn btn-success" type="submit" value="Login">
+                    </form>
+                    </form>
+                </div>
+                <!--/.navbar-collapse -->
+        </div>
+        <% } else { %>
+            <div id="navbar" class="navbar-collapse collapse">
+                <form class="navbar-form navbar-right" action="/auth/logout" method="get">
+                    <strong class="text-muted">
+                        <%= login.Manager_Name %>
+                            <input class="btn btn-success" type="submit" value="Logout">
+                    </strong>
+                </form>
+            </div>
+            <!--/.navbar-collapse -->
+            </div>
             <% } %>
-            <td  align="center"> <% include ./menuopt.ejs %> </td>
-        </tr>
-    </table>
-    <% if(menu) { %>    
-    <p>
-        <a href="/restaurant/<%=r_Code%>"> Restaurant Home </a>
-    </p>
-    <% } %>
-    
-</body>
-</html>
+    </nav>
+
+    <div class="container">
+
+        <div>
+            <h3 class="text-muted">Free Order</h3>
+            <nav>
+                <ul class="nav nav-pills nav-justified">
+                    <li> <a href="/restaurant/<%=r_Code%>">Home</a> </li>
+                    <li> <a href="/restaurant/<%=r_Code%>">Table</a> </li>
+                    <li class="active"> <a href="/menu/<%=r_Code%>">Menu</a> </li>
+                    <li> <a href="/restaurant/<%=r_Code%>/info">Info</a> </li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- Jumbotron -->
+        <div class="jumbotron row">
+            <div class="col-xs-6">
+                    <h1>Menu</h1>
+                    <p class="lead">You can view, add, edit, and delete menu in here</p>
+            </div>
+            <div class="col-xs-6">  
+                 <!-- Add New Menu -->
+                <p>
+                    <form class="form-inline" action="/menu/<%=r_Code%>/add" method="post">
+                        <div class="form-group">
+                            <label for="menuname" class="sr-only"></label>
+                            <input type="text" class="form-control" id="menuname" name="menuname" placeholder="New Menu" required>    
+                        </div>
+                        <div class="form-group">
+                            <label for="price" class="sr-only"></label>
+                            <input type="text" class="form-control" id="price" name="price" placeholder="Price" required>
+                        </div>
+                        <button type="submit" class="btn btn-default">Add</button>
+                    </form>
+                </p>
+                <!-- Add New Option -->
+                <p>
+                    <form class="form-inline" action="/menu/option/<%=r_Code%>/add" method="post">
+                        <div class="form-group">
+                            <label for="optionname" class="sr-only"></label>
+                            <input type="text" class="form-control" id="optionname" name="menuname" placeholder="New Option" required>    
+                        </div>
+                        <div class="form-group">
+                            <label for="optionprice" class="sr-only"></label>
+                            <input type="text" class="form-control" id="optionprice" name="price" placeholder="Price" required>
+                        </div>
+                        <button type="submit" class="btn btn-default">Add</button>
+                    </form>  
+                </p>          
+            </div>            
+        </div>
+
+        <div class="row">
+            <div class="col-xs-6">
+                <% include ./menulist.ejs %>
+            </div>            
+            <% if(m_Code != 'None') { %>
+                <div class="col-xs-6">
+                    <% include ./menudetail.ejs %>
+                </div>
+            <% } %>
+        </div>               
+        <div  class="row">
+            <div class="col-xs-6">
+                <% include ./menuopt.ejs %>
+            </div>
+        </div>
+
+        <hr>
+        <!-- Site footer -->
+        <footer class="footer">
+            <p>&copy; BBGoo 2018</p>
+        </footer>
+
+    </div>
+    <!-- /container -->
+
+    <% include ../bootstrap_down.ejs %>
