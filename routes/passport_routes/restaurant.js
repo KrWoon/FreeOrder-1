@@ -3,7 +3,7 @@ module.exports = function() {
     var pool = require('../../config/passport_config/db')();
 
     router.get('/:rid', function(req,res){
-        sql = 'SELECT * FROM restaurant WHERE Restaurant_Code = ?';
+        sql = 'SELECT * FROM restaurant WHERE Restaurant_Code = ? AND Use_Code = \'Y\'';
         pool.getConnection(function(err, conn) {
             conn.query(sql, [req.params.rid], function(err, results) {
                 res.render('restaurant/main', {'myRestaurant' : results[0], 'login' : req.user});                
@@ -13,7 +13,7 @@ module.exports = function() {
     });
 
     router.get('/:rid/info', function(req, res) {
-        sql = 'SELECT * FROM restaurant WHERE Restaurant_Code = ?';
+        sql = 'SELECT * FROM restaurant WHERE Restaurant_Code = ? AND Use_Code = \'Y\'';
         pool.getConnection(function(err, conn) {
             conn.query(sql, [req.params.rid], function(err, results) {
                 res.render('restaurant/info', {'myRestaurant' : results[0], 'login' : req.user});                
@@ -33,11 +33,11 @@ module.exports = function() {
             BusineddStatus : req.body.status,
         };
 
-        var sql = 'UPDATE restaurant SET ? WHERE Restaurant_Code = ' + req.params.rid;
+        var sql = 'UPDATE restaurant SET ? WHERE Use_Code = \'Y\' AND Restaurant_Code = ' + req.params.rid;
         pool.getConnection(function(err, conn) {
             conn.query(sql, updateRestaurant, function(err, restaurant) {       
                     req.session.save(function() {
-                        res.redirect('/restaurant/' + req.params.rid + '/info');
+                        res.redirect('/restaurant/' + req.params.rid);
                     });
                 conn.release();
             });

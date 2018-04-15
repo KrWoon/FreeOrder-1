@@ -13,7 +13,7 @@ module.exports = function(app) {
         done(null, user.Email);
     });
     passport.deserializeUser(function(email, done) {
-        var sql = 'SELECT * FROM manager WHERE Email=?';
+        var sql = 'SELECT * FROM manager WHERE Email=? AND Use_Code = \'Y\'';
         pool.getConnection(function(err, conn) {
             conn.query(sql, [email], function(err, results, fields) {
                 if(!results[0]) {
@@ -31,7 +31,7 @@ module.exports = function(app) {
             var email = username;
             var pwd = password;
 
-            var sql = 'SELECT * FROM manager WHERE Email=?';
+            var sql = 'SELECT * FROM manager WHERE Email=? AND Use_Code = \'Y\'';
             pool.getConnection(function(err, conn) {
                 conn.query(sql, [email], function(err, results, fields) {
                     if(!results[0]) {

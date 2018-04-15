@@ -3,14 +3,14 @@ module.exports = function () {
     var pool = require('../../config/passport_config/db')();
 
     router.get(['/:rid', '/:rid/:mid/detail'], function (req, res) {
-        var sql = 'SELECT * FROM menu WHERE Restaurant_Code = ?'
+        var sql = 'SELECT * FROM menu WHERE Restaurant_Code = ? AND Use_Code = \'Y\'';
         pool.getConnection(function (err, conn) {
             conn.query(sql, [req.params.rid], function (err, menus) {
-                sql = 'SELECT * FROM menuoption WHERE Restaurant_Code = ?';
+                sql = 'SELECT * FROM menuoption WHERE Restaurant_Code = ? AND Use_Code = \'Y\'';
 
                 conn.query(sql, [req.params.rid], function (err, options) {
                     if (req.params.mid) {
-                        sql = 'SELECT * FROM menuoption INNER JOIN menuinjuction ON menuoption.MenuOption_Code = menuinjuction.MenuOption_Code WHERE menuinjuction.Menu_Code = ?'
+                        sql = 'SELECT * FROM menuoption INNER JOIN menuinjuction ON menuoption.MenuOption_Code = menuinjuction.MenuOption_Code WHERE menuinjuction.Menu_Code = ? AND menuinjuction.Use_Code = \'Y\''
 
                         conn.query(sql, [req.params.mid], function (err, menuDetails) {
                             res.render('menu/mLayout', { 'menu': menus, 'menuDetail': menuDetails, 'menuOption': options, 'r_Code': req.params.rid, 'm_Code': req.params.mid, 'login' : req.user });
@@ -70,7 +70,7 @@ module.exports = function () {
 
     router.post('/:rid/:mid/detail/add', function (req, res) {
         var details = req.body.detail;
-        var sql = 'DELETE FROM menuinjuction WHERE Menu_Code = ?';
+        var sql = 'DELETE FROM menuinjuction WHERE Menu_Code = ? AND Use_Code = \'Y\'';
 
         pool.getConnection(function (err, conn) {
             conn.query(sql, [req.params.mid], function (err, results) {
@@ -110,6 +110,7 @@ module.exports = function () {
 
     router.post('/:rid/:mid/delete', function (req, res) {
         var mid = req.params.mid;
+        // var sql = 'UPDATE menu SET Use_Code = \'N\' WHERE Menu_Code = ?';
         var sql = 'DELETE FROM menu WHERE Menu_Code = ?';
 
         pool.getConnection(function (err, conn) {
@@ -124,6 +125,7 @@ module.exports = function () {
 
     router.post('/option/:rid/:mid/delete', function (req, res) {
         var mid = req.params.mid;
+        // var sql = 'UPDATE menuoption SET Use_Code = \'N\' WHERE MenuOption_Code = ?';
         var sql = 'DELETE FROM menuoption WHERE MenuOption_Code = ?';
 
         pool.getConnection(function (err, conn) {
