@@ -17,7 +17,8 @@ module.exports = function() {
                     var newApply = {
                         Manager_Code: req.user.Manager_Code,
                         Restaurant_Name: req.body.rname,
-                        Businesslicense: license
+                        Businesslicense: license,
+                        Location: req.body.location
                     };                         
                     
                 var sql = 'INSERT INTO application SET ?';
@@ -128,7 +129,7 @@ module.exports = function() {
             Signboard : req.body.rname,
             openTime : '09:00',
             closeTime : '21:00',
-            Location : 'N',
+            Location : req.body.location,
             NumberOfTable : 0
         };
 

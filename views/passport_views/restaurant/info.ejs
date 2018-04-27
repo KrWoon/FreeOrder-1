@@ -1,4 +1,6 @@
 <% include ../bootstrap_up.ejs %>
+</head>
+<body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -64,9 +66,25 @@
 
         <!-- Jumbotron -->
         <div class="jumbotron row">
-            <h1>Restaurant Information</h1>
-            <p class="lead">You can set your restaurant information in here</p>
-        </div>
+                <div class="col-xs-6">
+                        <h1>Information</h1>
+                        <p class="lead">You can set your restaurant information in here</p>
+                </div>
+                <div class="col-xs-6 text-center">  
+                     <!-- Change Business Status -->
+                     <p>
+                        <form action="/restaurant/<%= myRestaurant.Restaurant_Code %>/info/changeStatus"  method="post">
+                            <% if(myRestaurant.BusinessStatus == 'open') { %>    
+                                <input type="hidden" name="status" value="close">                            
+                                <button type="submit" class="btn btn-lg btn-info">Close Your Restaurant</button>
+                            <% } else { %>
+                                <input type="hidden" name="status" value="open">
+                                <button type="submit" class="btn btn-lg btn-info">Open Your Restaurant</button>
+                            <% } %>   
+                        </form>     
+                    </p>
+                </div>            
+            </div>
 
         <div class="container row">
             <form class="form-horizontal" action="/restaurant/<%= myRestaurant.Restaurant_Code %>/info" method="post">
@@ -97,30 +115,25 @@
                 <div class="col-xs-6">
                     <div class="form-group">
                         <label for="inputOpen1" class="col-sm-2 control-label"><p class="text-center">Open</p></label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-10">
                             <input type="text" id="inputOpen1" class="form-control" name="opentime" value="<%= myRestaurant.openTime %>" required>
                         </div>
+                    </div>
 
+                    <div class="form-group">
                         <label for="inputClose1" class="col-sm-2 control-label"><p class="text-center">Close</p></label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-10">
                             <input type="text" id="inputClose1" class="form-control" name="closetime" value="<%= myRestaurant.closeTime %>" required>
                         </div>
-
                     </div>
 
                     <div class="form-group">
-                        <label for="inputTables" class="col-sm-2 control-label"><p class="text-center">Tables</p></label>
-                        <div class="col-sm-10">
-                            <input type="text" id="inputTables" class="form-control" name="numoftable" value="<%= myRestaurant.NumberOfTable %>" required>
+                            <label for="inputTables" class="col-sm-2 control-label"><p class="text-center">Tables</p></label>
+                            <div class="col-sm-10">
+                                <input type="text" id="inputTables" class="form-control" name="numoftable" value="<%= myRestaurant.NumberOfTable %>" required>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="inputStatus" class="col-sm-2 control-label"><p class="text-center">Status</p></label>
-                        <div class="col-sm-10">
-                            <input type="text" id="inputStatus" class="form-control" name="status" value="<%= myRestaurant.BusineddStatus %>" required>
-                        </div>
-                    </div>
                 </div>
                 <div class="text-center">
                     <input class="btn btn-lg btn-primary" type="submit" value="Save">

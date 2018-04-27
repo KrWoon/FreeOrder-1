@@ -1,4 +1,6 @@
 <% include ../bootstrap_up.ejs %>
+</head>
+<body>
 <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
           <div class="navbar-header">
@@ -54,7 +56,7 @@
   
       
       <div class="container">            
-          <div class="panel panel=default">
+          <div class="panel">
                 <% if(login && login.Power == 1) { %>
                 <div class="panel-heading"><h1><%= restaurant.Restaurant_Name%></h1></div>
                 
@@ -68,6 +70,7 @@
                                         <th class="text-center">Manager Eamil</th>
                                         <th class="text-center">Restaurant Name</th>
                                         <th class="text-center">Business License</th>
+                                        <th class="text-center">Location</th>
                                     </tr>
                             </thead>
                             <tbody>
@@ -76,6 +79,7 @@
                                     <td class="text-center"><%=restaurant.Email%></td>
                                     <td class="text-center"><%=restaurant.Restaurant_Name%></td>
                                     <td class="text-center"><%=restaurant.Businesslicense%></td>
+                                    <td class="text-center"><%=restaurant.Location%></td>
                                 </tr>
                             </tbody>
                         </table>

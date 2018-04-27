@@ -1,33 +1,48 @@
 <% include ../bootstrap_up.ejs %>
+</head>
+<body>
     <div class="container">
-        <h1>Apply Form</h1>
+        <h2 class="text-center">Application Form</h2>
+        <p><br/></p>
         <form class="form-horizontal" action="/form/apply" method="post">
+
             <div class="form-group">
-                <label for="rname" class="col-sm-2 control-label">Restaurant</label>
-                <div class="col-sm-10">
+                <div class="col-md-3"></div>
+                <label for="rname" class="col-sm-2 control-label"><p class="text-center">Restaurant</p></label>
+                <div class="col-md-4">
                     <input type="text" class="form-control" id="rname" name="rname" placeholder="Name" required autofocus>
                 </div>                
             </div>
+
             <div class="form-group">
-                <label for="license1" class="col-sm-2 control-label">Busienses License</label>
-                <div class="col-sm-2">                        
-                    <input type="text" class="form-control" name="license1" id="license1" size="3" maxLength="3" required>
+                <div class="col-md-3"></div>
+                <label for="license1" class="col-sm-2 control-label"><p class="text-center">Business License</p></label>
+                <div class="col-md-1">                        
+                    <input type="text" class="form-control" name="license1" id="license1" size="3" maxLength="3" placeholder="123" required>
                 </div>      
 
-                <label for="license1" class="col-sm-1 control-label"><p class="text-center">ㅡ</p></label>
-                <div class="col-sm-2">                        
-                    <input type="text" class="form-control" name="license2" id="license2" size="2" maxLength="2" required>
+                <div class="col-md-1">                        
+                    <input type="text" class="form-control" name="license2" id="license2" size="2" maxLength="2" placeholder="12" required>
                 </div>      
 
-                <label for="license1" class="col-sm-1 control-label" ><p class="text-center">ㅡ</p></label>
-                <div class="col-sm-4">
-                    <input type="text" class="form-control" name="license3" id="license3" size="5" maxLength="5" required>
+                <div class="col-md-2">
+                    <input type="text" class="form-control" name="license3" id="license3" size="5" maxLength="5" placeholder="12345" required>
                 </div>
-            </div>            
-            <div class="pull-right">
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                    <button type="button" class="btn btn-primary" onclick="history.back();"> Back </button>
+            </div>     
+            
+            <div class="form-group">
+                <div class="col-md-3"></div>
+                <label for="inputLocation" class="col-sm-2 control-label text-center"><p class="text-center">Location</p></label>
+                <div class="col-md-4">
+                    <input type="text" id="inputLocation" class="form-control" name="location" placeholder="Location" required>
+                </div>
             </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="button" class="btn btn-primary" onclick="history.back();"> Back </button>
+            </div>
+
         </form>
     </div>
     <!-- /container -->

@@ -21,6 +21,8 @@
     "node-mysql": "^0.4.2",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
-    "pbkdf2-password": "^1.2.1"
+    "pbkdf2-password": "^1.2.1",
+    "popup": "0.0.3",
+    "popups": "^1.1.3"
   }
 }

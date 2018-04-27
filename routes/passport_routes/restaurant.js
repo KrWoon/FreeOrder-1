@@ -30,18 +30,39 @@ module.exports = function() {
             openTime : req.body.opentime,
             closeTime : req.body.closetime,
             NumberOfTable : req.body.numoftable,
-            BusineddStatus : req.body.status,
+            BusinessStatus : req.body.status,
         };
 
         var sql = 'UPDATE restaurant SET ? WHERE Use_Code = \'Y\' AND Restaurant_Code = ' + req.params.rid;
         pool.getConnection(function(err, conn) {
-            conn.query(sql, updateRestaurant, function(err, restaurant) {       
-                    req.session.save(function() {
-                        res.redirect('/restaurant/' + req.params.rid);
-                    });
+            conn.query(sql, updateRestaurant, function(err, restaurant) { 
+                req.session.save(function() {
+                    res.write('<script type="text/javascript"> alert("Complete"); </script>')
+                });               
                 conn.release();
             });
-        });       
+        });              
+    });
+
+    router.post('/:rid/info/changeStatus', function(req,res) {
+        var sql = 'SELECT count(*) as amount FROM menu WHERE Restaurant_Code = ' + req.params.rid;
+        pool.getConnection(function(err, conn) {
+            conn.query(sql, [], function(err, menus) {
+                if(menus[0].amount > 2) {
+                    var sql = 'UPDATE restaurant SET BusinessStatus=? WHERE Restaurant_Code = ' + req.params.rid;
+                    conn.query(sql, [req.body.status], function(err, restaurant) {
+                        req.session.save(function() {
+                            res.redirect('/restaurant/' + req.params.rid);
+                        });                     
+                    });
+                } else {
+                    res.write('<script type="text/javascript"> alert("You must add Menu at least 3"); </script>')
+                    res.write('<script language=\"javascript\"> history.back(); </script>')
+                    // res.write('<script language=\"javascript\"> window.location=\"info" </script>')
+                }   
+                conn.release();
+            });      
+        });
     });
 
     return router;
