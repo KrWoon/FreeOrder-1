@@ -62,7 +62,7 @@ module.exports = function() {
                     res.write('<script type="text/javascript"> alert("You must add Menu at least 3"); </script>')
                     res.write('<script language=\"javascript\"> history.back(); </script>')                    
                 }   
-                
+
                 conn.release();
             });      
         });
