@@ -10,7 +10,7 @@ module.exports = function () {
 
                 conn.query(sql, [req.params.rid], function (err, options) {
                     if (req.params.mid) {
-                        sql = 'SELECT * FROM menuoption INNER JOIN menuinjuction ON menuoption.MenuOption_Code = menuinjuction.MenuOption_Code WHERE menuinjuction.Menu_Code = ? AND menuinjuction.Use_Code = \'Y\''
+                        sql = 'SELECT * FROM menuoption INNER JOIN menu_menuoption ON menuoption.MenuOption_Code = menu_menuoption.MenuOption_Code WHERE menu_menuoption.Menu_Code = ? AND menu_menuoption.Use_Code = \'Y\''
 
                         conn.query(sql, [req.params.mid], function (err, menuDetails) {
                             res.render('menu/mLayout', { 'menu': menus, 'menuDetail': menuDetails, 'menuOption': options, 'r_Code': req.params.rid, 'm_Code': req.params.mid, 'login' : req.user });
@@ -70,7 +70,7 @@ module.exports = function () {
 
     router.post('/:rid/:mid/detail/add', function (req, res) {
         var details = req.body.detail;
-        var sql = 'DELETE FROM menuinjuction WHERE Menu_Code = ? AND Use_Code = \'Y\'';
+        var sql = 'DELETE FROM menu_menuoption WHERE Menu_Code = ? AND Use_Code = \'Y\'';
 
         pool.getConnection(function (err, conn) {
             conn.query(sql, [req.params.mid], function (err, results) {
@@ -85,7 +85,7 @@ module.exports = function () {
                             MenuOption_Code: details[i]
                         };
 
-                        sql = 'INSERT INTO menuinjuction SET ?';
+                        sql = 'INSERT INTO menu_menuoption SET ?';
                         conn.query(sql, newDetail, function (err, results) {
                             if (err) {
                                 console.log('db err');
