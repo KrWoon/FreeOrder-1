@@ -14,7 +14,9 @@ app.set("view engine", 'ejs');
 
 
  // set middlewares
-app.use(bodyParser.urlencoded({extended:false}));
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}));
 app.use(session({
     secret : 'asd123123fasdfasfdasdf',
     resave: false,
@@ -27,7 +29,6 @@ app.use(session({
         database : 'heroku_0623ff804c82489'
     })
 }));
-app.use(cors());
 app.use(logger('dev'));
 
 
@@ -47,6 +48,9 @@ var restaurant = require('./routes/passport_routes/restaurant')();
 app.use('/restaurant', restaurant);
 var menu = require('./routes/passport_routes/menu')();
 app.use('/menu', menu);
+
+var order = require('./routes/passport_routes/order')();
+app.use('/order', order);
 
 
 
