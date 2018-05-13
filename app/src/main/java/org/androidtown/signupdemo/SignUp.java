@@ -4,6 +4,7 @@ package org.androidtown.signupdemo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,7 +38,9 @@ public class SignUp extends AppCompatActivity {
          username = (EditText)findViewById(R.id.userName);
          useremail = (EditText)findViewById(R.id.userEmail);
          userpw = (EditText)findViewById(R.id.userPassword);
+        userpw.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
          confirmpw = (EditText)findViewById(R.id.confirmPassword);
+        confirmpw.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
          page="signup";
 
 
@@ -51,7 +54,10 @@ public class SignUp extends AppCompatActivity {
                         useremail.getText().toString().length() == 0 ||
                         userpw.getText().toString().length() == 0 ||
                         confirmpw.getText().toString().length() == 0
-                        ) Toast.makeText(getApplicationContext(),"다시입력",Toast.LENGTH_LONG).show();
+                        ) Toast.makeText(getApplicationContext(),"Fill the blank",Toast.LENGTH_LONG).show();
+                else if(!userpw.getText().toString().equals(confirmpw.getText().toString())){
+                    Toast.makeText(getApplicationContext(),"Confirmpassword is not match",Toast.LENGTH_LONG).show();
+                }
                 else {
                     jsonObject = new JSONObject();
                     try {
@@ -69,7 +75,7 @@ public class SignUp extends AppCompatActivity {
                 }
 
                     JSONTask task = new JSONTask();
-                    task.execute("http://172.16.20.141:3000/auth/android/register");//AsyncTask 시작시킴
+                    task.execute("http://172.30.1.35:3000/auth/android/register");//AsyncTask 시작시킴
                 }
                 }
 

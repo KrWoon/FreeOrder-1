@@ -5,18 +5,10 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -38,114 +30,67 @@ import java.util.ArrayList;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import Model.Menu;
 import Model.Order;
-import Model.Restaurant;
-import listadpater.RestaurantListAdapter;
+import listadpater.MenuListAdapter;
 
-public class Search extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class ShowMenu extends AppCompatActivity {
     TextView view;
     String query;
     JSONObject jsonObject;
     JSONParser jsonParser;
     JSONObject jsonObj ;
-    JSONArray restaurantArray ;
+    JSONArray menuArray ;
     ListView mListView;
     Context mcontext;
-    RestaurantListAdapter adapter;
-    ArrayList<Restaurant> restaurantlist = new ArrayList<>();
+    MenuListAdapter adapter;
+    ArrayList<Menu> menulist = new ArrayList<>();
     Order order;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setContentView(R.layout.activity_menu);
+        order = (Order) getIntent().getSerializableExtra("order");
+        String rst_name = getIntent().getStringExtra("rst_name");
+        int rate = getIntent().getIntExtra("rate",1);
+        String opentime = getIntent().getStringExtra("opentime");
+        String closetime = getIntent().getStringExtra(("closetime"));
+        String imgUrl = getIntent().getStringExtra("imgUrl");
 
-            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        TextView tv1 = (TextView) findViewById(R.id.textView1_menu);
+        TextView tv2 = (TextView) findViewById(R.id.textView2_menu);
+        TextView tv3 = (TextView) findViewById(R.id.textView3_menu);
+        ImageView iv = (ImageView) findViewById(R.id.image_restaurant_menu);
+        tv1.setText(rst_name);
+        tv2.setText(rate+"");
+        tv3.setText(opentime+"~"+closetime);
+
+        if(rst_name.equals("BBQ CHICKEN")) iv.setImageResource(R.drawable.bbq);
+        if(rst_name.equals("KFC")) iv.setImageResource(R.drawable.kfc);
+        if(rst_name.equals("DOMINO PIZZA")) iv.setImageResource(R.drawable.domino);
+        if(rst_name.equals("GOOBNE CHICKEN")) iv.setImageResource(R.drawable.goobne);
+        if(rst_name.equals("KYOCHON CHICKEN")) iv.setImageResource(R.drawable.kyochon);
+        if(rst_name.equals("MR.PIZZA")) iv.setImageResource(R.drawable.mrpizza);
+        if(rst_name.equals("PIZZA SCHOOL")) iv.setImageResource(R.drawable.pizzaschool);
+
+        jsonObject = new JSONObject();
+        jsonObject.put("query", rst_name);
+        mcontext = this;
+        JSONTask task = new JSONTask();
+        task.execute("http://172.30.1.35:3000/auth/menu");//AsyncTask 시작시킴
+
+        FloatingActionButton fab =(FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent cartIntent = new Intent(ShowMenu.this,ShowCart.class);
+                startActivity(cartIntent);
             }
         });
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        //
-        order = (Order) getIntent().getSerializableExtra("order");
-        query = getIntent().getStringExtra("search_key");//전 인텐트에서 전달받은 데이터
-        jsonObject = new JSONObject();
-        jsonObject.put("query", query);
-        mcontext = this;
-        JSONTask task = new JSONTask();
-        task.execute("http://172.30.1.35:3000/auth/search");//AsyncTask 시작시킴
-        //192.168.43.209
+
 
     }
-
-
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-    SearchView searchView;
-    public boolean onCreateOptionsMenu(Menu menu) {//앱바서 검색시 다시...
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.actionbar_serach, menu);
-
-        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-
-                Intent i = new Intent(getApplicationContext(), Search.class);
-                i.putExtra("search_key",s);
-                startActivity(i);
-
-                return false;
-            }
-            @Override
-            public boolean onQueryTextChange(String s) {
-                return false;
-            }
-        });
-        return true;
-    }
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
 
     public class JSONTask extends AsyncTask<String, String, String> {
 
@@ -209,37 +154,34 @@ public class Search extends AppCompatActivity
             return null;
         }
 
-
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             try{
-                 jsonParser = new JSONParser();
-                 jsonObj = (JSONObject) jsonParser.parse(result);
-                 restaurantArray = (JSONArray) jsonObj.get("RESTAURANTS");
+                jsonParser = new JSONParser();
+                jsonObj = (JSONObject) jsonParser.parse(result);
+                menuArray = (JSONArray) jsonObj.get("MENUS");
 
-
-                 System.out.println("respond");
-                 for(int i=0; i<restaurantArray.size() ; i++){
-                     JSONObject tempObj = (JSONObject) restaurantArray.get(i);
-                     Restaurant tempRst = new Restaurant(tempObj.get("name").toString(),Integer.parseInt(tempObj.get("rate").toString()),
-                             tempObj.get("opentime").toString(),tempObj.get("closetime").toString(),tempObj.get("imgUrl").toString(),
-                             Integer.parseInt(tempObj.get("rstcode").toString()));
-                     restaurantlist.add(tempRst);
-                 }
-                mListView = (ListView) findViewById(R.id.listview);
-                adapter = new RestaurantListAdapter(mcontext, R.layout.listview_restaurant,restaurantlist);
+                for(int i=0; i<menuArray.size() ; i++){
+                    JSONObject tempObj = (JSONObject) menuArray.get(i);
+                    Menu tempMenu = new Menu(Integer.parseInt(tempObj.get("menucode").toString()),
+                            tempObj.get("name").toString(),
+                            Integer.parseInt(tempObj.get("price").toString()));
+                    menulist.add(tempMenu);
+                }
+                mListView = (ListView) findViewById(R.id.listview_Menu);
+                adapter = new MenuListAdapter(mcontext, R.layout.listview_menu,menulist);
                 mListView.setAdapter(adapter);
                 mListView.setOnItemClickListener(mItemClickListener);
 
-
-                }
-                catch(ParseException e){
+            }
+            catch(ParseException e){
                 e.printStackTrace();
             }
         }
     }
-    private AdapterView.OnItemClickListener mItemClickListener = new AdapterView.OnItemClickListener() {
+
+    /*private AdapterView.OnItemClickListener mItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position,
                                 long l_position) {
@@ -247,12 +189,6 @@ public class Search extends AppCompatActivity
             // ListAdapter의 클릭리스너
             Restaurant a = (Restaurant) parent.getAdapter().getItem(position);
             Intent i = new Intent(getApplicationContext(), ShowMenu.class);
-            order.setRestaurant_Name(a.getRst_name());
-            order.setRestaurant_rate(a.getRate());
-            order.setRestaurant_OpenTime(a.getOpentime());
-            order.setRestaurant_CloseTime(a.getClosetime());
-            order.setRestaurant_Code(a.getRst_code());
-            i.putExtra("order",order);
             i.putExtra("rst_name",a.getRst_name());
             i.putExtra("rate",a.getRate());
             i.putExtra("opentime",a.getOpentime());
@@ -265,7 +201,24 @@ public class Search extends AppCompatActivity
 
         }
     };
+*/
+    private AdapterView.OnItemClickListener mItemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position,
+                                long l_position) {
+            // parent는 AdapterView의 속성의 모두 사용 할 수 있다.
+            // ListAdapter의 클릭리스너
+            Menu a = (Menu) parent.getAdapter().getItem(position);
+            order.setMenu_Code(a.getMenu_code());
+            order.setMenu_Name(a.getMenu_name());
+            order.setMenu_Price(a.getPrice());
+            Intent i = new Intent(getApplicationContext(), ShowMenuOption.class);
+            i.putExtra("order",order);
+            startActivity(i);
+            // view는 클릭한 Row의 view를 Object로 반환해 준다.
+            //TextView tv_view = (TextView)view.findViewById(R.id.);
+            //tv_view.setText("바꿈");
 
-
-
+        }
+    };
 }

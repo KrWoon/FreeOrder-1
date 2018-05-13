@@ -36,7 +36,8 @@
                 android:layout_marginTop="20dp"
                 android:background="@drawable/edittextstyle"
                 android:hint="Username"
-                android:textSize="15dp"/>
+                android:textSize="15dp"
+                android:textCursorDrawable="@null"/>
 
             <EditText
                 android:id="@+id/userEmail"
@@ -46,7 +47,8 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/edittextstyle"
                 android:hint="Email"
-                android:textSize="15dp"/>
+                android:textSize="15dp"
+                android:textCursorDrawable="@null"/>
 
             <EditText
                 android:id="@+id/userPassword"
@@ -56,7 +58,9 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/edittextstyle"
                 android:hint="Password"
-                android:textSize="15dp"/>
+                android:textSize="15dp"
+                android:inputType="textPassword"
+                android:textCursorDrawable="@null"/>
             <EditText
                 android:id="@+id/confirmPassword"
                 android:layout_width="230dp"
@@ -65,7 +69,9 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/edittextstyle"
                 android:hint="confirmPassword"
-                android:textSize="15dp"/>
+                android:textSize="15dp"
+                android:inputType="textPassword"
+                android:textCursorDrawable="@null"/>
 
             <Button
                 android:id="@+id/signUpButton"

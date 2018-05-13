@@ -1,0 +1,30 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_marginBottom="5dp"
+
+    >
+
+    <CheckedTextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:textStyle="bold"
+        android:gravity="center_vertical"
+        android:id="@+id/CheckedTextView_menuoption1"
+        android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+        android:textSize="18dp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:gravity="center_vertical"
+        android:id="@+id/textView_menuoption2"
+        android:textSize="13dp"
+        />
+</LinearLayout>
+

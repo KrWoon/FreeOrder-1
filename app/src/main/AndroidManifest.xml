@@ -27,6 +27,11 @@
             android:name=".Search"
             android:label="@string/title_activity_first"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ShowMenu" />
+        <activity
+            android:name=".ShowMenuOption"
+            android:theme="@style/AppTheme.CustomTheme" />
+        <activity android:name=".ShowCart"></activity>
     </application>
 
 </manifest>

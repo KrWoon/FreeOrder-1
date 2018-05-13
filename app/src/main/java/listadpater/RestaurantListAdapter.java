@@ -1,7 +1,6 @@
-package org.androidtown.signupdemo;
+package listadpater;
 
 import android.content.Context;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +16,9 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+
+import org.androidtown.signupdemo.R;
+import Model.Restaurant;
 
 import java.util.ArrayList;
 
@@ -54,8 +56,9 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> {
         //convertView는 처음에 null. 그후 화면에서
         String name = getItem(position).getRst_name();
         int rate = getItem(position).getRate();
-        int opentime = getItem(position).getOpentime();
-        String imgURL = getItem(position).getImgURL();
+        String opentime = getItem(position).getOpentime();
+        String imgURL = "@drawable/bbq";
+        String closetime = getItem(position).getClosetime();
 
         final View result;
 
@@ -88,19 +91,35 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> {
                 mcontext.getPackageName());
 
         //이미지로더
-        ImageLoader imageLoader = ImageLoader.getInstance();
-        DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
-                .cacheOnDisc(true).resetViewBeforeLoading(true)
-                .showImageForEmptyUri(defalutimage)
-                .showImageOnFail(defalutimage)
-                .showImageOnLoading(defalutimage).build();
+        //ImageLoader imageLoader = ImageLoader.getInstance();
+        //DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
+        //        .cacheOnDisc(true).resetViewBeforeLoading(true)
+        //        .showImageForEmptyUri(defalutimage)
+        //        .showImageOnFail(defalutimage)
+        //        .showImageOnLoading(defalutimage).build();
 
-        imageLoader.displayImage(imgURL, holder.img, options);
+        //imageLoader.displayImage(imgURL, holder.img, options);
 
 
         holder.name.setText(name);
-        holder.opentime.setText(opentime+"");
-        holder.rate.setText(rate+"");
+        holder.opentime.setText(opentime+"~"+closetime);
+        if(rate ==1) holder.rate.setText("★☆☆☆☆");
+        else if(rate ==2) holder.rate.setText("★★☆☆☆");
+        else if(rate ==3) holder.rate.setText("★★★☆☆");
+        else if(rate ==4) holder.rate.setText("★★★★☆");
+        else if(rate ==5) holder.rate.setText("★★★★★");
+        else if(rate ==0) holder.rate.setText("No rate");
+
+
+        if(name.equals("BBQ CHICKEN")) holder.img.setImageResource(R.drawable.bbq);
+        if(name.equals("KFC")) holder.img.setImageResource(R.drawable.kfc);
+        if(name.equals("DOMINO PIZZA")) holder.img.setImageResource(R.drawable.domino);
+        if(name.equals("GOOBNE CHICKEN")) holder.img.setImageResource(R.drawable.goobne);
+        if(name.equals("KYOCHON CHICKEN")) holder.img.setImageResource(R.drawable.kyochon);
+        if(name.equals("MR.PIZZA")) holder.img.setImageResource(R.drawable.mrpizza);
+        if(name.equals("PIZZA SCHOOL")) holder.img.setImageResource(R.drawable.pizzaschool);
+        if(name.equals("SCHOOL FOOD")) holder.img.setImageResource(R.drawable.school);
+
 
 
         return convertView;

@@ -11,17 +11,29 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
+
+import Model.Order;
 
 public class Main extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private Order order;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        order = (Order) getIntent().getSerializableExtra("order");
+        String my_email = order.getEmail();
+        //LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        //View myview = layoutInflater.inflate(R.layout.common_nav_header,null,false);
+        //TextView textView_myemail = (TextView) myview.findViewById(R.id.textview_myemail);
+        //textView_myemail.setText(my_email);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -30,7 +42,102 @@ public class Main extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        ImageButton showallfood = (ImageButton) findViewById(R.id.showallfood);
+        showallfood.setImageResource(R.drawable.showall);
+        ImageButton chicken = (ImageButton) findViewById(R.id.chicken);
+        chicken.setImageResource(R.drawable.chicken);
+        ImageButton koreanfood = (ImageButton) findViewById(R.id.koreanfood);
+        koreanfood.setImageResource(R.drawable.korean);
+        ImageButton chinesefood = (ImageButton) findViewById(R.id.chinesefood);
+        chinesefood.setImageResource(R.drawable.chinese);
+        ImageButton pizza = (ImageButton) findViewById(R.id.pizza);
+        pizza.setImageResource(R.drawable.pizza);
+        ImageButton schoolfood = (ImageButton) findViewById(R.id.schoolfood);
+        schoolfood.setImageResource(R.drawable.school);
+        ImageButton japanesefood = (ImageButton) findViewById(R.id.japanesefood);
+        japanesefood.setImageResource(R.drawable.japan);
+
+        showallfood.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), Search.class);
+                i.putExtra("search_key","");
+                i.putExtra("order",order);
+                startActivity(i);
+            }
+        });
+        chicken.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), Search.class);
+                i.putExtra("search_key","chicken");
+                i.putExtra("order",order);
+                startActivity(i);
+            }
+        });
+        koreanfood.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), Search.class);
+                i.putExtra("search_key","korean");
+                i.putExtra("order",order);
+                startActivity(i);
+            }
+        });
+        chinesefood.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), Search.class);
+                i.putExtra("search_key","chinese");
+                i.putExtra("order",order);
+                startActivity(i);
+            }
+        });
+        pizza.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), Search.class);
+                i.putExtra("search_key","pizza");
+                i.putExtra("order",order);
+                startActivity(i);
+            }
+        });
+        schoolfood.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), Search.class);
+                i.putExtra("search_key","school food");
+                i.putExtra("order",order);
+                startActivity(i);
+            }
+        });
+        japanesefood.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), Search.class);
+                i.putExtra("search_key","japanese");
+                i.putExtra("order",order);
+                startActivity(i);
+            }
+        });
+
     }
+
+//    public void setOnClickListenerr(final ImageButton btn, Order order){
+//
+//        btn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent i = new Intent(getApplicationContext(), Search.class);
+//                Toast.makeText(getApplicationContext(),""+btn.getTransitionName(),Toast.LENGTH_LONG).show();
+//                i.putExtra("search_key",""+btn.getId());
+//
+//                startActivity(i);
+//            }
+//        });
+//    }
+
 
     @Override
     public void onBackPressed() {
@@ -57,6 +164,7 @@ public class Main extends AppCompatActivity
 
                 Intent i = new Intent(getApplicationContext(), Search.class);
                 i.putExtra("search_key",s);
+                i.putExtra("order",order);
                 startActivity(i);
 
                 return false;
@@ -87,6 +195,7 @@ public class Main extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
@@ -106,6 +215,7 @@ public class Main extends AppCompatActivity
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+
         return true;
     }
 }

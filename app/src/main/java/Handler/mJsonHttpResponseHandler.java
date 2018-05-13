@@ -1,4 +1,4 @@
-package org.androidtown.signupdemo;
+package Handler;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +10,8 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 //import com.petersoboyejo.mobilepassport.R;
 //import com.petersoboyejo.mobilepassport.activities.LoginActivity;
 
+import org.androidtown.signupdemo.Login2;
+import org.androidtown.signupdemo.R;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,7 +35,7 @@ public class mJsonHttpResponseHandler extends JsonHttpResponseHandler {
         super.onSuccess(statusCode, headers, response);
         try {
             if (response.getInt(context.getString(R.string.server_response)) == 2) {
-                context.startActivity(new Intent(context, Login.class));
+                context.startActivity(new Intent(context, Login2.class));
                 Toast.makeText(context, R.string.e_session_expired, Toast.LENGTH_SHORT).show();
             }
         } catch (JSONException e) {

@@ -2,17 +2,22 @@ package org.androidtown.signupdemo;
 
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.TextView;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -23,58 +28,94 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
-public class Login extends AppCompatActivity {
-    EditText login_email;
-    EditText login_pw;
-    Button login_btn;
-    String page;
+import Model.Order;
+import listadpater.CartAdapter;
+import Database.Database;
+
+public class ShowCart extends AppCompatActivity {
+    RecyclerView recyclerView;
+    RecyclerView.LayoutManager layoutManager;
+
+    FirebaseDatabase database;
+    DatabaseReference request;
+
+    TextView txtTotalPrice;
+    Button btnOrder;
+
+    List<Order> cart = new ArrayList<>();
+    CartAdapter adapter;
     JSONObject jsonObject;
-    JSONObject jsob;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        login_email = (EditText)findViewById(R.id.login_email);
-        login_pw = (EditText)findViewById(R.id.login_password);
-        login_btn = (Button) findViewById(R.id.login_btn);
-        page= "login";
-        login_btn.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view){
+        setContentView(R.layout.activity__cart);
 
-                jsonObject = new JSONObject();
-                jsob = new JSONObject();
-                JSONArray arr = new JSONArray();
+        database = FirebaseDatabase.getInstance();
+        request = database.getReference("Request");
 
+        recyclerView = (RecyclerView) findViewById(R.id.listCart);
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
 
+        txtTotalPrice = (TextView) findViewById(R.id.total);
+        btnOrder = (Button) findViewById(R.id.btnOrder);
+        loadListOrder();
 
-                try {
-                    //jsonObject.put("email","1234");
-                    //jsonObject.put("password","4321");
-                    //arr.put(jsonObject);
-                    //jsob.put("body",arr.toString());
-                    jsonObject.accumulate("email", login_email.getText().toString());
-                    jsonObject.accumulate("password", login_pw.getText().toString());
-
-                }
-                catch (JSONException e1) {
-
-                    // TODO Auto-generated catch block
-
-                    e1.printStackTrace();
-
-                }
-
-
-
-                JSONTask task = new JSONTask();
-                task.execute("http://172.16.20.141:3000/auth/wow");//AsyncTask 시작시킴
-            }
-
-        });
     }
+    private void loadListOrder() {
+        cart = new Database(this).getCarts();
+        adapter = new CartAdapter(cart, this);
+        recyclerView.setAdapter(adapter);
 
+        int total = 0;
+        for (Order order : cart)
+            total += (order.getMenu_Price() + order.getSumMenuOptionPrice());
+        Locale locale = new Locale("en", "US");
+        NumberFormat fmt = NumberFormat.getCurrencyInstance(locale);
+
+        txtTotalPrice.setText(fmt.format(total));
+
+        btnOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                 jsonObject = new JSONObject();
+                 try{
+                    JSONArray jArray = new JSONArray();
+                    for(int i=0; i<cart.size(); i++) {
+                        JSONObject jsonObject1 = new JSONObject();
+                        JSONArray jArray2 = new JSONArray();
+                        for (int j = 0; j < cart.get(i).getMenuOption_ListNum(); j++) {
+                            JSONObject jsonObject2 = new JSONObject();
+                            jsonObject2.put("MenuOption_Code", cart.get(i).getMenuOption_Code() + "");
+                            jArray2.put(jsonObject2);
+                        }
+                        jsonObject1.put("Email", cart.get(i).getEmail());
+                        jsonObject1.put("Restaurant_Code", cart.get(i).getRestaurant_Code());
+                        jsonObject1.put("Menu_Code", cart.get(i).getMenu_Code());
+                        jsonObject1.put("MenuOption_CodeList", jArray2);
+
+                        jArray.put(jsonObject1);
+                    }
+                    jsonObject.put("mobileOrders",jArray);
+
+                }catch (JSONException e){}
+                JSONTask task = new JSONTask();
+                task.execute("http://172.30.1.35:3000/auth/yes");//AsyncTask 시작시킴
+
+            }
+        });
+
+
+    }
 
     public class JSONTask extends AsyncTask<String, String, String> {
 
@@ -106,10 +147,12 @@ public class Login extends AppCompatActivity {
                     writer.flush();
                     writer.close();//버퍼를 받아줌
                     //서버로 부터 데이터를 받음
-                    InputStream stream = con.getInputStream();
+                   InputStream stream = con.getInputStream();
                     reader = new BufferedReader(new InputStreamReader(stream));
                     StringBuffer buffer = new StringBuffer();
                     String line = "";
+
+
                     while ((line = reader.readLine()) != null) {
                         buffer.append(line);
                     }
@@ -135,16 +178,5 @@ public class Login extends AppCompatActivity {
             }
             return null;
         }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            Toast.makeText(getApplicationContext(),result,Toast.LENGTH_LONG).show();
-        }
-    }
-
-    public void signUpButtonClikced(View v){
-        Intent intent = new Intent(getApplicationContext(), SignUp.class);
-        startActivity(intent);
     }
 }

@@ -6,8 +6,8 @@ android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "org.androidtown.signupdemo"
-        minSdkVersion 15
-        targetSdkVersion 26
+        minSdkVersion 21
+        targetSdkVersion 24
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -23,6 +23,13 @@ android {
 
 
 dependencies {
+    //implementation 'com.google.firebase:firebase-core:15.0.0'
+    implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
+    implementation 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
+    implementation 'com.android.support:recyclerview-v7:26.+'
+    implementation 'com.google.firebase:firebase-database:10.2.0'
+    implementation 'com.google.firebase:firebase-core:10.2.0'
+    implementation 'com.firebaseui:firebase-ui-database:1.2.0'
     implementation 'com.android.support:multidex:1.0.1'
     implementation 'com.loopj.android:android-async-http:1.4.9'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
@@ -37,3 +44,4 @@ dependencies {
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     implementation files('libs/json-simple-1.1.1.jar')
 }
+apply plugin: 'com.google.gms.google-services'

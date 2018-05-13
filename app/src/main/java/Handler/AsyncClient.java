@@ -1,4 +1,4 @@
-package org.androidtown.signupdemo;
+package Handler;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +12,9 @@ import com.loopj.android.http.PersistentCookieStore;
 import com.loopj.android.http.RequestParams;
 //import com.petersoboyejo.mobilepassport.R;
 //import com.petersoboyejo.mobilepassport.activities.LoginActivity;
+
+import org.androidtown.signupdemo.Login2;
+import org.androidtown.signupdemo.R;
 
 import cz.msebera.android.httpclient.Header;
 
