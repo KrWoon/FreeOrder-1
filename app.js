@@ -5,6 +5,7 @@ var bodyParser = require('body-parser');
 var cors = require('cors')
 var logger = require('morgan');
 var path = require('path');
+var history = require('connect-history-api-fallback');
     
 var app = express();
 
@@ -30,6 +31,7 @@ app.use(session({
     })
 }));
 app.use(logger('dev'));
+app.use(history());
 
 
 // set static files
@@ -43,7 +45,7 @@ app.use('/auth/', auth);
 var form = require('./routes/passport_routes/form')();
 app.use('/form', form);
 var index = require('./routes/passport_routes/index')();
-app.use('/', index);
+app.use('/index', index);
 var restaurant = require('./routes/passport_routes/restaurant')();
 app.use('/restaurant', restaurant);
 var menu = require('./routes/passport_routes/menu')();

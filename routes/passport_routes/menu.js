@@ -2,33 +2,64 @@ module.exports = function () {
     var router = require('express').Router();
     var pool = require('../../config/passport_config/db')();
 
-    router.get(['/:rid', '/:rid/:mid/detail'], function (req, res) {
-        var sql = 'SELECT * FROM menu WHERE Restaurant_Code = ? AND Use_Code = \'Y\'';
+    // router.get(['/:rid', '/:rid/:mid/detail'], function (req, res) {
+    //     var sql = 'SELECT * FROM menu WHERE Restaurant_Code = ? AND Use_Code = \'Y\'';
+    //     pool.getConnection(function (err, conn) {
+    //         conn.query(sql, [req.params.rid], function (err, menus) {
+    //             sql = 'SELECT * FROM menuoption WHERE Restaurant_Code = ? AND Use_Code = \'Y\'';
+
+    //             conn.query(sql, [req.params.rid], function (err, options) {
+    //                 if (req.params.mid) {
+    //                     sql = 'SELECT * FROM menuoption INNER JOIN menu_menuoption ON menuoption.MenuOption_Code = menu_menuoption.MenuOption_Code WHERE menu_menuoption.Menu_Code = ? AND menu_menuoption.Use_Code = \'Y\''
+
+    //                     conn.query(sql, [req.params.mid], function (err, menuDetails) {
+    //                         res.render('menu/mLayout', { 'menu': menus, 'menuDetail': menuDetails, 'menuOption': options, 'r_Code': req.params.rid, 'm_Code': req.params.mid, 'login' : req.user });
+    //                     });
+    //                 } else {
+    //                     res.render('menu/mLayout', { 'menu': menus, 'menuOption': options, 'r_Code': req.params.rid, 'm_Code': 'None', 'login' : req.user  });
+    //                 }
+    //             });
+    //             conn.release();
+    //         });
+    //     });
+    // });
+
+    router.get('/:rid', function (req, res) {
+        var sql = 'SELECT Menu_Code, Menu_Name, Price, Delay FROM menu WHERE Restaurant_Code = ? AND Use_Code = \'Y\'';
         pool.getConnection(function (err, conn) {
             conn.query(sql, [req.params.rid], function (err, menus) {
-                sql = 'SELECT * FROM menuoption WHERE Restaurant_Code = ? AND Use_Code = \'Y\'';
-
-                conn.query(sql, [req.params.rid], function (err, options) {
-                    if (req.params.mid) {
-                        sql = 'SELECT * FROM menuoption INNER JOIN menu_menuoption ON menuoption.MenuOption_Code = menu_menuoption.MenuOption_Code WHERE menu_menuoption.Menu_Code = ? AND menu_menuoption.Use_Code = \'Y\''
-
-                        conn.query(sql, [req.params.mid], function (err, menuDetails) {
-                            res.render('menu/mLayout', { 'menu': menus, 'menuDetail': menuDetails, 'menuOption': options, 'r_Code': req.params.rid, 'm_Code': req.params.mid, 'login' : req.user });
-                        });
-                    } else {
-                        res.render('menu/mLayout', { 'menu': menus, 'menuOption': options, 'r_Code': req.params.rid, 'm_Code': 'None', 'login' : req.user  });
-                    }
-                });
+                res.json(menus);
                 conn.release();
             });
         });
     });
 
-    router.post('/:rid/add', function (req, res) {
+    router.get('/option/:rid', function (req, res) {
+        var sql = 'SELECT MenuOption_Code, MenuOption_Name, Price FROM menuoption WHERE Restaurant_Code = ? AND Use_Code = \'Y\'';
+        pool.getConnection(function (err, conn) {
+            conn.query(sql, [req.params.rid], function (err, options) {
+                res.json(options);
+                conn.release();
+            });
+        });
+    });
+
+    router.get('/details/:mid', function (req, res) {
+        var sql = 'SELECT menuoption.MenuOption_Code, menuoption.MenuOption_Name, menuoption.Price FROM menuoption INNER JOIN menu_menuoption ON menuoption.MenuOption_Code = menu_menuoption.MenuOption_Code WHERE Menu_Code = ?';
+        pool.getConnection(function (err, conn) {
+            conn.query(sql, [req.params.mid], function (err, details) {
+                res.json(details);
+                conn.release();
+            });
+        });
+    });
+
+    router.post('/:rid', function (req, res) {
         var newMenu = {
             Restaurant_Code: req.params.rid,
-            Menu_Name: req.body.menuname,
-            Price: req.body.price
+            Menu_Name: req.body.Menu_Name,
+            Price: req.body.Price,
+            Delay: req.body.Delay
         };
 
         var sql = 'INSERT INTO menu SET ?';
@@ -39,18 +70,18 @@ module.exports = function () {
                     res.status(500);
                 } else {
                     req.session.save(function () {
-                        res.redirect('/menu/' + req.params.rid);
+                        res.json({menu: 'New Menu is added!'})
                     });
                 }
             });
         });
     });
 
-    router.post('/option/:rid/add', function (req, res) {
+    router.post('/option/:rid', function (req, res) {
         var newOption = {
             Restaurant_Code: req.params.rid,
-            MenuOption_Name: req.body.menuname,
-            Price: req.body.price
+            MenuOption_Name: req.body.MenuOption_Name,
+            Price: req.body.Price
         };
 
         var sql = 'INSERT INTO menuoption SET ?';
@@ -61,7 +92,7 @@ module.exports = function () {
                     res.status(500);
                 } else {
                     req.session.save(function () {
-                        res.redirect('/menu/' + req.params.rid);
+                        res.json({option: 'New Option is added!'})
                     });
                 }
             });
@@ -108,7 +139,7 @@ module.exports = function () {
         });
     });
 
-    router.post('/:rid/:mid/delete', function (req, res) {
+    router.delete('/:mid', function (req, res) {
         var mid = req.params.mid;
         // var sql = 'UPDATE menu SET Use_Code = \'N\' WHERE Menu_Code = ?';
         var sql = 'DELETE FROM menu WHERE Menu_Code = ?';
@@ -116,14 +147,14 @@ module.exports = function () {
         pool.getConnection(function (err, conn) {
             conn.query(sql, [mid], function (err, results) {
                 req.session.save(function () {
-                    res.redirect('/menu/' + req.params.rid);
+                    res.json({menu : 'Delete Menu Complete!'});
                 });
                 conn.release();
             });
         });
     });
 
-    router.post('/option/:rid/:mid/delete', function (req, res) {
+    router.delete('/option/:mid', function (req, res) {
         var mid = req.params.mid;
         // var sql = 'UPDATE menuoption SET Use_Code = \'N\' WHERE MenuOption_Code = ?';
         var sql = 'DELETE FROM menuoption WHERE MenuOption_Code = ?';
@@ -131,7 +162,7 @@ module.exports = function () {
         pool.getConnection(function (err, conn) {
             conn.query(sql, [mid], function (err, results) {
                 req.session.save(function () {
-                    res.redirect('/menu/' + req.params.rid);
+                    res.json({option : 'Delete Option Complete!'});
                 });
                 conn.release();
             });

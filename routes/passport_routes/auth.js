@@ -12,10 +12,10 @@ module.exports = function(passport) {
         res.render('auth/login');
     });
     
-    router.get('/logout', function(req, res) {
+    router.post('/logout', function(req, res) {
         req.logout();
         req.session.save(function() {
-            res.redirect('/');
+            res.json({Logout: 'Logout Complete!'});
         });
     });
 
@@ -46,7 +46,7 @@ module.exports = function(passport) {
                                         res.status(500);
                                     } else {
                                         req.session.save(function() {
-                                            res.redirect('/');
+                                            res.redirect('/auth/login');
                                         });
                                     }
                                     conn.release();
@@ -56,13 +56,17 @@ module.exports = function(passport) {
                      }
                      else {
                         req.session.save(function() {
-                            res.redirect('/auth/register');
+                            res.write('<script type="text/javascript"> alert("Input password correctly"); </script>')
+                            res.write('<script language=\"javascript\"> history.back(); </script>') 
+                            // res.redirect('/auth/register');
                         });
                      }
                 } else {
                     console.log('ID already exists');
                     req.session.save(function() {
-                        res.redirect('/auth/register');
+                        res.write('<script type="text/javascript"> alert("ID already exists"); </script>')
+                        res.write('<script language=\"javascript\"> history.back(); </script>') 
+                        // res.redirect('/auth/register');
                     });
                 }
                 checkConn.release();

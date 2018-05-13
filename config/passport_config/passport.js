@@ -22,7 +22,7 @@ module.exports = function(app) {
                 } else {
                     conn.release();
                     return done(null, results[0]);
-                }
+                }                
             });
         });
     });

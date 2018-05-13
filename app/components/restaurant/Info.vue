@@ -1,0 +1,144 @@
+<template>
+  <div>
+
+    <main role="main">
+      <!-- Main jumbotron for a primary marketing message or call to action -->
+      <div class="jumbotron">
+        <div class="container">
+          <h1 class="display-3"> Information </h1>
+          <p>You can set your restaurant information in here</p>
+          <button class="btn btn-info btn-lg">Open Your Restaurant &raquo;</button>
+        </div>
+      </div>      
+
+        <div class="mycontainer">
+        <form v-on:submit.prevent="updateInfo()">
+            <div class="mb-3">
+                <label for="inputName">Restaurant name</label>   
+                <input type="text" class="form-control" v-model="info.Signboard" id="inputName" placeholder="Restaurant name" required autofocus>                                          
+            </div>
+
+            <div class="mb-3">
+                <label for="inputLocation">Location</label>   
+                <input type="text" class="form-control" v-model="info.Location" id="inputLocation" placeholder="Location" required autofocus>                                          
+            </div>
+
+            <div class="mb-3">
+                <label for="inputCategory">Category</label>   
+                <input type="text" class="form-control" v-model="info.Category" id="inputCategory" placeholder="Category" required autofocus>                                          
+            </div>
+
+            <div class="mb-3">
+                <label for="inputTables">Number of Table</label>   
+                <input type="text" class="form-control" v-model="info.NumberOfTable" id="inputTables" placeholder="Number of Table" required autofocus>                                          
+            </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="inputOpen">Open Time</label>
+                <input type="text" class="form-control text-center"  v-model="info.openTime" id="inputOpen" placeholder="09:00" pattern="\d{2}:\d{2}" title="Input type = ??:??" required>
+            </div>      
+
+            <div class="col-md-6 mb-3">
+                <label for="inputClose">Close Time</label>
+                <input type="text" class="form-control text-center"  v-model="info.closeTime" id="inputClose" placeholder="21:00" pattern="\d{2}:\d{2}" title="Input type = ??:??" required>
+            </div>      
+        </div>               
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Update</button>        
+        </form>            
+    </div>
+    <!-- /container -->    
+
+        <hr>
+    </main>
+
+    <footer class="container">
+      <p>&copy; BBGoo 2018</p>
+    </footer>
+  
+  </div> 
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      info: {}
+    }
+  },
+  created() {
+    this.fetchInfo();
+  },
+  watch: {
+    // 라우트가 변경되면 메소드를 다시 호출됩니다.
+    '$route': 'fetchInfo'
+  },
+  methods: {
+    fetchInfo() {
+      this.axios.get('/restaurant/' + this.$route.params.id)
+      .then(res => {
+        this.info = res.data;
+      })
+      .catch(err => console.log(err));
+    },
+    updateInfo() {
+        var response = confirm('Are you sure you want to edit?')
+        
+        if(response) {
+            this.axios.put('/restaurant/' + this.$route.params.id, this.info)
+            .then(res => {
+                this.$router.replace({name: 'Home'});
+            })
+            .catch(err => console.log(err));
+        }
+        return;
+
+    }
+  }
+}
+</script>
+
+<style>
+body {
+  padding-top: 3.5rem;
+  background-color:white;
+}
+.textColor {
+  color: #fff;
+}
+</style>
+
+<style scoped>
+.mycontainer {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+@media (min-width: 768px) {
+  .mycontainer {
+    width: 750px;
+  }
+}
+
+@media (min-width: 992px) {
+  .mycontainer {
+    width: 500px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .mycontainer {
+    width: 500px;
+  }
+}
+
+.border-top { border-top: 1px solid #e5e5e5; }
+.border-bottom { border-bottom: 1px solid #e5e5e5; }
+.border-top-gray { border-top-color: #adb5bd; }
+
+.box-shadow { box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05); }
+
+.lh-condensed { line-height: 1.25; }
+</style>

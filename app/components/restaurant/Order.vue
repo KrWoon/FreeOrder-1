@@ -7,6 +7,9 @@
           <h1 class="display-3"> Order </h1>
           <p>You can set your restaurant information in here</p>
           <button class="btn btn-info btn-lg disabled">Open Your Restaurant &raquo;</button>
+        <button class="btn btn-primary" v-on:click="sendMobileOrders()"> 
+            Send 
+        </button>    
         </div>
       </div>      
 
@@ -16,22 +19,21 @@
         <table class="table table-hover table-bordered">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Location</th>
-                    <th>Operation</th>
+                    <th>No.</th>
+                    <th>Email</th>
+                    <!-- <th>Operation</th> -->
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="order in orders">
-                    <td>{{order.UserID}}</td>
-                    <td>{{order.UserName}}</td>
-                    <td>{{order.UserLocation}}</td>
-                    <td>
+                <tr v-for="(order, index) in orders">
+                    <td>{{index + 1}}</td>
+                    <td>{{order.Email}}</td>
+                    <!-- <td>
                         <a href="#" class="btn btn-danger" v-on:click="deleteOrder(order.UserID)"> 
                             Delete 
-                        </a>                                             
-                    </td>
+                        </a>         
+                                  
+                    </td> -->
                 </tr>
             </tbody>
         </table>
@@ -53,7 +55,28 @@
 export default {
     data() {
         return {
-            orders: []
+            orders: [],
+            mobileOrders: [
+                {
+                    Email: "bbb@naver.com",
+                    Restaurant_Code: "211",
+                    Menu_Code: "391",
+                    MenuOption_CodeList: [
+                            { MenuOption_Code: "331" },
+                            { MenuOption_Code: "341" }
+                    ]
+                    
+                },
+                {
+                    Email: "bbb@naver.com",
+                    Restaurant_Code: "211",
+                    Menu_Code: "401",
+                    MenuOption_CodeList: [
+
+                    ]
+                    
+                }
+            ]
         }
     },
     created() {
@@ -61,9 +84,10 @@ export default {
     },
     methods: {
         fetchOrders() {
-            this.axios.get('/order')
+            this.axios.get('/order/mobile/' + this.$route.params.id)
             .then(res => {
                 this.orders = res.data;
+                console.log(this.orders);
             })
             .catch(err => console.log(err));
         },
@@ -86,6 +110,14 @@ export default {
                 .catch(err => console.log(err));
             }
             return;
+        },
+        sendMobileOrders() {
+            console.log(this.mobileOrders);
+            this.axios.post('/order/mobile', this.mobileOrders)
+            .then(res => {
+                console.log(res);
+            })
+            .catch(err => console.log(err));
         }
     }
 }

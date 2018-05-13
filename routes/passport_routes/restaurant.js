@@ -6,7 +6,8 @@ module.exports = function() {
         sql = 'SELECT * FROM restaurant WHERE Restaurant_Code = ? AND Use_Code = \'Y\'';
         pool.getConnection(function(err, conn) {
             conn.query(sql, [req.params.rid], function(err, results) {
-                res.render('restaurant/main', {'myRestaurant' : results[0], 'login' : req.user});                
+                res.json(results[0]);
+                // res.json({'restaurant' : results[0], 'login' : req.user});                
                 conn.release();
             });
         });     
@@ -22,23 +23,22 @@ module.exports = function() {
         }); 
     });
 
-    router.post('/:rid/info', function(req, res) {
+    // update restaurant
+    router.put('/:rid', function(req, res) {
         var updateRestaurant = {
-            Signboard : req.body.rname,
-            Location : req.body.location,
-            Category : req.body.category,
-            openTime : req.body.opentime,
-            closeTime : req.body.closetime,
-            NumberOfTable : req.body.numoftable,
-            BusinessStatus : req.body.status,
+            Signboard : req.body.Signboard,
+            Location : req.body.Location,
+            Category : req.body.Category,
+            NumberOfTable : req.body.NumberOfTable,
+            openTime : req.body.openTime,
+            closeTime : req.body.closeTime
         };
-
+        
         var sql = 'UPDATE restaurant SET ? WHERE Use_Code = \'Y\' AND Restaurant_Code = ' + req.params.rid;
         pool.getConnection(function(err, conn) {
             conn.query(sql, updateRestaurant, function(err, restaurant) { 
                 req.session.save(function() {
-                    res.write('<script type="text/javascript"> alert("Complete"); </script>')
-                    // res.write('<script language=\"javascript\"> window.location=\"info" </script>')
+                    res.json({restaurant: 'Update Restaurant Complete!'});
                 });               
                 conn.release();
             });

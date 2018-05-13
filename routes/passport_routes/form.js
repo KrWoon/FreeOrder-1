@@ -2,10 +2,6 @@ module.exports = function() {
     var router = require('express').Router();
     var pool = require('../../config/passport_config/db')();
     
-    router.get('/apply', function(req,res){
-        res.render('form/apply');
-    });
-
     router.post('/apply', function(req,res){
         var license = req.body.license1 + '-' + req.body.license2 + '-' + req.body.license3;        
         // Check Duplication of Restaurant
@@ -43,19 +39,6 @@ module.exports = function() {
         });        
     });
 
-    router.get('/apply/:id/edit', function(req,res){
-        var id = req.params.id;
-        var sql = 'SELECT * FROM application WHERE Application_Code = ? AND Use_Code = \'Y\'';
-        pool.getConnection(function(err, conn) {
-            conn.query(sql, [id], function(err, results) { 
-                req.session.save(function() {                    
-                    res.render('form/apply_edit', {'application' : results[0]});
-                });
-                conn.release();
-            });
-        });
-    });
-
     router.post('/apply/:id/edit', function(req,res){
         var license = req.body.license1 + '-' + req.body.license2 + '-' + req.body.license3;
         // 식당 중복 체크        
@@ -87,14 +70,14 @@ module.exports = function() {
         });        
     });
 
-    router.post('/apply/:id/delete', function(req,res){
+    router.delete('/:id', function(req, res, next){
         var id = req.params.id;
         // var sql = 'UPDATE application SET Use_Code = \'N\' WHERE Application_Code = ?';
         var sql = 'DELETE FROM application WHERE Application_Code = ?';
         pool.getConnection(function(err, conn) {
             conn.query(sql, [id], function(err, results) { 
                 req.session.save(function() {
-                    res.redirect('/');
+                    res.json({form: 'Delete Form Complete!'});
                 });
                 conn.release();
             });

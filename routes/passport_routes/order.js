@@ -13,6 +13,18 @@ module.exports = function() {
         });    
     });
 
+    // show data
+    router.get('/mobile/:rid', function(req, res) {
+        var sql = 'SELECT distinct Email FROM order_tb WHERE Restaurant_Code = ?';
+        pool.getConnection(function(err, conn) {
+            conn.query(sql, [req.params.rid], function(err, results) {
+                console.log(results);
+                res.json(results);   
+                conn.release();
+            });
+        });    
+    });
+
     // show one data
     router.get('/:id', function(req, res, next) {
         var sql = 'SELECT * FROM users WHERE UserID = ?';
@@ -22,6 +34,55 @@ module.exports = function() {
                 conn.release();
             });
         }); 
+    });
+
+    // add mobile data
+    router.post('/mobile', function(req, res) {
+        var totalOrder = [];
+
+        // push to totalOrder
+        for(var i=0; i<req.body.length; i++) {
+            // menuoption is existing
+            if(req.body[i].MenuOption_CodeList != 0) {
+                for(var j=0; j<req.body[i].MenuOption_CodeList.length; j++) {
+                    var newOrder = {
+                        Email: req.body[i].Email,
+                        Restaurant_Code: req.body[i].Restaurant_Code,
+                        Menu_Code: req.body[i].Menu_Code,
+                        MenuOption_Code: req.body[i].MenuOption_CodeList[j].MenuOption_Code
+                    }
+
+                    totalOrder.push(newOrder);
+                }
+            } else {
+                var newOrder = {
+                    Email: req.body[i].Email,
+                    Restaurant_Code: req.body[i].Restaurant_Code,
+                    Menu_Code: req.body[i].Menu_Code
+                }
+
+                totalOrder.push(newOrder);
+            }
+        }
+        
+        console.log(totalOrder);
+
+        pool.getConnection(function(err, conn) {
+            for(var i=0; i<totalOrder.length; i++) {
+
+                    var sql = 'INSERT INTO order_tb SET ?';
+                    conn.query(sql, totalOrder[i], function(err, results) {
+                        if(err) {
+                            console.log(err);
+                        } else {
+                            console.log('complete');
+                        }
+                    })    
+            }
+            res.status(200).send({message: 'DB complete'});
+            conn.release();
+        });
+
     });
 
     // add data
@@ -102,6 +163,7 @@ module.exports = function() {
             });
         });    
     });
+
 
     return router;
 }
