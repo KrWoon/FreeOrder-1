@@ -48,8 +48,8 @@
 
     <div class="container">
       <div class="row">
-        <div class="col-md-6">
-            <table class="table table-hover table-bordered text-center">
+        <div class="col-md-7">
+            <table class="table table-hover text-center">
                 <thead>
                     <tr>
                         <th>No.</th>
@@ -74,7 +74,7 @@
                 </tbody>
             </table>
 
-            <table class="table table-hover table-bordered text-center">
+            <table class="table table-hover text-center">
                 <thead>
                     <tr>
                         <th>No.</th>
@@ -98,8 +98,8 @@
             </table>
             </div>
 
-        <div class="col-md-6" v-if="check == 1">
-            <table class="table table-hover table-bordered text-center">
+        <div class="col-md-5" v-if="check == 1">
+            <table class="table table-hover text-center">
                 <thead>
                     <tr>
                         <th>Details</th>
@@ -252,13 +252,13 @@ body {
 
 @media (min-width: 992px) {
   .mycontainer {
-    width: 700px;
+    width: 1200px;
   }
 }
 
 @media (min-width: 1200px) {
   .mycontainer {
-    width: 700px;
+    width: 1200px;
   }
 }
 

@@ -79,8 +79,8 @@ module.exports = function() {
                         }
                     })    
             }
-            res.status(200).send({message: 'DB complete'});
             conn.release();
+            res.status(200).send({message: 'DB complete'});
         });
 
     });

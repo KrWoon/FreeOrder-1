@@ -77,9 +77,9 @@ module.exports = function() {
         pool.getConnection(function(err, conn) {
             conn.query(sql, [id], function(err, results) { 
                 req.session.save(function() {
+                    conn.release();
                     res.json({form: 'Delete Form Complete!'});
                 });
-                conn.release();
             });
         });
     });

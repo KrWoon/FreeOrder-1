@@ -5,10 +5,10 @@ module.exports = function() {
     router.get('/:rid', function(req,res){
         sql = 'SELECT * FROM restaurant WHERE Restaurant_Code = ? AND Use_Code = \'Y\'';
         pool.getConnection(function(err, conn) {
-            conn.query(sql, [req.params.rid], function(err, results) {
-                res.json(results[0]);
-                // res.json({'restaurant' : results[0], 'login' : req.user});                
+            conn.query(sql, [req.params.rid], function(err, results) {               
                 conn.release();
+                res.json(results[0]);
+                // res.json({'restaurant' : results[0], 'login' : req.user}); 
             });
         });     
     });
@@ -38,9 +38,9 @@ module.exports = function() {
         pool.getConnection(function(err, conn) {
             conn.query(sql, updateRestaurant, function(err, restaurant) { 
                 req.session.save(function() {
+                    conn.release();
                     res.json({restaurant: 'Update Restaurant Complete!'});
                 });               
-                conn.release();
             });
         });              
     });

@@ -28,8 +28,8 @@ module.exports = function () {
         var sql = 'SELECT Menu_Code, Menu_Name, Price, Delay FROM menu WHERE Restaurant_Code = ? AND Use_Code = \'Y\'';
         pool.getConnection(function (err, conn) {
             conn.query(sql, [req.params.rid], function (err, menus) {
-                res.json(menus);
                 conn.release();
+                res.json(menus);
             });
         });
     });
@@ -38,8 +38,8 @@ module.exports = function () {
         var sql = 'SELECT MenuOption_Code, MenuOption_Name, Price FROM menuoption WHERE Restaurant_Code = ? AND Use_Code = \'Y\'';
         pool.getConnection(function (err, conn) {
             conn.query(sql, [req.params.rid], function (err, options) {
-                res.json(options);
                 conn.release();
+                res.json(options);
             });
         });
     });
@@ -48,8 +48,8 @@ module.exports = function () {
         var sql = 'SELECT menuoption.MenuOption_Code, menuoption.MenuOption_Name, menuoption.Price FROM menuoption INNER JOIN menu_menuoption ON menuoption.MenuOption_Code = menu_menuoption.MenuOption_Code WHERE Menu_Code = ?';
         pool.getConnection(function (err, conn) {
             conn.query(sql, [req.params.mid], function (err, details) {
-                res.json(details);
                 conn.release();
+                res.json(details);
             });
         });
     });
@@ -66,10 +66,12 @@ module.exports = function () {
         pool.getConnection(function (err, conn) {
             conn.query(sql, newMenu, function (err, results) {
                 if (err) {
+                    conn.release();
                     console.log(err);
                     res.status(500);
                 } else {
                     req.session.save(function () {
+                        conn.release();
                         res.json({menu: 'New Menu is added!'})
                     });
                 }
@@ -88,10 +90,12 @@ module.exports = function () {
         pool.getConnection(function (err, conn) {
             conn.query(sql, newOption, function (err, results) {
                 if (err) {
+                    conn.release();
                     console.log(err);
                     res.status(500);
                 } else {
                     req.session.save(function () {
+                        conn.release();
                         res.json({option: 'New Option is added!'})
                     });
                 }
@@ -147,9 +151,9 @@ module.exports = function () {
         pool.getConnection(function (err, conn) {
             conn.query(sql, [mid], function (err, results) {
                 req.session.save(function () {
+                    conn.release();
                     res.json({menu : 'Delete Menu Complete!'});
                 });
-                conn.release();
             });
         });
     });
@@ -162,9 +166,9 @@ module.exports = function () {
         pool.getConnection(function (err, conn) {
             conn.query(sql, [mid], function (err, results) {
                 req.session.save(function () {
+                    conn.release();
                     res.json({option : 'Delete Option Complete!'});
                 });
-                conn.release();
             });
         });
     });

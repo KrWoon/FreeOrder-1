@@ -18162,7 +18162,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "\n.mycontainer[data-v-f825ffbe] {\r\n  padding-right: 15px;\r\n  padding-left: 15px;\r\n  margin-right: auto;\r\n  margin-left: auto;\n}\n@media (min-width: 768px) {\n.mycontainer[data-v-f825ffbe] {\r\n    width: 750px;\n}\n}\n@media (min-width: 992px) {\n.mycontainer[data-v-f825ffbe] {\r\n    width: 700px;\n}\n}\n@media (min-width: 1200px) {\n.mycontainer[data-v-f825ffbe] {\r\n    width: 700px;\n}\n}\n.border-top[data-v-f825ffbe] { border-top: 1px solid #e5e5e5;\n}\n.border-bottom[data-v-f825ffbe] { border-bottom: 1px solid #e5e5e5;\n}\n.border-top-gray[data-v-f825ffbe] { border-top-color: #adb5bd;\n}\n.box-shadow[data-v-f825ffbe] { box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);\n}\n.lh-condensed[data-v-f825ffbe] { line-height: 1.25;\n}\r\n", ""]);
+exports.push([module.i, "\n.mycontainer[data-v-f825ffbe] {\r\n  padding-right: 15px;\r\n  padding-left: 15px;\r\n  margin-right: auto;\r\n  margin-left: auto;\n}\n@media (min-width: 768px) {\n.mycontainer[data-v-f825ffbe] {\r\n    width: 750px;\n}\n}\n@media (min-width: 992px) {\n.mycontainer[data-v-f825ffbe] {\r\n    width: 1200px;\n}\n}\n@media (min-width: 1200px) {\n.mycontainer[data-v-f825ffbe] {\r\n    width: 1200px;\n}\n}\n.border-top[data-v-f825ffbe] { border-top: 1px solid #e5e5e5;\n}\n.border-bottom[data-v-f825ffbe] { border-bottom: 1px solid #e5e5e5;\n}\n.border-top-gray[data-v-f825ffbe] { border-top-color: #adb5bd;\n}\n.box-shadow[data-v-f825ffbe] { box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);\n}\n.lh-condensed[data-v-f825ffbe] { line-height: 1.25;\n}\r\n", ""]);
 
 // exports
 
@@ -18394,180 +18394,168 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "container" }, [
       _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-md-6" }, [
-          _c(
-            "table",
-            { staticClass: "table table-hover table-bordered text-center" },
-            [
-              _vm._m(1),
-              _vm._v(" "),
-              _c(
-                "tbody",
-                _vm._l(_vm.menus, function(menu, index) {
-                  return _c("tr", [
-                    _c("td", [_vm._v(" " + _vm._s(index + 1) + " ")]),
-                    _vm._v(" "),
-                    _c("td", [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-outline-dark btn-block",
-                          on: {
-                            click: function($event) {
-                              _vm.fetchDetails(menu.Menu_Code)
-                            }
+        _c("div", { staticClass: "col-md-7" }, [
+          _c("table", { staticClass: "table table-hover text-center" }, [
+            _vm._m(1),
+            _vm._v(" "),
+            _c(
+              "tbody",
+              _vm._l(_vm.menus, function(menu, index) {
+                return _c("tr", [
+                  _c("td", [_vm._v(" " + _vm._s(index + 1) + " ")]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-outline-dark btn-block",
+                        on: {
+                          click: function($event) {
+                            _vm.fetchDetails(menu.Menu_Code)
                           }
-                        },
-                        [_vm._v(" " + _vm._s(menu.Menu_Name) + " ")]
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(" " + _vm._s(menu.Price) + " ")]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(" " + _vm._s(menu.Delay) + " ")]),
-                    _vm._v(" "),
-                    _c("td", [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-outline-danger",
-                          on: {
-                            click: function($event) {
-                              _vm.deleteMenu(menu.Menu_Code)
-                            }
+                        }
+                      },
+                      [_vm._v(" " + _vm._s(menu.Menu_Name) + " ")]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(" " + _vm._s(menu.Price) + " ")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(" " + _vm._s(menu.Delay) + " ")]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-outline-danger",
+                        on: {
+                          click: function($event) {
+                            _vm.deleteMenu(menu.Menu_Code)
                           }
-                        },
-                        [
-                          _vm._v(
-                            " \n                              Delete \n                          "
-                          )
-                        ]
-                      )
-                    ])
+                        }
+                      },
+                      [
+                        _vm._v(
+                          " \n                              Delete \n                          "
+                        )
+                      ]
+                    )
                   ])
-                })
-              )
-            ]
-          ),
+                ])
+              })
+            )
+          ]),
           _vm._v(" "),
-          _c(
-            "table",
-            { staticClass: "table table-hover table-bordered text-center" },
-            [
-              _vm._m(2),
-              _vm._v(" "),
-              _c(
-                "tbody",
-                _vm._l(_vm.options, function(option, index) {
-                  return _c("tr", [
-                    _c("td", [_vm._v(" " + _vm._s(index + 1) + " ")]),
-                    _vm._v(" "),
-                    _c("td", [
-                      _vm._v(" " + _vm._s(option.MenuOption_Name) + " ")
-                    ]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(" " + _vm._s(option.Price) + " ")]),
-                    _vm._v(" "),
-                    _c("td", [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-outline-danger",
-                          on: {
-                            click: function($event) {
-                              _vm.deleteOption(option.MenuOption_Code)
-                            }
+          _c("table", { staticClass: "table table-hover text-center" }, [
+            _vm._m(2),
+            _vm._v(" "),
+            _c(
+              "tbody",
+              _vm._l(_vm.options, function(option, index) {
+                return _c("tr", [
+                  _c("td", [_vm._v(" " + _vm._s(index + 1) + " ")]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _vm._v(" " + _vm._s(option.MenuOption_Name) + " ")
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(" " + _vm._s(option.Price) + " ")]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-outline-danger",
+                        on: {
+                          click: function($event) {
+                            _vm.deleteOption(option.MenuOption_Code)
                           }
-                        },
-                        [
-                          _vm._v(
-                            " \n                              Delete \n                          "
-                          )
-                        ]
-                      )
-                    ])
+                        }
+                      },
+                      [
+                        _vm._v(
+                          " \n                              Delete \n                          "
+                        )
+                      ]
+                    )
                   ])
-                })
-              )
-            ]
-          )
+                ])
+              })
+            )
+          ])
         ]),
         _vm._v(" "),
         _vm.check == 1
-          ? _c("div", { staticClass: "col-md-6" }, [
-              _c(
-                "table",
-                { staticClass: "table table-hover table-bordered text-center" },
-                [
-                  _vm._m(3),
-                  _vm._v(" "),
-                  _c(
-                    "tbody",
-                    _vm._l(_vm.options, function(option) {
-                      return _c("tr", [
-                        _c("td", [
-                          _vm._v(" " + _vm._s(option.MenuOption_Name) + " ")
-                        ]),
-                        _vm._v(" "),
-                        _c("td", [_vm._v(" " + _vm._s(option.Price) + " ")]),
-                        _vm._v(" "),
-                        _c("td", [
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: option.MenuOption_Code,
-                                expression: "option.MenuOption_Code"
-                              }
-                            ],
-                            attrs: {
-                              type: "checkbox",
-                              name: "detail",
-                              checked: "checked"
-                            },
-                            domProps: {
-                              checked: Array.isArray(option.MenuOption_Code)
-                                ? _vm._i(option.MenuOption_Code, null) > -1
-                                : option.MenuOption_Code
-                            },
-                            on: {
-                              change: function($event) {
-                                var $$a = option.MenuOption_Code,
-                                  $$el = $event.target,
-                                  $$c = $$el.checked ? true : false
-                                if (Array.isArray($$a)) {
-                                  var $$v = null,
-                                    $$i = _vm._i($$a, $$v)
-                                  if ($$el.checked) {
-                                    $$i < 0 &&
-                                      _vm.$set(
-                                        option,
-                                        "MenuOption_Code",
-                                        $$a.concat([$$v])
-                                      )
-                                  } else {
-                                    $$i > -1 &&
-                                      _vm.$set(
-                                        option,
-                                        "MenuOption_Code",
-                                        $$a
-                                          .slice(0, $$i)
-                                          .concat($$a.slice($$i + 1))
-                                      )
-                                  }
+          ? _c("div", { staticClass: "col-md-5" }, [
+              _c("table", { staticClass: "table table-hover text-center" }, [
+                _vm._m(3),
+                _vm._v(" "),
+                _c(
+                  "tbody",
+                  _vm._l(_vm.options, function(option) {
+                    return _c("tr", [
+                      _c("td", [
+                        _vm._v(" " + _vm._s(option.MenuOption_Name) + " ")
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(" " + _vm._s(option.Price) + " ")]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: option.MenuOption_Code,
+                              expression: "option.MenuOption_Code"
+                            }
+                          ],
+                          attrs: {
+                            type: "checkbox",
+                            name: "detail",
+                            checked: "checked"
+                          },
+                          domProps: {
+                            checked: Array.isArray(option.MenuOption_Code)
+                              ? _vm._i(option.MenuOption_Code, null) > -1
+                              : option.MenuOption_Code
+                          },
+                          on: {
+                            change: function($event) {
+                              var $$a = option.MenuOption_Code,
+                                $$el = $event.target,
+                                $$c = $$el.checked ? true : false
+                              if (Array.isArray($$a)) {
+                                var $$v = null,
+                                  $$i = _vm._i($$a, $$v)
+                                if ($$el.checked) {
+                                  $$i < 0 &&
+                                    _vm.$set(
+                                      option,
+                                      "MenuOption_Code",
+                                      $$a.concat([$$v])
+                                    )
                                 } else {
-                                  _vm.$set(option, "MenuOption_Code", $$c)
+                                  $$i > -1 &&
+                                    _vm.$set(
+                                      option,
+                                      "MenuOption_Code",
+                                      $$a
+                                        .slice(0, $$i)
+                                        .concat($$a.slice($$i + 1))
+                                    )
                                 }
+                              } else {
+                                _vm.$set(option, "MenuOption_Code", $$c)
                               }
                             }
-                          })
-                        ])
+                          }
+                        })
                       ])
-                    })
-                  )
-                ]
-              )
+                    ])
+                  })
+                )
+              ])
             ])
           : _vm._e()
       ])
