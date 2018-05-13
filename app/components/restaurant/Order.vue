@@ -7,7 +7,7 @@
           <h1 class="display-3"> Order </h1>
           <p>You can set your restaurant information in here</p>
           <button class="btn btn-info btn-lg disabled">Open Your Restaurant &raquo;</button>
-        <button class="btn btn-primary" v-on:click="sendMobileOrders()"> 
+        <button class="btn btn-primary" v-on:click="sendMobileOrders()" disabled> 
             Send 
         </button>    
         </div>

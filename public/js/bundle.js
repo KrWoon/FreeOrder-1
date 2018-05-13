@@ -18829,6 +18829,7 @@ var render = function() {
             "button",
             {
               staticClass: "btn btn-primary",
+              attrs: { disabled: "" },
               on: {
                 click: function($event) {
                   _vm.sendMobileOrders()
