@@ -7,9 +7,9 @@
           <h1 class="display-3"> Order </h1>
           <p>You can set your restaurant information in here</p>
           <button class="btn btn-info btn-lg disabled">Order &raquo;</button>
-        <!-- <button class="btn btn-primary" v-on:click="sendMobileOrders()" disabled> 
+        <button class="btn btn-primary" v-on:click="sendMobileOrders()"> 
             Send 
-        </button>     -->
+        </button>    
         </div>
       </div>      
 
@@ -68,7 +68,7 @@ export default {
                     
                 },
                 {
-                    Email: "bbb@naver.com",
+                    Email: "aaa@naver.com",
                     Restaurant_Code: "211",
                     Menu_Code: "401",
                     MenuOption_CodeList: [

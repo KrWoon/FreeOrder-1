@@ -2524,7 +2524,7 @@ module.exports = Cancel;
                 MenuOption_CodeList: [{ MenuOption_Code: "331" }, { MenuOption_Code: "341" }]
 
             }, {
-                Email: "bbb@naver.com",
+                Email: "aaa@naver.com",
                 Restaurant_Code: "211",
                 Menu_Code: "401",
                 MenuOption_CodeList: []
@@ -18803,13 +18803,36 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", [
     _c("main", { attrs: { role: "main" } }, [
-      _vm._m(0),
+      _c("div", { staticClass: "jumbotron" }, [
+        _c("div", { staticClass: "container" }, [
+          _c("h1", { staticClass: "display-3" }, [_vm._v(" Order ")]),
+          _vm._v(" "),
+          _c("p", [_vm._v("You can set your restaurant information in here")]),
+          _vm._v(" "),
+          _c("button", { staticClass: "btn btn-info btn-lg disabled" }, [
+            _vm._v("Order »")
+          ]),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-primary",
+              on: {
+                click: function($event) {
+                  _vm.sendMobileOrders()
+                }
+              }
+            },
+            [_vm._v(" \n        Send \n    ")]
+          )
+        ])
+      ]),
       _vm._v(" "),
       _c("div", { staticClass: "mycontainer" }, [
         _c("h3", [_vm._v(" Display Order ")]),
         _vm._v(" "),
         _c("table", { staticClass: "table table-hover table-bordered" }, [
-          _vm._m(1),
+          _vm._m(0),
           _vm._v(" "),
           _c(
             "tbody",
@@ -18827,26 +18850,10 @@ var render = function() {
       _c("hr")
     ]),
     _vm._v(" "),
-    _vm._m(2)
+    _vm._m(1)
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "jumbotron" }, [
-      _c("div", { staticClass: "container" }, [
-        _c("h1", { staticClass: "display-3" }, [_vm._v(" Order ")]),
-        _vm._v(" "),
-        _c("p", [_vm._v("You can set your restaurant information in here")]),
-        _vm._v(" "),
-        _c("button", { staticClass: "btn btn-info btn-lg disabled" }, [
-          _vm._v("Order »")
-        ])
-      ])
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement

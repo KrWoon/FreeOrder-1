@@ -38,52 +38,109 @@ module.exports = function() {
 
     // add mobile data
     router.post('/mobile', function(req, res) {
-        var totalOrder = [];
+        var inputData = "";
 
-        // push to totalOrder
-        for(var i=0; i<req.body.length; i++) {
-            // menuoption is existing
-            if(req.body[i].MenuOption_CodeList != 0) {
-                for(var j=0; j<req.body[i].MenuOption_CodeList.length; j++) {
-                    var newOrder = {
-                        Email: req.body[i].Email,
-                        Restaurant_Code: req.body[i].Restaurant_Code,
-                        Menu_Code: req.body[i].Menu_Code,
-                        MenuOption_Code: req.body[i].MenuOption_CodeList[j].MenuOption_Code
-                    }
-
-                    totalOrder.push(newOrder);
-                }
-            } else {
-                var newOrder = {
-                    Email: req.body[i].Email,
-                    Restaurant_Code: req.body[i].Restaurant_Code,
-                    Menu_Code: req.body[i].Menu_Code
-                }
-
-                totalOrder.push(newOrder);
-            }
-        }
-        
-        console.log(totalOrder);
-
-        pool.getConnection(function(err, conn) {
-            for(var i=0; i<totalOrder.length; i++) {
-
-                    var sql = 'INSERT INTO order_tb SET ?';
-                    conn.query(sql, totalOrder[i], function(err, results) {
-                        if(err) {
-                            console.log(err);
-                        } else {
-                            console.log('complete');
-                        }
-                    })    
-            }
-            conn.release();
-            res.status(200).send({message: 'DB complete'});
+        req.on('data', function(data) {
+            inputData = JSON.parse(data);
         });
 
+        req.on('end', function() {
+            var totalOrder = [];
+        
+            // push to totalOrder
+            for(var i=0; i<inputData.length; i++) {
+                // menuoption is existing
+                if(inputData[i].MenuOption_CodeList != 0) {
+                    for(var j=0; j<inputData[i].MenuOption_CodeList.length; j++) {
+                        var newOrder = {
+                            Email: inputData[i].Email,
+                            Restaurant_Code: inputData[i].Restaurant_Code,
+                            Menu_Code: inputData[i].Menu_Code,
+                            MenuOption_Code: inputData[i].MenuOption_CodeList[j].MenuOption_Code
+                        }
+                        totalOrder.push(newOrder);
+                    }
+                } else {
+                    var newOrder = {
+                        Email: inputData[i].Email,
+                        Restaurant_Code: inputData[i].Restaurant_Code,
+                        Menu_Code: inputData[i].Menu_Code
+                    }
+                    totalOrder.push(newOrder);
+                }
+            }
+    
+            pool.getConnection(function(err, conn) {
+                for(var i=0; i<totalOrder.length; i++) {
+                        var sql = 'INSERT INTO order_tb SET ?';
+                        conn.query(sql, totalOrder[i], function(err, results) {
+                            if(err) {
+                                console.log(err);
+                            } else {
+                                console.log('complete');
+                            }
+                        })    
+                }
+                conn.release();
+            });
+        });
+
+        res.write("FreeOrder DB Ok");
+        res.end();
     });
+
+    // // add mobile data
+    // router.post('/mobile', function(req, res) {
+    //     var inputData = "";
+
+    //     req.on('data', function(data) {
+    //         inputData = JSON.parse(data);
+    //     });
+
+    //     req.on('end', function() {
+    //         var totalOrder = [];
+        
+    //         // push to totalOrder
+    //         for(var i=0; i<req.body.length; i++) {
+    //             // menuoption is existing
+    //             if(req.body[i].MenuOption_CodeList != 0) {
+    //                 for(var j=0; j<req.body[i].MenuOption_CodeList.length; j++) {
+    //                     var newOrder = {
+    //                         Email: req.body[i].Email,
+    //                         Restaurant_Code: req.body[i].Restaurant_Code,
+    //                         Menu_Code: req.body[i].Menu_Code,
+    //                         MenuOption_Code: req.body[i].MenuOption_CodeList[j].MenuOption_Code
+    //                     }
+    //                     totalOrder.push(newOrder);
+    //                 }
+    //             } else {
+    //                 var newOrder = {
+    //                     Email: req.body[i].Email,
+    //                     Restaurant_Code: req.body[i].Restaurant_Code,
+    //                     Menu_Code: req.body[i].Menu_Code
+    //                 }
+    //                 totalOrder.push(newOrder);
+    //             }
+    //         }
+    
+    //         pool.getConnection(function(err, conn) {
+    //             for(var i=0; i<totalOrder.length; i++) {
+    //                     var sql = 'INSERT INTO order_tb SET ?';
+    //                     conn.query(sql, totalOrder[i], function(err, results) {
+    //                         if(err) {
+    //                             console.log(err);
+    //                         } else {
+    //                             console.log('complete');
+    //                         }
+    //                     })    
+    //             }
+    //             conn.release();
+    //         });
+    //     });
+
+    //     res.write("FreeOrder DB Ok");
+    //     res.end();
+    // });
 
     // add data
     router.post('/', function(req, res) {
