@@ -18843,9 +18843,7 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("button", { staticClass: "btn btn-info btn-lg disabled" }, [
           _vm._v("Order »")
-        ]),
-        _vm._v(" "),
-        _vm._v("\n        Send \n    ")
+        ])
       ])
     ])
   },
