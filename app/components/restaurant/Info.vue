@@ -7,7 +7,14 @@
         <div class="container">
           <h1 class="display-3"> Information </h1>
           <p>You can set your restaurant information in here</p>
-          <button class="btn btn-info btn-lg">Open Your Restaurant &raquo;</button>
+          <button class="btn btn-info btn-lg" @click="changeStatus()">
+              <template v-if="this.status.status == 'open'">
+                Open Your Restaurant &raquo;
+              </template>
+              <template v-else>
+                Close Your Restaurant &raquo;
+              </template>
+          </button>
         </div>
       </div>      
 
@@ -63,21 +70,24 @@
 export default {
   data() {
     return {
-      info: {}
+      info: {},
+      status: {status: ''}
     }
   },
   created() {
     this.fetchInfo();
-  },
-  watch: {
-    // 라우트가 변경되면 메소드를 다시 호출됩니다.
-    '$route': 'fetchInfo'
   },
   methods: {
     fetchInfo() {
       this.axios.get('/restaurant/' + this.$route.params.id)
       .then(res => {
         this.info = res.data;
+
+        if(this.info.BusinessStatus == 'open') {
+          this.status.status = 'close'
+        } else {
+          this.status.status = 'open'
+        }
       })
       .catch(err => console.log(err));
     },
@@ -87,12 +97,28 @@ export default {
         if(response) {
             this.axios.put('/restaurant/' + this.$route.params.id, this.info)
             .then(res => {
-                this.$router.replace({name: 'Home'});
+                alert(res.data.restaurant);
             })
             .catch(err => console.log(err));
         }
         return;
 
+    },
+    changeStatus() {
+      this.axios.post('/restaurant/changeStatus/' + this.$route.params.id, this.status)
+      .then(res => {
+        alert(res.data.message);
+
+        if(res.data.change == 1) {
+          if(this.status.status == 'open') {
+            this.status.status = 'close';
+          } else {
+            this.status.status = 'open';
+          }
+        }
+        
+      })
+      .catch(err => console.log(err));
     }
   }
 }

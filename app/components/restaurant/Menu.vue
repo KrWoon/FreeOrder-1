@@ -62,7 +62,7 @@
                 <tbody>
                     <tr v-for="(menu, index ) in menus">
                         <td> {{ index+1 }} </td>
-                        <td> <button class="btn btn-outline-dark btn-block" v-on:click="fetchDetails(menu.Menu_Code)"> {{ menu.Menu_Name }} </button> </td>
+                        <td> <button class="btn btn-outline-dark btn-block" v-on:click="clickMenu(menu.Menu_Code)"> {{ menu.Menu_Name }} </button> </td>
                         <td> {{ menu.Price }} </td>
                         <td> {{ menu.Delay }} </td>
                         <td>
@@ -98,7 +98,8 @@
             </table>
             </div>
 
-        <div class="col-md-5" v-if="check == 1">
+        <div class="col-md-5" v-if="menuIsChecked">
+          <form v-on:submit.prevent="addDetails(menuIsChecked)">
             <table class="table table-hover text-center">
                 <thead>
                     <tr>
@@ -112,11 +113,16 @@
                         <td> {{ option.MenuOption_Name }} </td>
                         <td> {{ option.Price }} </td>
                         <td>
-                          <input type="checkbox" name="detail" v-model="option.MenuOption_Code" checked="checked">
-                        </td>                    
+                            <input type="checkbox" :value="{Menu_Code: menuIsChecked, MenuOption_Code: option.MenuOption_Code}" v-model="details">
+                        </td>       
                     </tr>                
                 </tbody>
-            </table>
+              </table>
+              
+              <div align="right">
+                <button class="btn btn-primary my-2 my-sm-0 align" type="submit">Save</button>
+              </div>
+            </form>
           </div>
 
           </div>
@@ -138,8 +144,7 @@ export default {
       menus: [],
       options: [],
       details: [],
-      check: 0,
-      detailCheck: 0,
+      menuIsChecked: 0,
       newMenu: {
         Menu_Name: "",
         Price: "",
@@ -157,9 +162,6 @@ export default {
     this.fetchOptions();
   },
   methods: {
-    incrementCheck() {
-      this.detailCheck += 1;
-    },
     fetchMenus() {
       this.axios.get('/menu/' + this.$route.params.id)
       .then(res => {
@@ -176,11 +178,11 @@ export default {
       })
       .catch(err => console.log(err));
     },
-    fetchDetails(id) {
+    clickMenu(id) {
       this.axios.get('/menu/details/' + id)
       .then(res => {
         this.details = res.data;
-        this.check = 1;
+        this.menuIsChecked = id;
 
         console.log(this.details);
       })
@@ -199,6 +201,16 @@ export default {
         this.fetchOptions();        
       })
       .catch(err => console.log(err));
+    },
+    addDetails(id) {
+      this.axios.post('/menu/details/' + id, this.details)
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => console.log(err));
+
+      console.log(id)
+      console.log(this.details);
     },
     deleteMenu(id) {
       var response = confirm('Are you sure you want to delete this menu?');
@@ -269,4 +281,5 @@ body {
 .box-shadow { box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05); }
 
 .lh-condensed { line-height: 1.25; }
+
 </style>

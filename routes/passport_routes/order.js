@@ -15,7 +15,7 @@ module.exports = function() {
 
     // show data
     router.get('/mobile/:rid', function(req, res) {
-        var sql = 'SELECT distinct Email FROM order_tb WHERE Restaurant_Code = ?';
+        var sql = 'SELECT * FROM order_tb WHERE Restaurant_Code = ?';
         pool.getConnection(function(err, conn) {
             conn.query(sql, [req.params.rid], function(err, results) {
                 console.log(results);
@@ -44,27 +44,29 @@ module.exports = function() {
             inputData = JSON.parse(data);
         });
 
+        console.log(inputData.mobileOrder);
+
         req.on('end', function() {
             var totalOrder = [];
         
             // push to totalOrder
-            for(var i=0; i<inputData.length; i++) {
+            for(var i=0; i<inputData.mobileOrder.length; i++) {
                 // menuoption is existing
-                if(inputData[i].MenuOption_CodeList != 0) {
-                    for(var j=0; j<inputData[i].MenuOption_CodeList.length; j++) {
+                if(inputData.mobileOrder[i].MenuOption_CodeList != 0) {
+                    for(var j=0; j<inputData.mobileOrder[i].MenuOption_CodeList.length; j++) {
                         var newOrder = {
-                            Email: inputData[i].Email,
-                            Restaurant_Code: inputData[i].Restaurant_Code,
-                            Menu_Code: inputData[i].Menu_Code,
-                            MenuOption_Code: inputData[i].MenuOption_CodeList[j].MenuOption_Code
+                            Email: inputData.mobileOrder[i].Email,
+                            Restaurant_Code: inputData.mobileOrder[i].Restaurant_Code,
+                            Menu_Code: inputData.mobileOrder[i].Menu_Code,
+                            MenuOption_Code: inputData.mobileOrder[i].MenuOption_CodeList[j].MenuOption_Code
                         }
                         totalOrder.push(newOrder);
                     }
                 } else {
                     var newOrder = {
-                        Email: inputData[i].Email,
-                        Restaurant_Code: inputData[i].Restaurant_Code,
-                        Menu_Code: inputData[i].Menu_Code
+                        Email: inputData.mobileOrder[i].Email,
+                        Restaurant_Code: inputData.mobileOrder[i].Restaurant_Code,
+                        Menu_Code: inputData.mobileOrder[i].Menu_Code
                     }
                     totalOrder.push(newOrder);
                 }

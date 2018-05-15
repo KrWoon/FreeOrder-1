@@ -2153,24 +2153,34 @@ module.exports = Cancel;
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
   data() {
     return {
-      info: {}
+      info: {},
+      status: { status: '' }
     };
   },
   created() {
     this.fetchInfo();
   },
-  watch: {
-    // 라우트가 변경되면 메소드를 다시 호출됩니다.
-    '$route': 'fetchInfo'
-  },
   methods: {
     fetchInfo() {
       this.axios.get('/restaurant/' + this.$route.params.id).then(res => {
         this.info = res.data;
+
+        if (this.info.BusinessStatus == 'open') {
+          this.status.status = 'close';
+        } else {
+          this.status.status = 'open';
+        }
       }).catch(err => console.log(err));
     },
     updateInfo() {
@@ -2178,10 +2188,23 @@ module.exports = Cancel;
 
       if (response) {
         this.axios.put('/restaurant/' + this.$route.params.id, this.info).then(res => {
-          this.$router.replace({ name: 'Home' });
+          alert(res.data.restaurant);
         }).catch(err => console.log(err));
       }
       return;
+    },
+    changeStatus() {
+      this.axios.post('/restaurant/changeStatus/' + this.$route.params.id, this.status).then(res => {
+        alert(res.data.message);
+
+        if (res.data.change == 1) {
+          if (this.status.status == 'open') {
+            this.status.status = 'close';
+          } else {
+            this.status.status = 'open';
+          }
+        }
+      }).catch(err => console.log(err));
     }
   }
 });
@@ -2374,6 +2397,12 @@ module.exports = Cancel;
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
   data() {
@@ -2381,8 +2410,7 @@ module.exports = Cancel;
       menus: [],
       options: [],
       details: [],
-      check: 0,
-      detailCheck: 0,
+      menuIsChecked: 0,
       newMenu: {
         Menu_Name: "",
         Price: "",
@@ -2400,9 +2428,6 @@ module.exports = Cancel;
     this.fetchOptions();
   },
   methods: {
-    incrementCheck() {
-      this.detailCheck += 1;
-    },
     fetchMenus() {
       this.axios.get('/menu/' + this.$route.params.id).then(res => {
         this.menus = res.data;
@@ -2415,10 +2440,10 @@ module.exports = Cancel;
         console.log(this.options);
       }).catch(err => console.log(err));
     },
-    fetchDetails(id) {
+    clickMenu(id) {
       this.axios.get('/menu/details/' + id).then(res => {
         this.details = res.data;
-        this.check = 1;
+        this.menuIsChecked = id;
 
         console.log(this.details);
       }).catch(err => console.log(err));
@@ -2432,6 +2457,14 @@ module.exports = Cancel;
       this.axios.post('/menu/option/' + this.$route.params.id, this.newOption).then(res => {
         this.fetchOptions();
       }).catch(err => console.log(err));
+    },
+    addDetails(id) {
+      this.axios.post('/menu/details/' + id, this.details).then(res => {
+        console.log(res);
+      }).catch(err => console.log(err));
+
+      console.log(id);
+      console.log(this.details);
     },
     deleteMenu(id) {
       var response = confirm('Are you sure you want to delete this menu?');
@@ -2512,12 +2545,18 @@ module.exports = Cancel;
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     data() {
         return {
             orders: [],
-            mobileOrders: [{
+            mobileOrder: [{
                 Email: "bbb@naver.com",
                 Restaurant_Code: "211",
                 Menu_Code: "391",
@@ -17598,7 +17637,39 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", [
     _c("main", { attrs: { role: "main" } }, [
-      _vm._m(0),
+      _c("div", { staticClass: "jumbotron" }, [
+        _c("div", { staticClass: "container" }, [
+          _c("h1", { staticClass: "display-3" }, [_vm._v(" Information ")]),
+          _vm._v(" "),
+          _c("p", [_vm._v("You can set your restaurant information in here")]),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-info btn-lg",
+              on: {
+                click: function($event) {
+                  _vm.changeStatus()
+                }
+              }
+            },
+            [
+              this.status.status == "open"
+                ? [
+                    _vm._v(
+                      "\n              Open Your Restaurant »\n            "
+                    )
+                  ]
+                : [
+                    _vm._v(
+                      "\n              Close Your Restaurant »\n            "
+                    )
+                  ]
+            ],
+            2
+          )
+        ])
+      ]),
       _vm._v(" "),
       _c("div", { staticClass: "mycontainer" }, [
         _c(
@@ -17835,26 +17906,10 @@ var render = function() {
       _c("hr")
     ]),
     _vm._v(" "),
-    _vm._m(1)
+    _vm._m(0)
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "jumbotron" }, [
-      _c("div", { staticClass: "container" }, [
-        _c("h1", { staticClass: "display-3" }, [_vm._v(" Information ")]),
-        _vm._v(" "),
-        _c("p", [_vm._v("You can set your restaurant information in here")]),
-        _vm._v(" "),
-        _c("button", { staticClass: "btn btn-info btn-lg" }, [
-          _vm._v("Open Your Restaurant »")
-        ])
-      ])
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -18162,7 +18217,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "\n.mycontainer[data-v-f825ffbe] {\r\n  padding-right: 15px;\r\n  padding-left: 15px;\r\n  margin-right: auto;\r\n  margin-left: auto;\n}\n@media (min-width: 768px) {\n.mycontainer[data-v-f825ffbe] {\r\n    width: 750px;\n}\n}\n@media (min-width: 992px) {\n.mycontainer[data-v-f825ffbe] {\r\n    width: 1200px;\n}\n}\n@media (min-width: 1200px) {\n.mycontainer[data-v-f825ffbe] {\r\n    width: 1200px;\n}\n}\n.border-top[data-v-f825ffbe] { border-top: 1px solid #e5e5e5;\n}\n.border-bottom[data-v-f825ffbe] { border-bottom: 1px solid #e5e5e5;\n}\n.border-top-gray[data-v-f825ffbe] { border-top-color: #adb5bd;\n}\n.box-shadow[data-v-f825ffbe] { box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);\n}\n.lh-condensed[data-v-f825ffbe] { line-height: 1.25;\n}\r\n", ""]);
+exports.push([module.i, "\n.mycontainer[data-v-f825ffbe] {\r\n  padding-right: 15px;\r\n  padding-left: 15px;\r\n  margin-right: auto;\r\n  margin-left: auto;\n}\n@media (min-width: 768px) {\n.mycontainer[data-v-f825ffbe] {\r\n    width: 750px;\n}\n}\n@media (min-width: 992px) {\n.mycontainer[data-v-f825ffbe] {\r\n    width: 1200px;\n}\n}\n@media (min-width: 1200px) {\n.mycontainer[data-v-f825ffbe] {\r\n    width: 1200px;\n}\n}\n.border-top[data-v-f825ffbe] { border-top: 1px solid #e5e5e5;\n}\n.border-bottom[data-v-f825ffbe] { border-bottom: 1px solid #e5e5e5;\n}\n.border-top-gray[data-v-f825ffbe] { border-top-color: #adb5bd;\n}\n.box-shadow[data-v-f825ffbe] { box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);\n}\n.lh-condensed[data-v-f825ffbe] { line-height: 1.25;\n}\r\n\r\n", ""]);
 
 // exports
 
@@ -18411,7 +18466,7 @@ var render = function() {
                         staticClass: "btn btn-outline-dark btn-block",
                         on: {
                           click: function($event) {
-                            _vm.fetchDetails(menu.Menu_Code)
+                            _vm.clickMenu(menu.Menu_Code)
                           }
                         }
                       },
@@ -18485,77 +18540,97 @@ var render = function() {
           ])
         ]),
         _vm._v(" "),
-        _vm.check == 1
+        _vm.menuIsChecked
           ? _c("div", { staticClass: "col-md-5" }, [
-              _c("table", { staticClass: "table table-hover text-center" }, [
-                _vm._m(3),
-                _vm._v(" "),
-                _c(
-                  "tbody",
-                  _vm._l(_vm.options, function(option) {
-                    return _c("tr", [
-                      _c("td", [
-                        _vm._v(" " + _vm._s(option.MenuOption_Name) + " ")
-                      ]),
+              _c(
+                "form",
+                {
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                      _vm.addDetails(_vm.menuIsChecked)
+                    }
+                  }
+                },
+                [
+                  _c(
+                    "table",
+                    { staticClass: "table table-hover text-center" },
+                    [
+                      _vm._m(3),
                       _vm._v(" "),
-                      _c("td", [_vm._v(" " + _vm._s(option.Price) + " ")]),
-                      _vm._v(" "),
-                      _c("td", [
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: option.MenuOption_Code,
-                              expression: "option.MenuOption_Code"
-                            }
-                          ],
-                          attrs: {
-                            type: "checkbox",
-                            name: "detail",
-                            checked: "checked"
-                          },
-                          domProps: {
-                            checked: Array.isArray(option.MenuOption_Code)
-                              ? _vm._i(option.MenuOption_Code, null) > -1
-                              : option.MenuOption_Code
-                          },
-                          on: {
-                            change: function($event) {
-                              var $$a = option.MenuOption_Code,
-                                $$el = $event.target,
-                                $$c = $$el.checked ? true : false
-                              if (Array.isArray($$a)) {
-                                var $$v = null,
-                                  $$i = _vm._i($$a, $$v)
-                                if ($$el.checked) {
-                                  $$i < 0 &&
-                                    _vm.$set(
-                                      option,
-                                      "MenuOption_Code",
-                                      $$a.concat([$$v])
-                                    )
-                                } else {
-                                  $$i > -1 &&
-                                    _vm.$set(
-                                      option,
-                                      "MenuOption_Code",
-                                      $$a
-                                        .slice(0, $$i)
-                                        .concat($$a.slice($$i + 1))
-                                    )
+                      _c(
+                        "tbody",
+                        _vm._l(_vm.options, function(option) {
+                          return _c("tr", [
+                            _c("td", [
+                              _vm._v(" " + _vm._s(option.MenuOption_Name) + " ")
+                            ]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _vm._v(" " + _vm._s(option.Price) + " ")
+                            ]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.details,
+                                    expression: "details"
+                                  }
+                                ],
+                                attrs: { type: "checkbox" },
+                                domProps: {
+                                  value: {
+                                    Menu_Code: _vm.menuIsChecked,
+                                    MenuOption_Code: option.MenuOption_Code
+                                  },
+                                  checked: Array.isArray(_vm.details)
+                                    ? _vm._i(_vm.details, {
+                                        Menu_Code: _vm.menuIsChecked,
+                                        MenuOption_Code: option.MenuOption_Code
+                                      }) > -1
+                                    : _vm.details
+                                },
+                                on: {
+                                  change: function($event) {
+                                    var $$a = _vm.details,
+                                      $$el = $event.target,
+                                      $$c = $$el.checked ? true : false
+                                    if (Array.isArray($$a)) {
+                                      var $$v = {
+                                          Menu_Code: _vm.menuIsChecked,
+                                          MenuOption_Code:
+                                            option.MenuOption_Code
+                                        },
+                                        $$i = _vm._i($$a, $$v)
+                                      if ($$el.checked) {
+                                        $$i < 0 &&
+                                          (_vm.details = $$a.concat([$$v]))
+                                      } else {
+                                        $$i > -1 &&
+                                          (_vm.details = $$a
+                                            .slice(0, $$i)
+                                            .concat($$a.slice($$i + 1)))
+                                      }
+                                    } else {
+                                      _vm.details = $$c
+                                    }
+                                  }
                                 }
-                              } else {
-                                _vm.$set(option, "MenuOption_Code", $$c)
-                              }
-                            }
-                          }
+                              })
+                            ])
+                          ])
                         })
-                      ])
-                    ])
-                  })
-                )
-              ])
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _vm._m(4)
+                ]
+              )
             ])
           : _vm._e()
       ])
@@ -18563,7 +18638,7 @@ var render = function() {
     _vm._v(" "),
     _c("hr"),
     _vm._v(" "),
-    _vm._m(4)
+    _vm._m(5)
   ])
 }
 var staticRenderFns = [
@@ -18629,6 +18704,21 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Operation")])
       ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { attrs: { align: "right" } }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-primary my-2 my-sm-0 align",
+          attrs: { type: "submit" }
+        },
+        [_vm._v("Save")]
+      )
     ])
   },
   function() {
@@ -18816,7 +18906,7 @@ var render = function() {
           _c(
             "button",
             {
-              staticClass: "btn btn-primary",
+              staticClass: "btn btn-primary disabled",
               on: {
                 click: function($event) {
                   _vm.sendMobileOrders()
@@ -18840,7 +18930,13 @@ var render = function() {
               return _c("tr", [
                 _c("td", [_vm._v(_vm._s(index + 1))]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(order.Email))])
+                _c("td", [_vm._v(_vm._s(order.Order_Code))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(order.Email))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(order.Menu_Code))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(order.MenuOption_Code))])
               ])
             })
           )
@@ -18862,7 +18958,13 @@ var staticRenderFns = [
       _c("tr", [
         _c("th", [_vm._v("No.")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Email")])
+        _c("th", [_vm._v("Order_Code")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Email")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Menu_Code")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("MenuOption_Code")])
       ])
     ])
   },
