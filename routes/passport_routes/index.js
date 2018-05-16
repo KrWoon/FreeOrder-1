@@ -1,6 +1,7 @@
 module.exports = function() {
     var router = require('express').Router();
     var pool = require('../../config/passport_config/db')();
+
     
     router.get('/', function(req, res){
         res.json({'login' : req.user});

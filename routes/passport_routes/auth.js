@@ -3,14 +3,6 @@ module.exports = function(passport) {
     var bkfd2Password = require('pbkdf2-password');
     var hasher = bkfd2Password();
     var pool = require('../../config/passport_config/db')();
-
-    router.get('/register', function(req, res){ 
-        res.render('auth/register');
-    });
-    
-    router.get('/login', function(req, res) {
-        res.render('auth/login');
-    });
     
     router.post('/logout', function(req, res) {
         req.logout();

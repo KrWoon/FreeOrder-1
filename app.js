@@ -6,8 +6,21 @@ var cors = require('cors')
 var logger = require('morgan');
 var path = require('path');
 var history = require('connect-history-api-fallback');
-    
+
 var app = express();
+
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
+
+server.listen('3000');
+
+io.on('connection', (socket) => {
+    console.log('Socket Cunnect');
+
+    socket.on('disconnect', function(){
+        console.log('Socket Disconnected');
+    });
+});
 
 // set view
 app.set('views',  './views/passport_views');
@@ -48,16 +61,15 @@ var index = require('./routes/passport_routes/index')();
 app.use('/index', index);
 var restaurant = require('./routes/passport_routes/restaurant')();
 app.use('/restaurant', restaurant);
-var menu = require('./routes/passport_routes/menu')();
+var menu = require('./routes/passport_routes/menu')(io);
 app.use('/menu', menu);
 
 var order = require('./routes/passport_routes/order')();
 app.use('/order', order);
 
 
-
 // start server
-var port = process.env.PORT || 3000;
-app.listen(port, function() {
-    console.log('Server On!');
-});
+// var port = process.env.PORT || 3000;
+// app.listen(port, function() {
+//     console.log('Server On!');
+// });

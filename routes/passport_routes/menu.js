@@ -1,4 +1,4 @@
-module.exports = function () {
+module.exports = function (io) {
     var router = require('express').Router();
     var pool = require('../../config/passport_config/db')();
 
@@ -28,18 +28,20 @@ module.exports = function () {
     router.get('/:rid', function (req, res) {
         var sql = 'SELECT Menu_Code, Menu_Name, Price, Delay FROM menu WHERE Restaurant_Code = ? AND Use_Code = \'Y\'';
         pool.getConnection(function (err, conn) {
+            if(err) throw err;
             conn.query(sql, [req.params.rid], function (err, menus) {
                 if(err) throw err;
                 conn.release();
                 res.json(menus);
             });
-        });
+        });        
     });
 
     // get options
     router.get('/option/:rid', function (req, res) {
         var sql = 'SELECT MenuOption_Code, MenuOption_Name, Price FROM menuoption WHERE Restaurant_Code = ? AND Use_Code = \'Y\'';
         pool.getConnection(function (err, conn) {
+            if(err) throw err;
             conn.query(sql, [req.params.rid], function (err, options) {
                 if(err) throw err;
                 conn.release();
@@ -52,6 +54,7 @@ module.exports = function () {
     router.get('/details/:mid', function (req, res) {
         var sql = 'SELECT Menu_Code, menuoption.MenuOption_Code FROM menuoption INNER JOIN menu_menuoption ON menuoption.MenuOption_Code = menu_menuoption.MenuOption_Code WHERE Menu_Code = ?';
         pool.getConnection(function (err, conn) {
+            if(err) throw err;
             conn.query(sql, [req.params.mid], function (err, details) {
                 if(err) throw err;
                 conn.release();
@@ -77,6 +80,8 @@ module.exports = function () {
                     console.log(err);
                     res.status(500);
                 } else {
+                    // jiwoon
+                    io.sockets.emit('customEmit', newMenu);
                     req.session.save(function () {
                         conn.release();
                         res.json({menu: 'New Menu is added!'})
@@ -85,6 +90,7 @@ module.exports = function () {
             });
         });
     });
+
 
     // add new option
     router.post('/option/:rid', function (req, res) {

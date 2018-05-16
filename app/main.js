@@ -1,12 +1,16 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
+
 Vue.use(VueRouter);
 
 import VueAxios from 'vue-axios';
 import axios from 'axios';
 
 Vue.use(VueAxios, axios);
+
+import VueSocketio from 'vue-socket.io';
+
 
 import App from './App.vue';
 
@@ -92,6 +96,12 @@ var routes = [
         components: {
             default: Menu,
             a: RestaurantTop
+        },
+        beforeEnter (to, from, next) {
+            if(!Vue.prototype.$socket) {
+                Vue.use(VueSocketio, 'http://freeorder1010.herokuapp.com');
+            }
+            next()
         }
     },
     {

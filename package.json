@@ -30,10 +30,12 @@
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "pbkdf2-password": "^1.2.1",
+    "socket.io": "^2.1.0",
     "vue": "^2.5.16",
     "vue-axios": "^2.1.1",
     "vue-loader": "^14.2.2",
     "vue-router": "^3.0.1",
+    "vue-socket.io": "^2.1.1-b",
     "vue-template-compiler": "^2.5.16",
     "webpack": "^3.8.1"
   },
