@@ -11,8 +11,17 @@ var app = express();
 
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
+var port = process.env.PORT || 3000;
 
-server.listen('3000');
+// start server
+// var port = process.env.PORT || 3000;
+// app.listen(port, function() {
+//     console.log('Server On!');
+// });
+
+server.listen(port, function() {
+    console.log('Server On!');
+});
 
 io.on('connection', (socket) => {
     console.log('Socket Cunnect');
@@ -68,8 +77,3 @@ var order = require('./routes/passport_routes/order')();
 app.use('/order', order);
 
 
-// start server
-// var port = process.env.PORT || 3000;
-// app.listen(port, function() {
-//     console.log('Server On!');
-// });
