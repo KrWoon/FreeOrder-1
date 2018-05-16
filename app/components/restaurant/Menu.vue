@@ -162,16 +162,16 @@ export default {
     this.fetchMenus();
     this.fetchOptions();
   },
-    // sockets:{
-    //     connect: function(){
-    //         console.log('connection success')
-    //     },
-    //     customEmit: function(val){
-    //       this.socketData = val;
-    //       console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)')
-    //       console.log('socket menu: ' + this.socketData);
-    //     }
-    // },
+    sockets:{
+        connect: function(){
+            console.log('connection success')
+        },
+        customEmit: function(val){
+          this.socketData = val;
+          console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)')
+          console.log('socket menu: ' + this.socketData);
+        }
+    },
   methods: {
     fetchMenus() {
       this.axios.get('/menu/' + this.$route.params.id)

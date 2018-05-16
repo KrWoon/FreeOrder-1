@@ -97,12 +97,12 @@ var routes = [
             default: Menu,
             a: RestaurantTop
         },
-        // beforeEnter (to, from, next) {
-        //     if(!Vue.prototype.$socket) {
-        //         Vue.use(VueSocketio, 'http://freeorder1010.herokuapp.com:3000');
-        //     }
-        //     next()
-        // }
+        beforeEnter (to, from, next) {
+            if(!Vue.prototype.$socket) {
+                Vue.use(VueSocketio, 'http://freeorder1010.herokuapp.com');
+            }
+            next()
+        }
     },
     {
         name: 'Order',

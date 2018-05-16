@@ -2428,16 +2428,16 @@ module.exports = Cancel;
     this.fetchMenus();
     this.fetchOptions();
   },
-  // sockets:{
-  //     connect: function(){
-  //         console.log('connection success')
-  //     },
-  //     customEmit: function(val){
-  //       this.socketData = val;
-  //       console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)')
-  //       console.log('socket menu: ' + this.socketData);
-  //     }
-  // },
+  sockets: {
+    connect: function () {
+      console.log('connection success');
+    },
+    customEmit: function (val) {
+      this.socketData = val;
+      console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)');
+      console.log('socket menu: ' + this.socketData);
+    }
+  },
   methods: {
     fetchMenus() {
       this.axios.get('/menu/' + this.$route.params.id).then(res => {
@@ -2736,13 +2736,13 @@ var routes = [{
     components: {
         default: __WEBPACK_IMPORTED_MODULE_19__components_restaurant_Menu_vue__["a" /* default */],
         a: __WEBPACK_IMPORTED_MODULE_16__components_restaurant_RestaurantTop_vue__["a" /* default */]
+    },
+    beforeEnter(to, from, next) {
+        if (!__WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].prototype.$socket) {
+            __WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].use(__WEBPACK_IMPORTED_MODULE_4_vue_socket_io___default.a, 'http://freeorder1010.herokuapp.com');
+        }
+        next();
     }
-    // beforeEnter (to, from, next) {
-    //     if(!Vue.prototype.$socket) {
-    //         Vue.use(VueSocketio, 'http://freeorder1010.herokuapp.com:3000');
-    //     }
-    //     next()
-    // }
 }, {
     name: 'Order',
     path: '/view/order/:id',

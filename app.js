@@ -13,12 +13,6 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var port = process.env.PORT || 3000;
 
-// start server
-// var port = process.env.PORT || 3000;
-// app.listen(port, function() {
-//     console.log('Server On!');
-// });
-
 server.listen(port, function() {
     console.log('Server On!');
 });
@@ -70,7 +64,7 @@ var index = require('./routes/passport_routes/index')();
 app.use('/index', index);
 var restaurant = require('./routes/passport_routes/restaurant')();
 app.use('/restaurant', restaurant);
-var menu = require('./routes/passport_routes/menu')();
+var menu = require('./routes/passport_routes/menu')(io);
 app.use('/menu', menu);
 
 var order = require('./routes/passport_routes/order')();

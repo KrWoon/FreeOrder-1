@@ -1,4 +1,4 @@
-module.exports = function () {
+module.exports = function (io) {
     var router = require('express').Router();
     var pool = require('../../config/passport_config/db')();
 
@@ -81,7 +81,7 @@ module.exports = function () {
                     res.status(500);
                 } else {
                     // jiwoon
-                    // io.sockets.emit('customEmit', newMenu);
+                    io.sockets.emit('customEmit', newMenu);
                     req.session.save(function () {
                         conn.release();
                         res.json({menu: 'New Menu is added!'})
