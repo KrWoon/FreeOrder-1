@@ -14,13 +14,13 @@ var io = require('socket.io')(server);
 
 server.listen('3000');
 
-io.on('connection', (socket) => {
-    console.log('Socket Cunnect');
+// io.on('connection', (socket) => {
+//     console.log('Socket Cunnect');
 
-    socket.on('disconnect', function(){
-        console.log('Socket Disconnected');
-    });
-});
+//     socket.on('disconnect', function(){
+//         console.log('Socket Disconnected');
+//     });
+// });
 
 // set view
 app.set('views',  './views/passport_views');
@@ -67,9 +67,3 @@ app.use('/menu', menu);
 var order = require('./routes/passport_routes/order')();
 app.use('/order', order);
 
-
-// start server
-// var port = process.env.PORT || 3000;
-// app.listen(port, function() {
-//     console.log('Server On!');
-// });
