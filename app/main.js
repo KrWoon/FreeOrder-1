@@ -99,7 +99,7 @@ var routes = [
         },
         beforeEnter (to, from, next) {
             if(!Vue.prototype.$socket) {
-                Vue.use(VueSocketio, 'http://freeorder1010.herokuapp.com');
+                Vue.use(VueSocketio, 'http://freeorder1010.herokuapp.com:3000');
             }
             next()
         }
