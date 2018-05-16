@@ -2739,7 +2739,7 @@ var routes = [{
     },
     beforeEnter(to, from, next) {
         if (!__WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].prototype.$socket) {
-            __WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].use(__WEBPACK_IMPORTED_MODULE_4_vue_socket_io___default.a, 'http://freeorder1010.herokuapp.com');
+            __WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].use(__WEBPACK_IMPORTED_MODULE_4_vue_socket_io___default.a, 'http://freeorder1010.herokuapp.com:3000');
         }
         next();
     }
