@@ -2579,11 +2579,19 @@ module.exports = Cancel;
                 Menu_Code: "401",
                 MenuOption_CodeList: []
 
-            }]
+            }],
+            socketData: {}
         };
     },
     created() {
         this.fetchOrders();
+    },
+    sockets: {
+        customOrder: function (val) {
+            this.socketData = val;
+            console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)');
+            console.log('socket menu: ' + this.socketData);
+        }
     },
     methods: {
         fetchOrders() {

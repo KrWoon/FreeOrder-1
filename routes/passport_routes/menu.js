@@ -121,17 +121,27 @@ module.exports = function (io) {
     router.post('/details/:mid', function (req, res) {
         console.log(req.body);
 
-        pool.getConnection(function (err, conn) {            
-            var sql = 'INSERT INTO menu_menuoption (Menu_Code, MenuOption_Code) SELECT ?, ? FROM DUAL WHERE NOT EXISTS (SELECT * FROM menu_menuoption WHERE Menu_Code = ? AND MenuOption_Code = ?)';
+        pool.getConnection(function (err, conn) {     
+            if(err) throw err;
 
-            for(var i=0; i<req.body.length; i++) {
-                conn.query(sql, [req.body[i].Menu_Code, req.body[i].MenuOption_Code, req.body[i].Menu_Code, req.body[i].MenuOption_Code], function (err, details) {
-                    if(err) throw err;
-                    console.log('complete');
+            var sql = 'DELETE FROM menu_menuoption WHERE Menu_Code = ?';
+
+            conn.query(sql, [req.body[0].Menu_Code], function(err, result) {
+                if(err) throw err;
+
+                req.session.save(function () {
+                    sql = 'INSERT INTO menu_menuoption (Menu_Code, MenuOption_Code) SELECT ?, ? FROM DUAL WHERE NOT EXISTS (SELECT * FROM menu_menuoption WHERE Menu_Code = ? AND MenuOption_Code = ?)';
+
+                    for(var i=0; i<req.body.length; i++) {
+                        conn.query(sql, [req.body[i].Menu_Code, req.body[i].MenuOption_Code, req.body[i].Menu_Code, req.body[i].MenuOption_Code], function (err, details) {
+                            if(err) throw err;
+                            console.log('complete');
+                        });
+                    }            
+                    conn.release();
+                    res.json({detail : "detail receive complete"});
                 });
-            }            
-            conn.release();
-            res.json({detail : "detail receive complete"});
+            });
         });
     });
 

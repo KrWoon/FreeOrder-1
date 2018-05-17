@@ -18,6 +18,9 @@ module.exports = function() {
 
     // add mobile data
     router.post('/mobile', function(req, res) {
+        // jiwoon
+        io.sockets.emit('customOrder', {mobile:'complete'});
+
         var inputData = "";
 
         req.on('data', function(data) {
