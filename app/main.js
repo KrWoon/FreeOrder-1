@@ -110,6 +110,12 @@ var routes = [
         components: {
             default: Order,
             a: RestaurantTop
+        },
+        beforeEnter (to, from, next) {
+            if(!Vue.prototype.$socket) {
+                Vue.use(VueSocketio, 'https://freeorder1010.herokuapp.com');
+            }
+            next()
         }
     },
     {

@@ -130,10 +130,10 @@ module.exports = function (io) {
                 if(err) throw err;
 
                 req.session.save(function () {
-                    sql = 'INSERT INTO menu_menuoption (Menu_Code, MenuOption_Code) SELECT ?, ? FROM DUAL WHERE NOT EXISTS (SELECT * FROM menu_menuoption WHERE Menu_Code = ? AND MenuOption_Code = ?)';
+                    sql = 'INSERT INTO menu_menuoption (Menu_Code, MenuOption_Code) VALUES(?, ?)';
 
                     for(var i=0; i<req.body.length; i++) {
-                        conn.query(sql, [req.body[i].Menu_Code, req.body[i].MenuOption_Code, req.body[i].Menu_Code, req.body[i].MenuOption_Code], function (err, details) {
+                        conn.query(sql, [req.body[i].Menu_Code, req.body[i].MenuOption_Code], function (err, details) {
                             if(err) throw err;
                             console.log('complete');
                         });

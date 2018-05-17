@@ -2757,6 +2757,12 @@ var routes = [{
     components: {
         default: __WEBPACK_IMPORTED_MODULE_20__components_restaurant_Order_vue__["a" /* default */],
         a: __WEBPACK_IMPORTED_MODULE_16__components_restaurant_RestaurantTop_vue__["a" /* default */]
+    },
+    beforeEnter(to, from, next) {
+        if (!__WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].prototype.$socket) {
+            __WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].use(__WEBPACK_IMPORTED_MODULE_4_vue_socket_io___default.a, 'https://freeorder1010.herokuapp.com');
+        }
+        next();
     }
 }, {
     name: 'DisplayOrder',

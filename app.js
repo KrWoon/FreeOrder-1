@@ -67,7 +67,7 @@ app.use('/restaurant', restaurant);
 var menu = require('./routes/passport_routes/menu')(io);
 app.use('/menu', menu);
 
-var order = require('./routes/passport_routes/order')();
+var order = require('./routes/passport_routes/order')(io);
 app.use('/order', order);
 
 

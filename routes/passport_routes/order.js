@@ -1,4 +1,4 @@
-module.exports = function() {
+module.exports = function(io) {
     var router = require('express').Router();
     var pool = require('../../config/passport_config/db')();
 
