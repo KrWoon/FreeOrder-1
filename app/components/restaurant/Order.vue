@@ -90,6 +90,9 @@ export default {
         this.fetchOrders();
     },
     sockets:{
+        connect: function(){
+            console.log('connection success')
+        },
         customOrder: function(val){
           this.socketData = val;
           console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)')
