@@ -16,20 +16,28 @@ module.exports = function(io) {
         });    
     });
 
+    // add mobile data test
+    router.post('/mobile/test', function(req, res) {
+        console.log('who get in here post /order/mobile/test');
+
+        var inputData = req.body;
+             
+        // jiwoon
+        io.sockets.emit('customOrder', inputData.user_id);
+     
+        res.write("NodeJS Complete!");
+        res.end();
+    });
+
     // add mobile data
     router.post('/mobile', function(req, res) {
+        var inputData = req.body;
+
         // jiwoon
-        io.sockets.emit('customOrder', {mobile:'complete'});
-
-        var inputData = "";
-
-        req.on('data', function(data) {
-            inputData = JSON.parse(data);
-        });
+        io.sockets.emit('customOrder', inputData.mobileOrder);
 
         console.log(inputData.mobileOrder);
 
-        req.on('end', function() {
             var totalOrder = [];
         
             // push to totalOrder
@@ -68,7 +76,6 @@ module.exports = function(io) {
                 }
                 conn.release();
             });
-        });
 
         res.write("FreeOrder DB Ok");
         res.end();

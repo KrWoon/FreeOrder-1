@@ -96,12 +96,6 @@ var routes = [
         components: {
             default: Menu,
             a: RestaurantTop
-        },
-        beforeEnter (to, from, next) {
-            if(!Vue.prototype.$socket) {
-                Vue.use(VueSocketio, 'https://freeorder1010.herokuapp.com');
-            }
-            next()
         }
     },
     {
@@ -113,7 +107,8 @@ var routes = [
         },
         beforeEnter (to, from, next) {
             if(!Vue.prototype.$socket) {
-                Vue.use(VueSocketio, 'https://freeorder1010.herokuapp.com');
+                Vue.use(VueSocketio, 'http://127.0.0.1:3000');
+                // Vue.use(VueSocketio, 'https://freeorder1010.herokuapp.com');
             }
             next()
         }

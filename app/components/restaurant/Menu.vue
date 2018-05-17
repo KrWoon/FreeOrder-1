@@ -62,7 +62,7 @@
                 <tbody>
                     <tr v-for="(menu, index ) in menus">
                         <td> {{ index+1 }} </td>
-                        <td> <button class="btn btn-outline-dark btn-block" v-on:click="clickMenu(menu.Menu_Code)"> {{ menu.Menu_Name }} </button> </td>
+                        <td> <button class="btn btn-outline-dark btn-block" v-on:click="clickMenu(menu.Menu_Code, menu.Menu_Name)"> {{ menu.Menu_Name }} </button> </td>
                         <td> {{ menu.Price }} </td>
                         <td> {{ menu.Delay }} </td>
                         <td>
@@ -100,6 +100,7 @@
 
         <div class="col-md-5" v-if="menuIsChecked">
           <form v-on:submit.prevent="addDetails(menuIsChecked)">
+            <h2 align="center"> {{ clickedMenuName }}</h2>
             <table class="table table-hover text-center">
                 <thead>
                     <tr>
@@ -144,6 +145,7 @@ export default {
       menus: [],
       options: [],
       details: [],
+      clickedMenuName: '',
       menuIsChecked: 0,
       newMenu: {
         Menu_Name: "",
@@ -153,8 +155,7 @@ export default {
       newOption: {
         MenuOption_Name: "",
         Price: ""
-      },
-      socketData: {}
+      }
 
     }
   },
@@ -162,13 +163,6 @@ export default {
     this.fetchMenus();
     this.fetchOptions();
   },
-    sockets:{
-        customEmit: function(val){
-          this.socketData = val;
-          console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)')
-          console.log('socket menu: ' + this.socketData);
-        }
-    },
   methods: {
     fetchMenus() {
       this.axios.get('/menu/' + this.$route.params.id)
@@ -186,11 +180,12 @@ export default {
       })
       .catch(err => console.log(err));
     },
-    clickMenu(id) {
+    clickMenu(id, name) {
       this.axios.get('/menu/details/' + id)
       .then(res => {
         this.details = res.data;
         this.menuIsChecked = id;
+        this.clickedMenuName = name;
 
         console.log(this.details);
       })

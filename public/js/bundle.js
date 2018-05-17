@@ -2403,6 +2403,7 @@ module.exports = Cancel;
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
   data() {
@@ -2410,6 +2411,7 @@ module.exports = Cancel;
       menus: [],
       options: [],
       details: [],
+      clickedMenuName: '',
       menuIsChecked: 0,
       newMenu: {
         Menu_Name: "",
@@ -2419,21 +2421,13 @@ module.exports = Cancel;
       newOption: {
         MenuOption_Name: "",
         Price: ""
-      },
-      socketData: {}
+      }
 
     };
   },
   created() {
     this.fetchMenus();
     this.fetchOptions();
-  },
-  sockets: {
-    customEmit: function (val) {
-      this.socketData = val;
-      console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)');
-      console.log('socket menu: ' + this.socketData);
-    }
   },
   methods: {
     fetchMenus() {
@@ -2448,10 +2442,11 @@ module.exports = Cancel;
         console.log(this.options);
       }).catch(err => console.log(err));
     },
-    clickMenu(id) {
+    clickMenu(id, name) {
       this.axios.get('/menu/details/' + id).then(res => {
         this.details = res.data;
         this.menuIsChecked = id;
+        this.clickedMenuName = name;
 
         console.log(this.details);
       }).catch(err => console.log(err));
@@ -2744,12 +2739,6 @@ var routes = [{
     components: {
         default: __WEBPACK_IMPORTED_MODULE_19__components_restaurant_Menu_vue__["a" /* default */],
         a: __WEBPACK_IMPORTED_MODULE_16__components_restaurant_RestaurantTop_vue__["a" /* default */]
-    },
-    beforeEnter(to, from, next) {
-        if (!__WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].prototype.$socket) {
-            __WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].use(__WEBPACK_IMPORTED_MODULE_4_vue_socket_io___default.a, 'https://freeorder1010.herokuapp.com');
-        }
-        next();
     }
 }, {
     name: 'Order',
@@ -2760,7 +2749,8 @@ var routes = [{
     },
     beforeEnter(to, from, next) {
         if (!__WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].prototype.$socket) {
-            __WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].use(__WEBPACK_IMPORTED_MODULE_4_vue_socket_io___default.a, 'https://freeorder1010.herokuapp.com');
+            __WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].use(__WEBPACK_IMPORTED_MODULE_4_vue_socket_io___default.a, 'http://127.0.0.1:3000');
+            // Vue.use(VueSocketio, 'https://freeorder1010.herokuapp.com');
         }
         next();
     }
@@ -18507,7 +18497,7 @@ var render = function() {
                         staticClass: "btn btn-outline-dark btn-block",
                         on: {
                           click: function($event) {
-                            _vm.clickMenu(menu.Menu_Code)
+                            _vm.clickMenu(menu.Menu_Code, menu.Menu_Name)
                           }
                         }
                       },
@@ -18594,6 +18584,10 @@ var render = function() {
                   }
                 },
                 [
+                  _c("h2", { attrs: { align: "center" } }, [
+                    _vm._v(" " + _vm._s(_vm.clickedMenuName))
+                  ]),
+                  _vm._v(" "),
                   _c(
                     "table",
                     { staticClass: "table table-hover text-center" },

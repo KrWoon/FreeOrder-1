@@ -80,8 +80,6 @@ module.exports = function (io) {
                     console.log(err);
                     res.status(500);
                 } else {
-                    // jiwoon
-                    io.sockets.emit('customEmit', newMenu);
                     req.session.save(function () {
                         conn.release();
                         res.json({menu: 'New Menu is added!'})
