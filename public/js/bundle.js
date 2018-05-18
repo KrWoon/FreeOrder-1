@@ -2552,24 +2552,22 @@ module.exports = Cancel;
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     data() {
         return {
             orders: [],
             mobileOrder: [{
-                Email: "bbb@naver.com",
-                Restaurant_Code: "211",
+                Email: "aaa@naver.com",
+                Restaurant_Code: "212",
                 Menu_Code: "391",
-                MenuOption_CodeList: [{ MenuOption_Code: "331" }, { MenuOption_Code: "341" }]
+                MenuOption_CodeList: [{ MenuOption_Code: "331" }, { MenuOption_Code: "441" }]
 
             }, {
                 Email: "aaa@naver.com",
-                Restaurant_Code: "211",
+                Restaurant_Code: "212",
                 Menu_Code: "401",
-                MenuOption_CodeList: []
+                MenuOption_CodeList: [{ MenuOption_Code: "331" }]
 
             }],
             socketData: {}
@@ -2583,6 +2581,11 @@ module.exports = Cancel;
             console.log('connection success');
         },
         customOrder: function (val) {
+            this.socketData = val;
+            console.log('this method was fired by the socket server. eg: io.emit("customOrder", data)');
+            console.log('socket menu: ' + this.socketData);
+        },
+        customEmit: function (val) {
             this.socketData = val;
             console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)');
             console.log('socket menu: ' + this.socketData);
@@ -2614,9 +2617,9 @@ module.exports = Cancel;
             return;
         },
         sendMobileOrders() {
-            console.log(this.mobileOrders);
-            this.axios.post('/order/mobile', this.mobileOrders).then(res => {
-                console.log(res);
+            console.log(this.mobileOrder);
+            this.axios.post('/order/mobile/test', this.mobileOrder).then(res => {
+                console.log('send complete');
             }).catch(err => console.log(err));
         }
     }
@@ -18941,7 +18944,7 @@ var render = function() {
           _c(
             "button",
             {
-              staticClass: "btn btn-primary disabled",
+              staticClass: "btn btn-primary",
               on: {
                 click: function($event) {
                   _vm.sendMobileOrders()
@@ -18969,9 +18972,7 @@ var render = function() {
                 _vm._v(" "),
                 _c("td", [_vm._v(_vm._s(order.Email))]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(order.Menu_Code))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(order.MenuOption_Code))])
+                _c("td", [_vm._v(_vm._s(order.Restaurant_Code))])
               ])
             })
           )
@@ -18997,9 +18998,7 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Email")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Menu_Code")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("MenuOption_Code")])
+        _c("th", [_vm._v("Restaurant_Code")])
       ])
     ])
   },

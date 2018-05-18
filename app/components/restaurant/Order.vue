@@ -7,7 +7,7 @@
           <h1 class="display-3"> Order </h1>
           <p>You can set your restaurant information in here</p>
           <button class="btn btn-info btn-lg disabled">Order &raquo;</button>
-        <button class="btn btn-primary disabled" v-on:click="sendMobileOrders()"> 
+        <button class="btn btn-primary" v-on:click="sendMobileOrders()"> 
             Send 
         </button>    
         </div>
@@ -22,8 +22,7 @@
                     <th>No.</th>
                     <th>Order_Code</th>
                     <th>Email</th>
-                    <th>Menu_Code</th>
-                    <th>MenuOption_Code</th>
+                    <th>Restaurant_Code</th>
                     <!-- <th>Operation</th> -->
                 </tr>
             </thead>
@@ -32,8 +31,7 @@
                     <td>{{index + 1}}</td>
                     <td>{{order.Order_Code}}</td>
                     <td>{{order.Email}}</td>
-                    <td>{{order.Menu_Code}}</td>
-                    <td>{{order.MenuOption_Code}}</td>
+                    <td>{{order.Restaurant_Code}}</td>
                     <!-- <td>
                         <a href="#" class="btn btn-danger" v-on:click="deleteOrder(order.UserID)"> 
                             Delete 
@@ -64,21 +62,21 @@ export default {
             orders: [],
             mobileOrder: [
                 {
-                    Email: "bbb@naver.com",
-                    Restaurant_Code: "211",
+                    Email: "aaa@naver.com",
+                    Restaurant_Code: "212",
                     Menu_Code: "391",
                     MenuOption_CodeList: [
                             { MenuOption_Code: "331" },
-                            { MenuOption_Code: "341" }
+                            { MenuOption_Code: "441" }
                     ]
                     
                 },
                 {
                     Email: "aaa@naver.com",
-                    Restaurant_Code: "211",
+                    Restaurant_Code: "212",
                     Menu_Code: "401",
                     MenuOption_CodeList: [
-
+                            { MenuOption_Code: "331" }
                     ]
                     
                 }
@@ -94,6 +92,11 @@ export default {
             console.log('connection success')
         },
         customOrder: function(val){
+          this.socketData = val;
+          console.log('this method was fired by the socket server. eg: io.emit("customOrder", data)')
+          console.log('socket menu: ' + this.socketData);
+        },
+        customEmit: function(val){
           this.socketData = val;
           console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)')
           console.log('socket menu: ' + this.socketData);
@@ -129,10 +132,10 @@ export default {
             return;
         },
         sendMobileOrders() {
-            console.log(this.mobileOrders);
-            this.axios.post('/order/mobile', this.mobileOrders)
+            console.log(this.mobileOrder);
+            this.axios.post('/order/mobile/test', this.mobileOrder)
             .then(res => {
-                console.log(res);
+                console.log('send complete');
             })
             .catch(err => console.log(err));
         }

@@ -5,11 +5,11 @@ module.exports = function(io) {
     
     // show data
     router.get('/mobile/:rid', function(req, res) {
-        var sql = 'SELECT * FROM order_tb WHERE Restaurant_Code = ?';
+        var sql = 'SELECT * FROM ordereditem WHERE Restaurant_Code = ?';
         pool.getConnection(function(err, conn) {
             conn.query(sql, [req.params.rid], function(err, results) {
+                if(err) throw err;
 
-                console.log(results);
                 res.json(results);   
                 conn.release();
             });
@@ -18,54 +18,56 @@ module.exports = function(io) {
 
     // add mobile data test
     router.post('/mobile/test', function(req, res) {
-        console.log('who get in here post /order/mobile/test');
+        var order = req.body;
+        var totalOrder = [];
 
-        var inputData = req.body;
-             
-        // jiwoon
-        io.sockets.emit('customOrder', inputData.user_id);
-     
-        res.write("NodeJS Complete!");
-        res.end();
-    });
+        // insert to ordereditem table
+        var First_func = function(){
+            var sql = 'INSERT INTO ordereditem (Email, Restaurant_Code) VALUES (?, ?)';
 
-    // add mobile data
-    router.post('/mobile', function(req, res) {
-        var inputData = req.body;
-
-        // jiwoon
-        io.sockets.emit('customOrder', inputData.mobileOrder);
-
-        console.log(inputData.mobileOrder);
-
-            var totalOrder = [];
-        
-            // push to totalOrder
-            for(var i=0; i<inputData.mobileOrder.length; i++) {
-                // menuoption is existing
-                if(inputData.mobileOrder[i].MenuOption_CodeList != 0) {
-                    for(var j=0; j<inputData.mobileOrder[i].MenuOption_CodeList.length; j++) {
-                        var newOrder = {
-                            Email: inputData.mobileOrder[i].Email,
-                            Restaurant_Code: inputData.mobileOrder[i].Restaurant_Code,
-                            Menu_Code: inputData.mobileOrder[i].Menu_Code,
-                            MenuOption_Code: inputData.mobileOrder[i].MenuOption_CodeList[j].MenuOption_Code
-                        }
-                        totalOrder.push(newOrder);
-                    }
-                } else {
-                    var newOrder = {
-                        Email: inputData.mobileOrder[i].Email,
-                        Restaurant_Code: inputData.mobileOrder[i].Restaurant_Code,
-                        Menu_Code: inputData.mobileOrder[i].Menu_Code
-                    }
-                    totalOrder.push(newOrder);
-                }
-            }
-    
             pool.getConnection(function(err, conn) {
-                for(var i=0; i<totalOrder.length; i++) {
-                        var sql = 'INSERT INTO order_tb SET ?';
+                if(err) throw err;
+
+                conn.query(sql, [order[0].Email, order[0].Restaurant_Code], function(err, results) {
+                    console.log('insert ordereditem complete');
+                    Second_func();
+                });
+            });
+        };
+        
+        // get order_code and insert to orderedmenu table
+        var Second_func = function(){
+            var sql = 'SELECT Order_Code FROM ordereditem WHERE Email = ? AND Restaurant_Code = ?';
+
+            pool.getConnection(function(err, conn) {
+                if(err) throw err;
+
+                conn.query(sql, [order[0].Email, order[0].Restaurant_Code], function(err, orderCodes) {
+                    var recent = orderCodes[orderCodes.length - 1];
+
+                    for(var i=0; i<order.length; i++) {
+                        if(order[i].MenuOption_CodeList != 0) {
+                            for(var j=0; j<order[i].MenuOption_CodeList.length; j++) {
+                                orderedMenu = {
+                                    Order_Code: recent.Order_Code,
+                                    Sequence: i,
+                                    Menu_Code: order[i].Menu_Code,
+                                    MenuOption_Code: order[i].MenuOption_CodeList[j].MenuOption_Code
+                                }
+                                totalOrder.push(orderedMenu);
+                            }
+                        } else {
+                            orderedMenu = {
+                                Order_Code: recent.Order_Code,
+                                Sequence: i,
+                                Menu_Code: order[i].Menu_Code
+                            }
+                            totalOrder.push(orderedMenu);
+                        }
+                    }
+
+                    sql = 'INSERT INTO orderedmenu SET ?';
+                    for(var i=0; i<totalOrder.length; i++) {                        
                         conn.query(sql, totalOrder[i], function(err, results) {
                             if(err) {
                                 console.log(err);
@@ -73,66 +75,45 @@ module.exports = function(io) {
                                 console.log('complete');
                             }
                         })    
-                }
-                conn.release();
-            });
+                    }
 
-        res.write("FreeOrder DB Ok");
-        res.end();
+                    conn.release();
+                });
+            });
+        };
+        
+        First_func();
     });
 
-    // // add mobile data
-    // router.post('/mobile', function(req, res) {
-    //     var inputData = "";
 
-    //     req.on('data', function(data) {
-    //         inputData = JSON.parse(data);
-    //     });
-
-    //     req.on('end', function() {
-    //         var totalOrder = [];
+    //add mobile data
+    router.post('/mobile', function(req, res) {
+        var inputData = req.body;
         
-    //         // push to totalOrder
-    //         for(var i=0; i<req.body.length; i++) {
-    //             // menuoption is existing
-    //             if(req.body[i].MenuOption_CodeList != 0) {
-    //                 for(var j=0; j<req.body[i].MenuOption_CodeList.length; j++) {
-    //                     var newOrder = {
-    //                         Email: req.body[i].Email,
-    //                         Restaurant_Code: req.body[i].Restaurant_Code,
-    //                         Menu_Code: req.body[i].Menu_Code,
-    //                         MenuOption_Code: req.body[i].MenuOption_CodeList[j].MenuOption_Code
-    //                     }
-    //                     totalOrder.push(newOrder);
-    //                 }
-    //             } else {
-    //                 var newOrder = {
-    //                     Email: req.body[i].Email,
-    //                     Restaurant_Code: req.body[i].Restaurant_Code,
-    //                     Menu_Code: req.body[i].Menu_Code
-    //                 }
-    //                 totalOrder.push(newOrder);
-    //             }
-    //         }
-    
-    //         pool.getConnection(function(err, conn) {
-    //             for(var i=0; i<totalOrder.length; i++) {
-    //                     var sql = 'INSERT INTO order_tb SET ?';
-    //                     conn.query(sql, totalOrder[i], function(err, results) {
-    //                         if(err) {
-    //                             console.log(err);
-    //                         } else {
-    //                             console.log('complete');
-    //                         }
-    //                     })    
-    //             }
-    //             conn.release();
-    //         });
-    //     });
+        // jiwoon
+        io.sockets.emit('customOrder', inputData);
+        res.write("req.body Ok");
 
-    //     res.write("FreeOrder DB Ok");
-    //     res.end();
-    // });
+
+        var reqData;
+
+        console.log('who get in here post /users');
+
+
+        var reqData;
+         
+        req.on('data', (data) => {
+            reqData = JSON.parse(data);
+        });
+         
+        req.on('end', () => {
+            // jiwoon
+            io.sockets.emit('customEmit', reqData);
+            res.write("req.on Ok");
+        });
+        
+        res.end();
+    });
 
     
     router.put('/:id', function(req, res) {
