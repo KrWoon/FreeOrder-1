@@ -2562,15 +2562,13 @@ module.exports = Cancel;
                 Restaurant_Code: "212",
                 Menu_Code: "391",
                 MenuOption_CodeList: [{ MenuOption_Code: "331" }, { MenuOption_Code: "441" }]
-
             }, {
                 Email: "aaa@naver.com",
                 Restaurant_Code: "212",
                 Menu_Code: "401",
-                MenuOption_CodeList: [{ MenuOption_Code: "331" }]
-
+                MenuOption_CodeList: []
             }],
-            socketData: {}
+            socketData: 0
         };
     },
     created() {
@@ -2582,13 +2580,9 @@ module.exports = Cancel;
         },
         customOrder: function (val) {
             this.socketData = val;
-            console.log('this method was fired by the socket server. eg: io.emit("customOrder", data)');
-            console.log('socket menu: ' + this.socketData);
-        },
-        customEmit: function (val) {
-            this.socketData = val;
-            console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)');
-            console.log('socket menu: ' + this.socketData);
+            console.log('eg: io.emit("customOrder", data)');
+            console.log('socket menu: ' + this.socketData.Order_Code);
+            this.updatePriceAndDelay(this.socketData.Order_Code);
         }
     },
     methods: {
@@ -2596,6 +2590,11 @@ module.exports = Cancel;
             this.axios.get('/order/mobile/' + this.$route.params.id).then(res => {
                 this.orders = res.data;
                 console.log(this.orders);
+            }).catch(err => console.log(err));
+        },
+        updatePriceAndDelay(orderId) {
+            this.axios.put('/order/mobile/' + orderId).then(res => {
+                this.fetchOrders();
             }).catch(err => console.log(err));
         },
         deleteOrder(id) {
@@ -2618,7 +2617,7 @@ module.exports = Cancel;
         },
         sendMobileOrders() {
             console.log(this.mobileOrder);
-            this.axios.post('/order/mobile/test', this.mobileOrder).then(res => {
+            this.axios.post('/order/mobile', this.mobileOrder).then(res => {
                 console.log('send complete');
             }).catch(err => console.log(err));
         }
@@ -18959,30 +18958,36 @@ var render = function() {
       _c("div", { staticClass: "mycontainer" }, [
         _c("h3", [_vm._v(" Display Order ")]),
         _vm._v(" "),
-        _c("table", { staticClass: "table table-hover table-bordered" }, [
-          _vm._m(0),
-          _vm._v(" "),
-          _c(
-            "tbody",
-            _vm._l(_vm.orders, function(order, index) {
-              return _c("tr", [
-                _c("td", [_vm._v(_vm._s(index + 1))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(order.Order_Code))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(order.Email))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(order.Restaurant_Code))])
-              ])
-            })
-          )
-        ])
+        _c(
+          "table",
+          { staticClass: "table table-hover table-bordered  text-center" },
+          [
+            _vm._m(0),
+            _vm._v(" "),
+            _c(
+              "tbody",
+              _vm._l(_vm.orders, function(order, index) {
+                return _c("tr", [
+                  _c("td", [_vm._v(_vm._s(index + 1))]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(order.Email))]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(order.TotalPrice))]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(order.Date))]),
+                  _vm._v(" "),
+                  _vm._m(1, true)
+                ])
+              })
+            )
+          ]
+        )
       ]),
       _vm._v(" "),
       _c("hr")
     ]),
     _vm._v(" "),
-    _vm._m(1)
+    _vm._m(2)
   ])
 }
 var staticRenderFns = [
@@ -18994,11 +18999,23 @@ var staticRenderFns = [
       _c("tr", [
         _c("th", [_vm._v("No.")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Order_Code")]),
-        _vm._v(" "),
         _c("th", [_vm._v("Email")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Restaurant_Code")])
+        _c("th", [_vm._v("Price")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Date")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("View")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("td", [
+      _c("a", { staticClass: "btn btn-info", attrs: { href: "#" } }, [
+        _vm._v(" \n                        View \n                    ")
       ])
     ])
   },

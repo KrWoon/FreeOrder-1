@@ -15,7 +15,10 @@ module.exports = function(app) {
     passport.deserializeUser(function(email, done) {
         var sql = 'SELECT * FROM manager WHERE Email=? AND Use_Code = \'Y\'';
         pool.getConnection(function(err, conn) {
+            if(err) throw err;
             conn.query(sql, [email], function(err, results, fields) {
+                if(err) throw err;
+                
                 if(!results[0]) {
                     conn.release();
                     return done(null, false);

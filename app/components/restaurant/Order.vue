@@ -16,28 +16,28 @@
     <div class="mycontainer">
         <h3> Display Order </h3>
 
-        <table class="table table-hover table-bordered">
+        <table class="table table-hover table-bordered  text-center">
             <thead>
                 <tr>
                     <th>No.</th>
-                    <th>Order_Code</th>
                     <th>Email</th>
-                    <th>Restaurant_Code</th>
-                    <!-- <th>Operation</th> -->
+                    <th>Price</th>
+                    <th>Date</th>
+                    <th>View</th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="(order, index) in orders">
-                    <td>{{index + 1}}</td>
-                    <td>{{order.Order_Code}}</td>
-                    <td>{{order.Email}}</td>
-                    <td>{{order.Restaurant_Code}}</td>
-                    <!-- <td>
-                        <a href="#" class="btn btn-danger" v-on:click="deleteOrder(order.UserID)"> 
-                            Delete 
+                    <td>{{ index + 1 }}</td>
+                    <td>{{ order.Email }}</td>
+                    <td>{{ order.TotalPrice }}</td>
+                    <td>{{ order.Date }}</td>
+                    <td>
+                        <a href="#" class="btn btn-info"> 
+                            View 
                         </a>         
                                   
-                    </td> -->
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -66,22 +66,20 @@ export default {
                     Restaurant_Code: "212",
                     Menu_Code: "391",
                     MenuOption_CodeList: [
-                            { MenuOption_Code: "331" },
-                            { MenuOption_Code: "441" }
-                    ]
-                    
+                        { MenuOption_Code: "331" },
+                        { MenuOption_Code: "441" }
+                    ]                    
                 },
                 {
                     Email: "aaa@naver.com",
                     Restaurant_Code: "212",
                     Menu_Code: "401",
                     MenuOption_CodeList: [
-                            { MenuOption_Code: "331" }
-                    ]
-                    
+
+                    ]                    
                 }
             ],
-            socketData: {}
+            socketData: 0
         }
     },
     created() {
@@ -93,14 +91,10 @@ export default {
         },
         customOrder: function(val){
           this.socketData = val;
-          console.log('this method was fired by the socket server. eg: io.emit("customOrder", data)')
-          console.log('socket menu: ' + this.socketData);
+          console.log('eg: io.emit("customOrder", data)')
+          console.log('socket menu: ' + this.socketData.Order_Code);
+          this.updatePriceAndDelay(this.socketData.Order_Code);
         },
-        customEmit: function(val){
-          this.socketData = val;
-          console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)')
-          console.log('socket menu: ' + this.socketData);
-        }
     },
     methods: {
         fetchOrders() {
@@ -108,6 +102,13 @@ export default {
             .then(res => {
                 this.orders = res.data;
                 console.log(this.orders);
+            })
+            .catch(err => console.log(err));
+        },
+        updatePriceAndDelay(orderId) {
+            this.axios.put('/order/mobile/' + orderId)
+            .then(res => {                
+                this.fetchOrders();
             })
             .catch(err => console.log(err));
         },
@@ -133,7 +134,7 @@ export default {
         },
         sendMobileOrders() {
             console.log(this.mobileOrder);
-            this.axios.post('/order/mobile/test', this.mobileOrder)
+            this.axios.post('/order/mobile', this.mobileOrder)
             .then(res => {
                 console.log('send complete');
             })
