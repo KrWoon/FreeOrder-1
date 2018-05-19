@@ -62,7 +62,7 @@ export default {
             orders: [],
             mobileOrder: [
                 {
-                    Email: "aaa@naver.com",
+                    Email: "bro@naver.com",
                     Restaurant_Code: "212",
                     Menu_Code: "391",
                     MenuOption_CodeList: [
@@ -71,11 +71,11 @@ export default {
                     ]                    
                 },
                 {
-                    Email: "aaa@naver.com",
+                    Email: "bro@naver.com",
                     Restaurant_Code: "212",
                     Menu_Code: "401",
                     MenuOption_CodeList: [
-
+                        
                     ]                    
                 }
             ],
