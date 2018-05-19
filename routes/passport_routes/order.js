@@ -91,27 +91,11 @@ module.exports = function(io) {
         var inputData = req.body;
         
         // jiwoon
-        io.sockets.emit('customOrder', inputData);
+        io.sockets.emit('customOrder', inputData.mobileOrders);
         res.write("req.body Ok");
 
 
-        var reqData;
-
         console.log('who get in here post /users');
-
-
-        var reqData;
-         
-        req.on('data', (data) => {
-            reqData = JSON.parse(data);
-        });
-         
-        req.on('end', () => {
-            // jiwoon
-            io.sockets.emit('customEmit', reqData);
-            res.write("req.on Ok");
-        });
-        
         res.end();
     });
 
