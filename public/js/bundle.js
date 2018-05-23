@@ -1465,15 +1465,24 @@ module.exports = Cancel;
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     data() {
-        return {};
+        return {
+            file: ''
+        };
     },
     methods: {
-        uploadFile() {
-            this.axios.post('/index/upload').then(res => {
+        onFileSelected(event) {
+            this.file = event.target.files[0];
+            console.log(this.file);
+        },
+        onUpload() {
+            const fd = new FormData();
+            fd.append('image', this.file, this.file.name);
+            const config = { headers: { 'Content-Type': 'multipart/form-data' } };
+
+            this.axios.post('/index/upload', fd).then(res => {
                 console.log(res);
             }).catch(err => console.log(err));
         }
@@ -15311,7 +15320,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -15327,30 +15336,16 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "container" }, [
+    _c("input", {
+      attrs: { type: "file", name: "userfile" },
+      on: { change: _vm.onFileSelected }
+    }),
+    _vm._v(" "),
+    _c("button", { on: { click: _vm.onUpload } }, [_vm._v(" Upload ")])
+  ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "form",
-      {
-        attrs: {
-          action: "/index/upload",
-          method: "post",
-          enctype: "multipart/form-data"
-        }
-      },
-      [
-        _c("input", { attrs: { type: "file", name: "userfile" } }),
-        _vm._v(" "),
-        _c("input", { attrs: { type: "submit" } })
-      ]
-    )
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 if (false) {

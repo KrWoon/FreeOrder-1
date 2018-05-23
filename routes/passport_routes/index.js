@@ -64,12 +64,11 @@ module.exports = function() {
         }
     });
 
-    var uploads = multer({ storage: storage }).single('userfile');
+    var uploads = multer({ storage: storage }).single('image');
 
 
     router.post('/upload', function (req, res, next) {
         uploads(req, res, function (err) {
-            console.log(req.file);
             if(err){
                 return res.end('Error Upload file')
             }
