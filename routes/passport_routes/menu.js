@@ -26,7 +26,7 @@ module.exports = function (io) {
 
     // get menus
     router.get('/:rid', function (req, res) {
-        var sql = 'SELECT Menu_Code, Menu_Name, Price, Delay FROM menu WHERE Restaurant_Code = ? AND Use_Code = \'Y\'';
+        var sql = 'SELECT Menu_Code, Menu_Name, Price, CookingTime FROM menu WHERE Restaurant_Code = ? AND Use_Code = \'Y\'';
         pool.getConnection(function (err, conn) {
             if(err) throw err;
             conn.query(sql, [req.params.rid], function (err, menus) {
@@ -69,7 +69,7 @@ module.exports = function (io) {
             Restaurant_Code: req.params.rid,
             Menu_Name: req.body.Menu_Name,
             Price: req.body.Price,
-            Delay: req.body.Delay
+            CookingTime: req.body.CookingTime
         };
 
         var sql = 'INSERT INTO menu SET ?';

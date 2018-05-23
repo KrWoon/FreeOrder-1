@@ -99,16 +99,15 @@ module.exports = function(io) {
     });
 
 
-    // update price and delay
+    // update price
     router.put('/mobile/:oid', function(req, res) {
         var orderCode = req.params.oid;
 
-        // get totalPrice and totalDelay
+        // get totalPrice
         var First_func = function() {
             var totalPrice = 0;
-            var totalDelay = 0;
 
-            var sql = 'select distinct menu.Menu_Code, menu.Price, menu.Delay from menu join orderedmenu on menu.Menu_Code = orderedmenu.Menu_Code join orderedinfo on orderedinfo.Order_Code = orderedmenu.Order_Code where orderedmenu.Order_Code = ?';
+            var sql = 'select distinct menu.Menu_Code, menu.Price from menu join orderedmenu on menu.Menu_Code = orderedmenu.Menu_Code join orderedinfo on orderedinfo.Order_Code = orderedmenu.Order_Code where orderedmenu.Order_Code = ?';
             pool.getConnection(function(err, conn) {
                 if(err) throw err;
                 
@@ -121,27 +120,26 @@ module.exports = function(io) {
 
                         for(var i=0; i<menu.length; i++) {
                             totalPrice += menu[i].Price;
-                            totalDelay += menu[i].Delay;
                         }
 
                         for(var i=0; i<option.length; i++) {
                             totalPrice += option[i].Price;
                         }
 
-                        Second_func(totalPrice, totalDelay);
+                        Second_func(totalPrice);
                         conn.release();
                     });
                 });
             });  
         }  
 
-        // insert price and delay into orderedinfo table
-        var Second_func = function(Price, Delay){
-            var sql = 'UPDATE orderedinfo SET TotalPrice = ?, EstimatedLatency = ? WHERE Order_Code = ?';
+        // insert price into orderedinfo table
+        var Second_func = function(Price){
+            var sql = 'UPDATE orderedinfo SET TotalPrice = ? WHERE Order_Code = ?';
             pool.getConnection(function(err, conn) {
                 if(err) throw err;
 
-                conn.query(sql, [Price, Delay, orderCode], function(err, results) {
+                conn.query(sql, [Price, orderCode], function(err, results) {
                     if(err) throw err;
 
                     conn.release();

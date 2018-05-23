@@ -15,11 +15,14 @@ import VueSocketio from 'vue-socket.io';
 import App from './App.vue';
 
 import StartPage from './components/main/StartPage.vue';
+import Temp from './components/main/Temp.vue';
 
 import Login from './components/auth/Login.vue';
 import Register from './components/auth/Register.vue';
 
 import FormTop from './components/form/FormTop.vue';
+import RootTop from './components/form/RootTop.vue';
+import DisplayAdminPage from './components/form/DisplayAdminPage.vue';
 import DisplayApplication from './components/form/DisplayApplication.vue';
 import DisplayRestaurant from './components/form/DisplayRestaurant.vue';
 import ApplyForm from './components/form/ApplyForm.vue';
@@ -35,10 +38,15 @@ import Menu from './components/restaurant/Menu.vue';
 import Order from './components/restaurant/Order.vue';
 
 var routes = [
+    // {
+    //     name: 'StartPage',
+    //     path: '/',
+    //     component: StartPage
+    // },
     {
-        name: 'StartPage',
+        name: 'Temp',
         path: '/',
-        component: StartPage
+        component: Temp
     },
     {
         name: 'Login',
@@ -56,6 +64,14 @@ var routes = [
         components: {
             default: DisplayRestaurant,
             a: FormTop
+        }
+    },
+    {
+        name: 'DisplayAdminPage',
+        path: '/view/admin',
+        components: {
+            default: DisplayAdminPage,
+            a: RootTop
         }
     },
     {

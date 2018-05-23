@@ -27,17 +27,22 @@
 
             <div class="mb-3">
                 <label for="inputLocation">Location</label>   
-                <input type="text" class="form-control" v-model="info.Location" id="inputLocation" placeholder="Location" required autofocus>                                          
+                <input type="text" class="form-control" v-model="info.Location" id="inputLocation" placeholder="Location" required>                                          
             </div>
 
             <div class="mb-3">
                 <label for="inputCategory">Category</label>   
-                <input type="text" class="form-control" v-model="info.Category" id="inputCategory" placeholder="Category" required autofocus>                                          
+                <input type="text" class="form-control" v-model="info.Category" id="inputCategory" placeholder="Category" required>                                          
             </div>
 
             <div class="mb-3">
                 <label for="inputTables">Number of Table</label>   
-                <input type="text" class="form-control" v-model="info.NumberOfTable" id="inputTables" placeholder="Number of Table" required autofocus>                                          
+                <input type="number" class="form-control" v-model="info.NumberOfTable" id="inputTables" placeholder="Number of Table" required>                                          
+            </div>
+
+            <div class="mb-3">
+                <label for="inputDelay">Expected Delay</label>   
+                <input type="number" class="form-control" v-model="info.Delay" id="inputDelay" placeholder="Delay" required>                                          
             </div>
 
         <div class="row">

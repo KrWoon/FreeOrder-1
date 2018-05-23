@@ -34,7 +34,8 @@ module.exports = function() {
             Category : req.body.Category,
             NumberOfTable : req.body.NumberOfTable,
             openTime : req.body.openTime,
-            closeTime : req.body.closeTime
+            closeTime : req.body.closeTime,
+            Delay : req.body.Delay
         };
         
         var sql = 'UPDATE restaurant SET ? WHERE Use_Code = \'Y\' AND Restaurant_Code = ' + req.params.rid;

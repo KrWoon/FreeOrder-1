@@ -5,8 +5,11 @@
         <h1 class="cover-heading">Free Order</h1>
         <p class="lead">Welcome, {{this.info.login.Manager_Name}} ! </p>
         <p class="lead">
-            <router-link :to="{ name: 'DisplayRestaurant'}" class="btn btn-lg btn-secondary" replace>
+            <router-link :to="{ name: 'DisplayRestaurant'}" v-if="this.info.login.Power == 0" class="btn btn-lg btn-secondary" replace>
                Get Started
+            </router-link>
+            <router-link :to="{ name: 'DisplayAdminPage'}" v-if="this.info.login.Power == 1" class="btn btn-lg btn-secondary" replace>
+               Manage App
             </router-link>
         </p>
       </main>

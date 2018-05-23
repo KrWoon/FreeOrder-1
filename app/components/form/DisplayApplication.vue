@@ -39,7 +39,8 @@
 export default {
     data() {
       return {
-        infos: []
+        infos: [],
+        Power: 0
       }
     },
     created() {
@@ -64,18 +65,9 @@ export default {
           var response = confirm('Are you sure you want to delete?');
           
           if(response) {
-              this.axios.delete('/form/' + id)
+              this.axios.delete('/form/apply' + id)
               .then(res => {
                 this.fetchInfos();
-                // var deleteForm = null;
-
-                // this.infos.applications.forEach(function(n) {
-                //    if(n.Application_Code == id) {
-                //      deleteForm = n;
-                //    }
-                // });
-
-                // this.infos.applications.splice(this.infos.applications.indexOf(deleteForm), 1);
               })
               .catch(err => {
                 console.log(err);

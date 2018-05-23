@@ -22,8 +22,8 @@
                   <label for="inputMenuPrice"></label>   
                   <input type="text" class="form-control mr-sm-2" v-model="newMenu.Price" id="inputMenuPrice" placeholder="Price" required>                                          
                 
-                  <label for="inputMenuDelay"></label>   
-                  <input type="number" class="form-control mr-sm-2" v-model="newMenu.Delay" id="inputMenuDelay" placeholder="Delay" required>                                          
+                  <label for="inputMenuCookingTime"></label>   
+                  <input type="number" class="form-control mr-sm-2" v-model="newMenu.CookingTime" id="inputMenuCookingTime" placeholder="CookingTime" required>                                          
               
                   <button class="btn btn-primary my-2 my-sm-0" type="submit">Add</button>          
                 </form> 
@@ -55,7 +55,7 @@
                         <th>No.</th>
                         <th>Menu</th>
                         <th>Price</th>
-                        <th>Delay</th>
+                        <th>CookingTime</th>
                         <th>Operation</th>
                     </tr>
                 </thead>
@@ -64,7 +64,7 @@
                         <td> {{ index+1 }} </td>
                         <td> <button class="btn btn-outline-dark btn-block" v-on:click="clickMenu(menu.Menu_Code, menu.Menu_Name)"> {{ menu.Menu_Name }} </button> </td>
                         <td> {{ menu.Price }} </td>
-                        <td> {{ menu.Delay }} </td>
+                        <td> {{ menu.CookingTime }} </td>
                         <td>
                             <button class="btn btn-outline-danger" v-on:click="deleteMenu(menu.Menu_Code)"> 
                                 Delete 
@@ -150,7 +150,7 @@ export default {
       newMenu: {
         Menu_Name: "",
         Price: "",
-        Delay: ''
+        CookingTime: ''
       },
       newOption: {
         MenuOption_Name: "",

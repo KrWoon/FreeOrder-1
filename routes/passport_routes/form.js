@@ -2,12 +2,13 @@ module.exports = function() {
     var router = require('express').Router();
     var pool = require('../../config/passport_config/db')();
     
+    // apply restaurant
     router.post('/apply', function(req,res){
         var license = req.body.license1 + '-' + req.body.license2 + '-' + req.body.license3;        
         // Check Duplication of Restaurant
         var checkSql = 'SELECT * FROM application WHERE Businesslicense = ? AND Use_Code = \'Y\'';
         pool.getConnection(function(err, conn) {
-            conn.query(checkSql, [req.body.license], function(err, restaurant, fields) {
+            conn.query(checkSql, [license], function(err, restaurant, fields) {
                 // if no duplication
                 if(!restaurant[0]) {
                     var newApply = {
@@ -23,21 +24,18 @@ module.exports = function() {
                         console.log(err);
                         res.status(500);
                     } else {
-                        req.session.save(function() {
-                        res.redirect('/');
-                        });
+                        res.json({application: 'Apply restaurant completely!'});
                     }
                 });     
                 } else {
-                    console.log('Restaurant already exists')
-                    req.session.save(function() {
-                        res.redirect('/form/apply');
-                    });
+                    // if duplicated
+                    res.json({application: 'Restaurant already exists!'});
                 }
                 conn.release();
             });
         });        
     });
+
 
     router.post('/apply/:id/edit', function(req,res){
         var license = req.body.license1 + '-' + req.body.license2 + '-' + req.body.license3;
@@ -46,20 +44,20 @@ module.exports = function() {
         pool.getConnection(function(err, conn) {
             conn.query(checkSql, [license], function(err, restaurant, fields) {
                 // 중복된 식당이 없다면
-                if(!restaurant[0]) {     
-                    
-                var sql = 'UPDATE application SET Restaurant_Name=?, Businesslicense=? WHERE Application_Code = ? AND Use_Code = \'Y\'';
-                conn.query(sql, [req.body.rname, license, req.params.id], function(err, results, fields) {
-                    if(err) {
-                        console.log(err);
-                        res.status(500);
-                    } else {
-                        req.session.save(function() {
-                        res.redirect('/');
-                        });
-                    }
-                });     
+                if(!restaurant[0]) {    
+                    var sql = 'UPDATE application SET Restaurant_Name=?, Businesslicense=? WHERE Application_Code = ? AND Use_Code = \'Y\'';
+                    conn.query(sql, [req.body.rname, license, req.params.id], function(err, results, fields) {
+                        if(err) {
+                            console.log(err);
+                            res.status(500);
+                        } else {
+                            req.session.save(function() {
+                                res.redirect('/');
+                            });
+                        }
+                    });     
                 } else {
+                    // 중복된 식당이 있다면
                     console.log('Restaurant already exists')
                     req.session.save(function() {
                         res.redirect('/form/apply/'+req.params.id+'/edit');
@@ -70,7 +68,9 @@ module.exports = function() {
         });        
     });
 
-    router.delete('/:id', function(req, res, next){
+
+    // delete apply restaurant
+    router.delete('/apply/:id', function(req, res, next){
         var id = req.params.id;
         // var sql = 'UPDATE application SET Use_Code = \'N\' WHERE Application_Code = ?';
         var sql = 'DELETE FROM application WHERE Application_Code = ?';
@@ -84,35 +84,18 @@ module.exports = function() {
         });
     });
 
-    router.get('/permit', function(req,res){
-        var sql = 'SELECT * FROM application INNER JOIN manager ON application.Manager_Code = manager.Manager_Code WHERE manager.Use_Code = \'Y\' AND application.Use_Code = \'Y\'';
-        pool.getConnection(function(err, conn) {
-            conn.query(sql, [], function(err, results, fields) {
-                res.render('form/permit', {restaurants : results, 'login' : req.user})
-            });
-            conn.release();
-        });
-    });
-
-    router.get('/permit/:id', function(req,res){
-        var id = req.params.id;
-
-        var sql = 'SELECT * FROM application INNER JOIN manager ON application.Manager_Code = manager.Manager_Code WHERE application.Application_Code = ? AND manager.Use_Code = \'Y\' AND application.Use_Code = \'Y\'';
-        pool.getConnection(function(err, conn) {
-            conn.query(sql, [id], function(err, results) {
-                res.render('form/permit_id', {restaurant : results[0], 'login' : req.user})
-            });
-            conn.release();
-        });                
-    });
-
-    router.post('/permit/:id', function(req,res){
+    // admin accept new restaurant
+    router.post('/accept/:id', function(req,res){
         var newRestaurant = {
-            Manager_Code : req.body.managerCode,
-            Signboard : req.body.rname,
+            Manager_Code : req.body.Manager_Code,
+            Signboard : req.body.Restaurant_Name,
+            Category: 'N',
             openTime : '09:00',
             closeTime : '21:00',
-            Location : req.body.location,
+            rate: 0,
+            BusinessStatus: 'close',
+            Delay: 0,
+            Location : req.body.Location,
             NumberOfTable : 0
         };
 
@@ -122,11 +105,22 @@ module.exports = function() {
                 // sql = 'UPDATE application SET Use_Code = \'N\' WHERE Application_Code = ?';  
                 sql = 'DELETE FROM application WHERE Application_Code = ? ';             
                 conn.query(sql, req.params.id, function(err, rows) {
-                    req.session.save(function() {
-                        res.redirect('/form/permit');
-                    });
+                    conn.release();
+                    res.json({application: 'Accept application completely'})
                 });
+            });
+        });                
+    });
+
+    // admin rejects the application
+    router.post('/reject/:id', function(req,res){
+        pool.getConnection(function(err, conn) {
+            // sql = 'UPDATE application SET Use_Code = \'N\' WHERE Application_Code = ?';  
+            var sql = 'DELETE FROM application WHERE Application_Code = ? '; 
+
+            conn.query(sql, req.params.id, function(err, rows) {
                 conn.release();
+                res.json({application: 'Reject application completely'})
             });
         });                
     });
