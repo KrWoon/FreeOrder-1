@@ -13,8 +13,10 @@ import VueSocketio from 'vue-socket.io';
 
 import App from './App.vue';
 
+
 import StartPage from './components/main/StartPage.vue';
 import Temp from './components/main/Temp.vue';
+import GoogleMap from './components/main/GoogleMap.vue';
 
 import Login from './components/auth/Login.vue';
 import Register from './components/auth/Register.vue';
@@ -47,6 +49,11 @@ var routes = [
         path: '/',
         component: Temp
     },
+    // {
+    //     name: 'GoogleMap',
+    //     path: '/',
+    //     component: GoogleMap
+    // },
     {
         name: 'Login',
         path: '/login',

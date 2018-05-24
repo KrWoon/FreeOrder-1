@@ -47,8 +47,6 @@ module.exports = function() {
             pool.getConnection(function(err, conn) {
                 conn.query("INSERT INTO users (UserID, UserName, UserLocation) VALUES (0, ?, 'N')", [data], function(err, row) {
                     if(err) {console.log('error db')}
-                    console.log(data);
-                    console.log('db complete');
                     return conn.release();
                 })
             });            
@@ -57,7 +55,7 @@ module.exports = function() {
 
     var storage = multer.diskStorage({
         destination: function (req, file, callback) {
-            callback(null, './public/images')
+            callback(null, './uploads')
         },
         filename: function (req, file, callback) {
             callback(null, file.originalname)
@@ -77,9 +75,10 @@ module.exports = function() {
                 if(err){
                     res.end(err)
                 } else {
-                    res.json(rows)
+                    res.json('db complete');
                 }
             })
+            res.json(req.file);
         })
     });
 
