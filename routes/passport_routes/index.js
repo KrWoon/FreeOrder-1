@@ -67,9 +67,9 @@ module.exports = function() {
 
     router.post('/upload', function (req, res, next) {
         uploads(req, res, function (err) {
-            if(err){
-                return res.end('Error Upload file')
-            }
+            // if(err){
+            //     return res.end('Error Upload file')
+            // }
     
             upload.insertImage(req.file.filename, function (err, rows) {
                 if(err){
