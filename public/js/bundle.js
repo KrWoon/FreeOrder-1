@@ -2376,6 +2376,18 @@ module.exports = Cancel;
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
   data() {
@@ -2401,13 +2413,14 @@ module.exports = Cancel;
       }).catch(err => console.log(err));
     },
     updateInfo() {
-      this.searchLocation();
-      console.log(this.info);
+      console.log(this.info.Longitude);
+      console.log(this.info.Latitude);
       var response = confirm('Are you sure you want to edit?');
 
       if (response) {
         this.axios.put('/restaurant/' + this.$route.params.id, this.info).then(res => {
           alert(res.data.restaurant);
+          console.log(this.info);
         }).catch(err => console.log(err));
       }
       return;
@@ -2817,6 +2830,7 @@ module.exports = Cancel;
         fetchOrders() {
             this.axios.get('/order/mobile/' + this.$route.params.id).then(res => {
                 this.orders = res.data;
+
                 console.log(this.orders);
             }).catch(err => console.log(err));
         },
@@ -18682,6 +18696,7 @@ var render = function() {
                 },
                 domProps: { value: _vm.info.Address },
                 on: {
+                  change: _vm.searchLocation,
                   input: function($event) {
                     if ($event.target.composing) {
                       return
@@ -18690,6 +18705,60 @@ var render = function() {
                   }
                 }
               })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-md-6 mb-3" }, [
+                _c("label", [_vm._v("Latitude")]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.info.Latitude,
+                      expression: "info.Latitude"
+                    }
+                  ],
+                  staticClass: "form-control text-center",
+                  attrs: { type: "text", disabled: "" },
+                  domProps: { value: _vm.info.Latitude },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.info, "Latitude", $event.target.value)
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-md-6 mb-3" }, [
+                _c("label", [_vm._v("Longitude")]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.info.Longitude,
+                      expression: "info.Longitude"
+                    }
+                  ],
+                  staticClass: "form-control text-center",
+                  attrs: { type: "text", disabled: "" },
+                  domProps: { value: _vm.info.Longitude },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.info, "Longitude", $event.target.value)
+                    }
+                  }
+                })
+              ])
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "mb-3" }, [

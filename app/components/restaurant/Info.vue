@@ -27,8 +27,20 @@
 
             <div class="mb-3">
                 <label for="inputAddress">Address</label>   
-                <input type="text" class="form-control" v-model="info.Address" id="inputAddress" placeholder="Address" required>                                          
+                <input type="text" class="form-control" v-model="info.Address" id="inputAddress" placeholder="Address" @change="searchLocation" required>  
             </div>
+
+          <div class="row">
+              <div class="col-md-6 mb-3">
+                  <label>Latitude</label>
+                  <input type="text" class="form-control text-center"  v-model="info.Latitude"  disabled>
+              </div>      
+
+              <div class="col-md-6 mb-3">
+                  <label>Longitude</label>
+                  <input type="text" class="form-control text-center"  v-model="info.Longitude"  disabled>
+              </div>      
+          </div>   
 
             <div class="mb-3">
                 <label for="inputCategory">Category</label>   
@@ -101,14 +113,15 @@ export default {
       .catch(err => console.log(err));
     },
     updateInfo() {
-        this.searchLocation();
-        console.log(this.info);
+        console.log(this.info.Longitude);
+        console.log(this.info.Latitude);
         var response = confirm('Are you sure you want to edit?')
         
         if(response) {
             this.axios.put('/restaurant/' + this.$route.params.id, this.info)
             .then(res => {
                 alert(res.data.restaurant);
+              console.log(this.info);
             })
             .catch(err => console.log(err));
         }

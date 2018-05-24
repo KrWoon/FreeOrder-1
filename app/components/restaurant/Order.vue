@@ -101,6 +101,7 @@ export default {
             this.axios.get('/order/mobile/' + this.$route.params.id)
             .then(res => {
                 this.orders = res.data;
+                
                 console.log(this.orders);
             })
             .catch(err => console.log(err));
