@@ -55,7 +55,7 @@ module.exports = function() {
 
     var storage = multer.diskStorage({
         destination: function (req, file, callback) {
-            callback(null, './uploads')
+            callback(null, './public/images')
         },
         filename: function (req, file, callback) {
             callback(null, file.originalname)
@@ -70,14 +70,15 @@ module.exports = function() {
             if(err){
                 return res.end('Error Upload file')
             }
+            console.log(req.file);
     
-            upload.insertImage(req.file.filename, function (err, rows) {
-                if(err){
-                    res.end(err)
-                } else {
-                    res.json('db complete');
-                }
-            })
+            // upload.insertImage(req.file.filename, function (err, rows) {
+            //     if(err){
+            //         res.end(err)
+            //     } else {
+            //         res.json('db complete');
+            //     }
+            // })
             res.json(req.file);
         })
     });

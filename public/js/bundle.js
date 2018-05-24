@@ -1465,26 +1465,51 @@ module.exports = Cancel;
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     data() {
         return {
+            image: '',
             file: ''
         };
     },
     methods: {
-        onFileSelected(event) {
+        onFileSelected(e) {
+            var files = e.target.files || e.dataTransfer.files;
+            if (!files.length) return;
+            this.createImage(files[0]);
             this.file = event.target.files[0];
             console.log(this.file);
         },
         onUpload() {
             const fd = new FormData();
-            fd.append('image', this.file, this.file.name);
+            fd.append('image', this.file);
             const config = { headers: { 'Content-Type': 'multipart/form-data' } };
 
             this.axios.post('/index/upload', fd).then(res => {
                 console.log(res);
             }).catch(err => console.log(err));
+        },
+        createImage(file) {
+            var image = new Image();
+            var reader = new FileReader();
+            var vm = this;
+
+            reader.onload = e => {
+                vm.image = e.target.result;
+                // console.log(vm.image);
+            };
+            reader.readAsDataURL(file);
+        },
+        removeImage: function (e) {
+            this.image = '';
         }
     }
 });
@@ -15417,7 +15442,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -15434,10 +15459,20 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
-    _c("input", {
-      attrs: { type: "file", name: "userfile" },
-      on: { change: _vm.onFileSelected }
-    }),
+    !_vm.image
+      ? _c("div", [
+          _c("input", {
+            attrs: { type: "file", name: "userfile" },
+            on: { change: _vm.onFileSelected }
+          })
+        ])
+      : _c("div", [
+          _c("img", { attrs: { src: _vm.image } }),
+          _vm._v(" "),
+          _c("button", { on: { click: _vm.removeImage } }, [
+            _vm._v("Remove image")
+          ])
+        ]),
     _vm._v(" "),
     _c("button", { on: { click: _vm.onUpload } }, [_vm._v(" Upload ")])
   ])
