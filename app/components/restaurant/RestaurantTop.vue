@@ -19,11 +19,6 @@
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link :to="{ name: 'Home'}" class="nav-link" replace>
-              Table
-            </router-link>
-          </li>   
-          <li class="nav-item">
             <router-link :to="{ name: 'Menu'}" class="nav-link" replace>
               Menu
             </router-link>
@@ -31,6 +26,11 @@
           <li class="nav-item">
             <router-link :to="{ name: 'Info'}" class="nav-link" replace>
               Info
+            </router-link>
+          </li>   
+          <li class="nav-item">
+            <router-link :to="{ name: 'Image'}" class="nav-link" replace>
+              Image
             </router-link>
           </li>   
         </ul>

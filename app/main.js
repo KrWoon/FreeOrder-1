@@ -37,18 +37,19 @@ import Info from './components/restaurant/Info.vue';
 import Home from './components/restaurant/Home.vue';
 import Menu from './components/restaurant/Menu.vue';
 import Order from './components/restaurant/Order.vue';
+import Image from './components/restaurant/Image.vue';
 
 var routes = [
-    // {
-    //     name: 'StartPage',
-    //     path: '/',
-    //     component: StartPage
-    // },
     {
-        name: 'Temp',
+        name: 'StartPage',
         path: '/',
-        component: Temp
+        component: StartPage
     },
+    // {
+    //     name: 'Temp',
+    //     path: '/',
+    //     component: Temp
+    // },
     // {
     //     name: 'GoogleMap',
     //     path: '/',
@@ -133,6 +134,14 @@ var routes = [
                 Vue.use(VueSocketio, 'https://freeorder1010.herokuapp.com');
             }
             next()
+        }
+    },
+    {
+        name: 'Image',
+        path: '/view/image/:id',
+        components: {
+            default: Image,
+            a: RestaurantTop
         }
     },
     {

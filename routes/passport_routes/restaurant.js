@@ -1,6 +1,7 @@
 module.exports = function() {
     var router = require('express').Router();
     var pool = require('../../config/passport_config/db')();
+    var multer = require('multer');
 
     // get restaurant info
     router.get('/:rid', function(req,res){
@@ -76,6 +77,49 @@ module.exports = function() {
                 conn.release();
             });      
         });
+    });
+
+
+
+    // upload image
+    var upload = {
+        insertImage:function (data, rCode, callback) {
+            pool.getConnection(function(err, conn) {
+                conn.query("UPDATE restaurant SET ImageName= ? WHERE Restaurant_Code = ?", [data, rCode], function(err, row) {
+                    if(err) {console.log('error db')}
+                    return conn.release();
+                })
+            });            
+        }
+    };
+
+    var storage = multer.diskStorage({
+        destination: function (req, file, callback) {
+            callback(null, './public/images/')
+        },
+        filename: function (req, file, callback) {
+            callback(null, file.originalname)
+        }
+    });
+
+    var uploads = multer({ storage: storage }).single('image');
+
+
+    router.post('/upload/:rid', function (req, res, next) {
+        uploads(req, res, function (err) {
+            if(err){
+                return res.end('Error Upload file')
+            }
+    
+            upload.insertImage(req.file.filename, req.params.rid ,function (err, rows) {
+                if(err){
+                    res.end(err)
+                } else {
+                    res.json('db complete');
+                }
+            })
+            res.json(req.file);
+        })
     });
 
     // router.post('/:rid/info/changeStatus', function(req,res) {

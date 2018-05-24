@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-      <div v-if="!image">
+    <div v-if="!image">
         <input type="file" name="userfile" @change="onFileSelected">
     </div>
           <div v-else>
@@ -51,9 +51,9 @@ export default {
             };
             reader.readAsDataURL(file);
         },
-        removeImage: function (e) {
+      removeImage: function (e) {
             this.image = '';
-        }
+    }
     }
 }
 </script>

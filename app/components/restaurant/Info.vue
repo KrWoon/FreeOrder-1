@@ -55,9 +55,12 @@
                 <label for="inputClose">Close Time</label>
                 <input type="text" class="form-control text-center"  v-model="info.closeTime" id="inputClose" placeholder="21:00" pattern="\d{2}:\d{2}" title="Input type = ??:??" required>
             </div>      
-        </div>               
+        </div>   
+
             <button class="btn btn-lg btn-primary btn-block" type="submit">Update</button>        
-        </form>            
+        </form>     
+
+     
     </div>
     <!-- /container -->    
 
@@ -107,7 +110,6 @@ export default {
             .catch(err => console.log(err));
         }
         return;
-
     },
     changeStatus() {
       this.axios.post('/restaurant/changeStatus/' + this.$route.params.id, this.status)
