@@ -1470,78 +1470,31 @@ module.exports = Cancel;
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
-/* harmony default export */ __webpack_exports__["a"] = ({});
+/* harmony default export */ __webpack_exports__["a"] = ({
+    data() {
+        return {
+            placeSearch: null,
+            autocomplete: null
+        };
+    },
+    methods: {
+        initAutocomplete() {
+            // Create the autocomplete object, restricting the search to geographical
+            // location types.
+            autocomplete = new google.maps.places.Autocomplete(document.getElementById('autocomplete'), { types: ['geocode'] });
+            // When the user selects an address from the dropdown, populate the address
+            // fields in the form.
+            autocomplete.addListener('place_changed', fillInAddress);
+        },
+        fillInAddress() {
+            // Get the place details from the autocomplete object.
+            var place = autocomplete.getPlace();
+            document.getElementById("lat").value = place.geometry.location.lat();
+            document.getElementById("lng").value = place.geometry.location.lng();
+        }
+    }
+});
 
 /***/ }),
 /* 16 */
@@ -2902,25 +2855,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_vue_socket_io___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_vue_socket_io__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__App_vue__ = __webpack_require__(58);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_main_StartPage_vue__ = __webpack_require__(60);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_main_Temp_vue__ = __webpack_require__(67);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_main_GoogleMap_vue__ = __webpack_require__(71);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_auth_Login_vue__ = __webpack_require__(75);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_auth_Register_vue__ = __webpack_require__(81);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__components_form_FormTop_vue__ = __webpack_require__(87);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__components_form_RootTop_vue__ = __webpack_require__(91);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__components_form_DisplayAdminPage_vue__ = __webpack_require__(95);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__components_form_DisplayApplication_vue__ = __webpack_require__(101);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__components_form_DisplayRestaurant_vue__ = __webpack_require__(105);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__components_form_ApplyForm_vue__ = __webpack_require__(109);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__components_order_DisplayOrder_vue__ = __webpack_require__(115);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__components_order_CreateOrder_vue__ = __webpack_require__(121);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__components_order_EditOrder_vue__ = __webpack_require__(125);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__components_restaurant_RestaurantTop_vue__ = __webpack_require__(129);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__components_restaurant_Info_vue__ = __webpack_require__(133);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__components_restaurant_Home_vue__ = __webpack_require__(139);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__components_restaurant_Menu_vue__ = __webpack_require__(143);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__components_restaurant_Order_vue__ = __webpack_require__(149);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__components_restaurant_Image_vue__ = __webpack_require__(156);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_main_GoogleMap_vue__ = __webpack_require__(71);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_auth_Login_vue__ = __webpack_require__(75);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_auth_Register_vue__ = __webpack_require__(81);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_form_FormTop_vue__ = __webpack_require__(87);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__components_form_RootTop_vue__ = __webpack_require__(91);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__components_form_DisplayAdminPage_vue__ = __webpack_require__(95);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__components_form_DisplayApplication_vue__ = __webpack_require__(101);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__components_form_DisplayRestaurant_vue__ = __webpack_require__(105);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__components_form_ApplyForm_vue__ = __webpack_require__(109);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__components_order_DisplayOrder_vue__ = __webpack_require__(115);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__components_order_CreateOrder_vue__ = __webpack_require__(121);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__components_order_EditOrder_vue__ = __webpack_require__(125);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__components_restaurant_RestaurantTop_vue__ = __webpack_require__(129);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__components_restaurant_Info_vue__ = __webpack_require__(133);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__components_restaurant_Home_vue__ = __webpack_require__(139);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__components_restaurant_Menu_vue__ = __webpack_require__(143);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__components_restaurant_Order_vue__ = __webpack_require__(149);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__components_restaurant_Image_vue__ = __webpack_require__(156);
 
 
 
@@ -2959,85 +2911,79 @@ __WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].use(__WEBPACK_IMPORTED_MODU
 
 
 
-
-var routes = [{
-    name: 'StartPage',
-    path: '/',
-    component: __WEBPACK_IMPORTED_MODULE_6__components_main_StartPage_vue__["a" /* default */]
-},
+var routes = [
 // {
-//     name: 'Temp',
+//     name: 'StartPage',
 //     path: '/',
-//     component: Temp
-// },
-// {
-//     name: 'GoogleMap',
-//     path: '/',
-//     component: GoogleMap
+//     component: StartPage
 // },
 {
+    name: 'GoogleMap',
+    path: '/',
+    component: __WEBPACK_IMPORTED_MODULE_7__components_main_GoogleMap_vue__["a" /* default */]
+}, {
     name: 'Login',
     path: '/login',
-    component: __WEBPACK_IMPORTED_MODULE_9__components_auth_Login_vue__["a" /* default */]
+    component: __WEBPACK_IMPORTED_MODULE_8__components_auth_Login_vue__["a" /* default */]
 }, {
     name: 'Register',
     path: '/register',
-    component: __WEBPACK_IMPORTED_MODULE_10__components_auth_Register_vue__["a" /* default */]
+    component: __WEBPACK_IMPORTED_MODULE_9__components_auth_Register_vue__["a" /* default */]
 }, {
     name: 'DisplayRestaurant',
     path: '/view/restaurant',
     components: {
-        default: __WEBPACK_IMPORTED_MODULE_15__components_form_DisplayRestaurant_vue__["a" /* default */],
-        a: __WEBPACK_IMPORTED_MODULE_11__components_form_FormTop_vue__["a" /* default */]
+        default: __WEBPACK_IMPORTED_MODULE_14__components_form_DisplayRestaurant_vue__["a" /* default */],
+        a: __WEBPACK_IMPORTED_MODULE_10__components_form_FormTop_vue__["a" /* default */]
     }
 }, {
     name: 'DisplayAdminPage',
     path: '/view/admin',
     components: {
-        default: __WEBPACK_IMPORTED_MODULE_13__components_form_DisplayAdminPage_vue__["a" /* default */],
-        a: __WEBPACK_IMPORTED_MODULE_12__components_form_RootTop_vue__["a" /* default */]
+        default: __WEBPACK_IMPORTED_MODULE_12__components_form_DisplayAdminPage_vue__["a" /* default */],
+        a: __WEBPACK_IMPORTED_MODULE_11__components_form_RootTop_vue__["a" /* default */]
     }
 }, {
     name: 'DisplayApplication',
     path: '/view/application',
     components: {
-        default: __WEBPACK_IMPORTED_MODULE_14__components_form_DisplayApplication_vue__["a" /* default */],
-        a: __WEBPACK_IMPORTED_MODULE_11__components_form_FormTop_vue__["a" /* default */]
+        default: __WEBPACK_IMPORTED_MODULE_13__components_form_DisplayApplication_vue__["a" /* default */],
+        a: __WEBPACK_IMPORTED_MODULE_10__components_form_FormTop_vue__["a" /* default */]
     }
 }, {
     name: 'ApplyForm',
     path: '/apply/application',
     components: {
-        default: __WEBPACK_IMPORTED_MODULE_16__components_form_ApplyForm_vue__["a" /* default */],
-        a: __WEBPACK_IMPORTED_MODULE_11__components_form_FormTop_vue__["a" /* default */]
+        default: __WEBPACK_IMPORTED_MODULE_15__components_form_ApplyForm_vue__["a" /* default */],
+        a: __WEBPACK_IMPORTED_MODULE_10__components_form_FormTop_vue__["a" /* default */]
     }
 }, {
     name: 'Home',
     path: '/view/home/:id',
     components: {
-        default: __WEBPACK_IMPORTED_MODULE_22__components_restaurant_Home_vue__["a" /* default */],
-        a: __WEBPACK_IMPORTED_MODULE_20__components_restaurant_RestaurantTop_vue__["a" /* default */]
+        default: __WEBPACK_IMPORTED_MODULE_21__components_restaurant_Home_vue__["a" /* default */],
+        a: __WEBPACK_IMPORTED_MODULE_19__components_restaurant_RestaurantTop_vue__["a" /* default */]
     }
 }, {
     name: 'Info',
     path: '/view/info/:id',
     components: {
-        default: __WEBPACK_IMPORTED_MODULE_21__components_restaurant_Info_vue__["a" /* default */],
-        a: __WEBPACK_IMPORTED_MODULE_20__components_restaurant_RestaurantTop_vue__["a" /* default */]
+        default: __WEBPACK_IMPORTED_MODULE_20__components_restaurant_Info_vue__["a" /* default */],
+        a: __WEBPACK_IMPORTED_MODULE_19__components_restaurant_RestaurantTop_vue__["a" /* default */]
     }
 }, {
     name: 'Menu',
     path: '/view/menu/:id',
     components: {
-        default: __WEBPACK_IMPORTED_MODULE_23__components_restaurant_Menu_vue__["a" /* default */],
-        a: __WEBPACK_IMPORTED_MODULE_20__components_restaurant_RestaurantTop_vue__["a" /* default */]
+        default: __WEBPACK_IMPORTED_MODULE_22__components_restaurant_Menu_vue__["a" /* default */],
+        a: __WEBPACK_IMPORTED_MODULE_19__components_restaurant_RestaurantTop_vue__["a" /* default */]
     }
 }, {
     name: 'Order',
     path: '/view/order/:id',
     components: {
-        default: __WEBPACK_IMPORTED_MODULE_24__components_restaurant_Order_vue__["a" /* default */],
-        a: __WEBPACK_IMPORTED_MODULE_20__components_restaurant_RestaurantTop_vue__["a" /* default */]
+        default: __WEBPACK_IMPORTED_MODULE_23__components_restaurant_Order_vue__["a" /* default */],
+        a: __WEBPACK_IMPORTED_MODULE_19__components_restaurant_RestaurantTop_vue__["a" /* default */]
     },
     beforeEnter(to, from, next) {
         if (!__WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].prototype.$socket) {
@@ -3050,24 +2996,24 @@ var routes = [{
     name: 'Image',
     path: '/view/image/:id',
     components: {
-        default: __WEBPACK_IMPORTED_MODULE_25__components_restaurant_Image_vue__["a" /* default */],
-        a: __WEBPACK_IMPORTED_MODULE_20__components_restaurant_RestaurantTop_vue__["a" /* default */]
+        default: __WEBPACK_IMPORTED_MODULE_24__components_restaurant_Image_vue__["a" /* default */],
+        a: __WEBPACK_IMPORTED_MODULE_19__components_restaurant_RestaurantTop_vue__["a" /* default */]
     }
 }, {
     name: 'DisplayOrder',
     path: '/view/order',
     components: {
-        default: __WEBPACK_IMPORTED_MODULE_17__components_order_DisplayOrder_vue__["a" /* default */],
-        a: __WEBPACK_IMPORTED_MODULE_20__components_restaurant_RestaurantTop_vue__["a" /* default */]
+        default: __WEBPACK_IMPORTED_MODULE_16__components_order_DisplayOrder_vue__["a" /* default */],
+        a: __WEBPACK_IMPORTED_MODULE_19__components_restaurant_RestaurantTop_vue__["a" /* default */]
     }
 }, {
     name: 'CreateOrder',
     path: '/create/order',
-    component: __WEBPACK_IMPORTED_MODULE_18__components_order_CreateOrder_vue__["a" /* default */]
+    component: __WEBPACK_IMPORTED_MODULE_17__components_order_CreateOrder_vue__["a" /* default */]
 }, {
     name: 'EditOrder',
     path: '/edit/order/:id',
-    component: __WEBPACK_IMPORTED_MODULE_19__components_order_EditOrder_vue__["a" /* default */]
+    component: __WEBPACK_IMPORTED_MODULE_18__components_order_EditOrder_vue__["a" /* default */]
 }];
 
 var router = new __WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]({ mode: 'history', routes: routes });
@@ -15000,7 +14946,7 @@ if (false) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_StartPage_vue__ = __webpack_require__(13);
-/* unused harmony namespace reexport */
+/* unused harmony reexport namespace */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_62857bfb_hasScoped_true_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_StartPage_vue__ = __webpack_require__(66);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(2);
 var disposed = false
@@ -15050,7 +14996,7 @@ if (false) {(function () {
   })
 })()}
 
-/* harmony default export */ __webpack_exports__["a"] = (Component.exports);
+/* unused harmony default export */ var _unused_webpack_default_export = (Component.exports);
 
 
 /***/ }),
@@ -15300,12 +15246,7 @@ if (false) {
 }
 
 /***/ }),
-/* 67 */
-/***/ (function(module, exports) {
-
-throw new Error("Module build failed: Error: ENOENT: no such file or directory, open 'C:\\Users\\박지운\\workspace\\freeorder\\app\\components\\main\\Temp.vue'");
-
-/***/ }),
+/* 67 */,
 /* 68 */,
 /* 69 */,
 /* 70 */,
@@ -15314,7 +15255,7 @@ throw new Error("Module build failed: Error: ENOENT: no such file or directory, 
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_GoogleMap_vue__ = __webpack_require__(15);
-/* unused harmony reexport namespace */
+/* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_6af9614d_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_GoogleMap_vue__ = __webpack_require__(74);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(2);
 var disposed = false
@@ -15363,7 +15304,7 @@ if (false) {(function () {
   })
 })()}
 
-/* unused harmony default export */ var _unused_webpack_default_export = (Component.exports);
+/* harmony default export */ __webpack_exports__["a"] = (Component.exports);
 
 
 /***/ }),
@@ -15402,7 +15343,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -15425,221 +15366,20 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "header" }, [
-        _c("ul", { staticClass: "nav nav-pills pull-right" }, [
-          _c("li", { attrs: { active: "" } }, [
-            _c("a", { attrs: { href: "" } }, [_vm._v("Join the Team")])
-          ]),
-          _vm._v(" "),
-          _c("li", { attrs: { disabled: "" } }, [
-            _c("a", { attrs: { href: "" } }, [_vm._v("Find Teammates")])
-          ])
-        ]),
-        _vm._v(" "),
-        _c("h3", { staticClass: "text-muted" }, [
-          _vm._v("The Scotch MEAN MapApp")
-        ])
+    return _c("div", [
+      _c("div", { attrs: { id: "locationField" } }, [
+        _c("input", {
+          attrs: {
+            id: "autocomplete",
+            placeholder: "Enter your address",
+            type: "text"
+          }
+        })
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "row content" }, [
-        _c("div", { staticClass: "col-md-7" }, [
-          _c("div", { attrs: { id: "map" } }, [
-            _c("img", { attrs: { src: "holder.js/645x645" } })
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-md-5" }, [
-          _c("div", { staticClass: "panel panel-default" }, [
-            _c("div", { staticClass: "panel-heading" }, [
-              _c("h2", { staticClass: "panel-title text-center" }, [
-                _vm._v("Join the Scotch Team! "),
-                _c("span", { staticClass: "glyphicon glyphicon-map-marker" })
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "panel-body" }, [
-              _c("form", { attrs: { name: "addForm", novalidate: "" } }, [
-                _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "username" } }, [
-                    _vm._v("Username "),
-                    _c("span", { staticClass: "badge" }, [
-                      _vm._v("All fields required")
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("input", {
-                    staticClass: "form-control",
-                    attrs: {
-                      type: "text",
-                      id: "username",
-                      placeholder: "OldandGold",
-                      "ng-model": "formData.username",
-                      required: ""
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("label", { staticClass: "radio control-label" }, [
-                  _vm._v("Gender")
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "radio" }, [
-                  _c("label", [
-                    _c("input", {
-                      attrs: {
-                        type: "radio",
-                        name: "optionsRadios",
-                        id: "radiomale",
-                        value: "Male",
-                        "ng-model": "formData.gender"
-                      }
-                    }),
-                    _vm._v(
-                      "\r\n                                Male\r\n                            "
-                    )
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "radio", attrs: { required: "" } }, [
-                  _c("label", [
-                    _c("input", {
-                      attrs: {
-                        type: "radio",
-                        name: "optionsRadios",
-                        id: "radiofemale",
-                        value: "Female",
-                        "ng-model": "formData.gender"
-                      }
-                    }),
-                    _vm._v(
-                      "\r\n                                Female\r\n                            "
-                    )
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "radio" }, [
-                  _c("label", [
-                    _c("input", {
-                      attrs: {
-                        type: "radio",
-                        name: "optionsRadios",
-                        id: "radioother",
-                        value: "What's it to ya?",
-                        "ng-model": "formData.gender"
-                      }
-                    }),
-                    _vm._v(
-                      "\r\n                                What's it to ya?\r\n                            "
-                    )
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "age" } }, [_vm._v("Age")]),
-                  _vm._v(" "),
-                  _c("input", {
-                    staticClass: "form-control",
-                    attrs: {
-                      type: "number",
-                      id: "age",
-                      placeholder: "72",
-                      "ng-model": "formData.age",
-                      required: ""
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "language" } }, [
-                    _vm._v("Favorite Language")
-                  ]),
-                  _vm._v(" "),
-                  _c("input", {
-                    staticClass: "form-control",
-                    attrs: {
-                      type: "text",
-                      id: "language",
-                      placeholder: "Fortran",
-                      "ng-model": "formData.favlang",
-                      required: ""
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "latitude" } }, [
-                    _vm._v("Latitude")
-                  ]),
-                  _vm._v(" "),
-                  _c("input", {
-                    staticClass: "form-control",
-                    attrs: {
-                      type: "text",
-                      id: "latitude",
-                      value: "39.500",
-                      "ng-model": "formData.latitude",
-                      readonly: ""
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "longitude" } }, [
-                    _vm._v("Longitude")
-                  ]),
-                  _vm._v(" "),
-                  _c("input", {
-                    staticClass: "form-control",
-                    attrs: {
-                      type: "text",
-                      id: "longitude",
-                      value: "-98.350",
-                      "ng-model": "formData.longitude",
-                      readonly: ""
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "verified" } }, [
-                    _vm._v("HTML5 Verified Location? "),
-                    _c("span", [
-                      _c("button", { staticClass: "btn btn-default btn-xs" }, [
-                        _c("span", {
-                          staticClass: "glyphicon glyphicon-refresh"
-                        })
-                      ])
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("input", {
-                    staticClass: "form-control",
-                    attrs: {
-                      type: "text",
-                      id: "verified",
-                      placeholder: "Nope (Thanks for spamming my map...)",
-                      "ng-model": "formData.htmlverified",
-                      readonly: ""
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-danger btn-block",
-                    attrs: { type: "submit", "ng-disabled": "addForm.$invalid" }
-                  },
-                  [_vm._v("Submit")]
-                )
-              ])
-            ])
-          ])
-        ])
-      ]),
+      _c("input", { staticClass: "field", attrs: { id: "lat" } }),
       _vm._v(" "),
-      _c("hr")
+      _c("input", { staticClass: "field", attrs: { id: "lng" } })
     ])
   }
 ]

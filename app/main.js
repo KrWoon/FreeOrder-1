@@ -10,12 +10,9 @@ Vue.use(VueAxios, axios);
 
 import VueSocketio from 'vue-socket.io';
 
-
 import App from './App.vue';
 
-
 import StartPage from './components/main/StartPage.vue';
-import Temp from './components/main/Temp.vue';
 import GoogleMap from './components/main/GoogleMap.vue';
 
 import Login from './components/auth/Login.vue';
@@ -40,21 +37,16 @@ import Order from './components/restaurant/Order.vue';
 import Image from './components/restaurant/Image.vue';
 
 var routes = [
+    // {
+    //     name: 'StartPage',
+    //     path: '/',
+    //     component: StartPage
+    // },
     {
-        name: 'StartPage',
+        name: 'GoogleMap',
         path: '/',
-        component: StartPage
+        component: GoogleMap
     },
-    // {
-    //     name: 'Temp',
-    //     path: '/',
-    //     component: Temp
-    // },
-    // {
-    //     name: 'GoogleMap',
-    //     path: '/',
-    //     component: GoogleMap
-    // },
     {
         name: 'Login',
         path: '/login',
