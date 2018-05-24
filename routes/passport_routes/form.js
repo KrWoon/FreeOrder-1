@@ -15,7 +15,7 @@ module.exports = function() {
                         Manager_Code: req.user.Manager_Code,
                         Restaurant_Name: req.body.rname,
                         Businesslicense: license,
-                        Location: req.body.location
+                        Address: req.body.Address
                     };                         
                     
                 var sql = 'INSERT INTO application SET ?';
@@ -95,7 +95,7 @@ module.exports = function() {
             rate: 0,
             BusinessStatus: 'close',
             Delay: 0,
-            Location : req.body.Location,
+            Address : req.body.Address,
             NumberOfTable : 0
         };
 

@@ -38,8 +38,8 @@
         </div>   
             
             <div class="mb-3">
-                <label for="inputLocation">Location</label>
-                <input type="text" id="inputLocation" class="form-control" v-model="form.location" placeholder="Location" required>               
+                <label for="inputAddress">Address</label>
+                <input type="text" id="inputAddress" class="form-control" v-model="form.Address" placeholder="Address" required>               
             </div>
 
             <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>        

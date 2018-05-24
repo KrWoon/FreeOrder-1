@@ -2381,7 +2381,8 @@ module.exports = Cancel;
   data() {
     return {
       info: {},
-      status: { status: '' }
+      status: { status: '' },
+      currentLocation: { lat: 0, lng: 0 }
     };
   },
   created() {
@@ -2400,6 +2401,8 @@ module.exports = Cancel;
       }).catch(err => console.log(err));
     },
     updateInfo() {
+      this.searchLocation();
+      console.log(this.info);
       var response = confirm('Are you sure you want to edit?');
 
       if (response) {
@@ -2421,6 +2424,15 @@ module.exports = Cancel;
           }
         }
       }).catch(err => console.log(err));
+    },
+    searchLocation: function () {
+      var geocoder = new google.maps.Geocoder();
+      geocoder.geocode({ 'address': this.info.Address }, (results, status) => {
+        if (status === 'OK') {
+          this.info.Latitude = results[0].geometry.location.lat();
+          this.info.Longitude = results[0].geometry.location.lng();
+        }
+      });
     }
   }
 });
@@ -2912,17 +2924,17 @@ __WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].use(__WEBPACK_IMPORTED_MODU
 
 
 
-var routes = [
+var routes = [{
+    name: 'StartPage',
+    path: '/',
+    component: __WEBPACK_IMPORTED_MODULE_6__components_main_StartPage_vue__["a" /* default */]
+},
 // {
-//     name: 'StartPage',
+//     name: 'GoogleMap',
 //     path: '/',
-//     component: StartPage
+//     component: GoogleMap
 // },
 {
-    name: 'GoogleMap',
-    path: '/',
-    component: __WEBPACK_IMPORTED_MODULE_7__components_main_GoogleMap_vue__["a" /* default */]
-}, {
     name: 'Login',
     path: '/login',
     component: __WEBPACK_IMPORTED_MODULE_8__components_auth_Login_vue__["a" /* default */]
@@ -14947,7 +14959,7 @@ if (false) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_StartPage_vue__ = __webpack_require__(13);
-/* unused harmony reexport namespace */
+/* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_62857bfb_hasScoped_true_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_StartPage_vue__ = __webpack_require__(66);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(2);
 var disposed = false
@@ -14997,7 +15009,7 @@ if (false) {(function () {
   })
 })()}
 
-/* unused harmony default export */ var _unused_webpack_default_export = (Component.exports);
+/* harmony default export */ __webpack_exports__["a"] = (Component.exports);
 
 
 /***/ }),
@@ -15256,7 +15268,7 @@ if (false) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_GoogleMap_vue__ = __webpack_require__(15);
-/* unused harmony namespace reexport */
+/* unused harmony reexport namespace */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_6af9614d_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_GoogleMap_vue__ = __webpack_require__(74);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(2);
 var disposed = false
@@ -15305,7 +15317,7 @@ if (false) {(function () {
   })
 })()}
 
-/* harmony default export */ __webpack_exports__["a"] = (Component.exports);
+/* unused harmony default export */ var _unused_webpack_default_export = (Component.exports);
 
 
 /***/ }),
@@ -16613,7 +16625,7 @@ var render = function() {
                   _vm._v(" "),
                   _c("td", [_vm._v(" " + _vm._s(admin.Businesslicense) + " ")]),
                   _vm._v(" "),
-                  _c("td", [_vm._v(" " + _vm._s(admin.Location) + " ")]),
+                  _c("td", [_vm._v(" " + _vm._s(admin.Address) + " ")]),
                   _vm._v(" "),
                   _c("td", [
                     _c(
@@ -16672,7 +16684,7 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Business License")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Location")]),
+        _c("th", [_vm._v("Address")]),
         _vm._v(" "),
         _c("th", [_vm._v("Permit")]),
         _vm._v(" "),
@@ -17444,8 +17456,8 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "mb-3" }, [
-              _c("label", { attrs: { for: "inputLocation" } }, [
-                _vm._v("Location")
+              _c("label", { attrs: { for: "inputAddress" } }, [
+                _vm._v("Address")
               ]),
               _vm._v(" "),
               _c("input", {
@@ -17453,24 +17465,24 @@ var render = function() {
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.form.location,
-                    expression: "form.location"
+                    value: _vm.form.Address,
+                    expression: "form.Address"
                   }
                 ],
                 staticClass: "form-control",
                 attrs: {
                   type: "text",
-                  id: "inputLocation",
-                  placeholder: "Location",
+                  id: "inputAddress",
+                  placeholder: "Address",
                   required: ""
                 },
-                domProps: { value: _vm.form.location },
+                domProps: { value: _vm.form.Address },
                 on: {
                   input: function($event) {
                     if ($event.target.composing) {
                       return
                     }
-                    _vm.$set(_vm.form, "location", $event.target.value)
+                    _vm.$set(_vm.form, "Address", $event.target.value)
                   }
                 }
               })
@@ -18648,8 +18660,8 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "mb-3" }, [
-              _c("label", { attrs: { for: "inputLocation" } }, [
-                _vm._v("Location")
+              _c("label", { attrs: { for: "inputAddress" } }, [
+                _vm._v("Address")
               ]),
               _vm._v(" "),
               _c("input", {
@@ -18657,24 +18669,24 @@ var render = function() {
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.info.Location,
-                    expression: "info.Location"
+                    value: _vm.info.Address,
+                    expression: "info.Address"
                   }
                 ],
                 staticClass: "form-control",
                 attrs: {
                   type: "text",
-                  id: "inputLocation",
-                  placeholder: "Location",
+                  id: "inputAddress",
+                  placeholder: "Address",
                   required: ""
                 },
-                domProps: { value: _vm.info.Location },
+                domProps: { value: _vm.info.Address },
                 on: {
                   input: function($event) {
                     if ($event.target.composing) {
                       return
                     }
-                    _vm.$set(_vm.info, "Location", $event.target.value)
+                    _vm.$set(_vm.info, "Address", $event.target.value)
                   }
                 }
               })

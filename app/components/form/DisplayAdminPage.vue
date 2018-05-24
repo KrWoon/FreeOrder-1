@@ -19,7 +19,7 @@
                     <th>Restaurant Name</th>
                     <th>Email</th>
                     <th>Business License</th>
-                    <th>Location</th>
+                    <th>Address</th>
                     <th>Permit</th>
                     <th>Reject</th>
                 </tr>
@@ -29,7 +29,7 @@
                     <td>{{ admin.Restaurant_Name }}</td>
                     <td>{{ admin.Email }}</td>
                     <td> {{ admin.Businesslicense }} </td>
-                    <td> {{ admin.Location }} </td>
+                    <td> {{ admin.Address }} </td>
                     <td>
                         <a href="#" class="btn btn-primary"  v-on:click="acceptForm(admin.Application_Code)"> 
                             Accept 

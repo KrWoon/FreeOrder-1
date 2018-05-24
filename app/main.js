@@ -37,16 +37,16 @@ import Order from './components/restaurant/Order.vue';
 import Image from './components/restaurant/Image.vue';
 
 var routes = [
-    // {
-    //     name: 'StartPage',
-    //     path: '/',
-    //     component: StartPage
-    // },
     {
-        name: 'GoogleMap',
+        name: 'StartPage',
         path: '/',
-        component: GoogleMap
+        component: StartPage
     },
+    // {
+    //     name: 'GoogleMap',
+    //     path: '/',
+    //     component: GoogleMap
+    // },
     {
         name: 'Login',
         path: '/login',

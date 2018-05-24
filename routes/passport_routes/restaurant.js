@@ -31,12 +31,14 @@ module.exports = function() {
     router.put('/:rid', function(req, res) {
         var updateRestaurant = {
             Signboard : req.body.Signboard,
-            Location : req.body.Location,
+            Address : req.body.Address,
             Category : req.body.Category,
             NumberOfTable : req.body.NumberOfTable,
             openTime : req.body.openTime,
             closeTime : req.body.closeTime,
-            Delay : req.body.Delay
+            Delay : req.body.Delay,
+            Latitude : req.body.Latitude,
+            Longitude : req.body.Longitude
         };
         
         var sql = 'UPDATE restaurant SET ? WHERE Use_Code = \'Y\' AND Restaurant_Code = ' + req.params.rid;

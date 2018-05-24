@@ -32,7 +32,7 @@ module.exports = function() {
 
     // display applications
     router.get('/admins', function(req, res){
-        var sql = 'SELECT Application_Code, Restaurant_Name, Businesslicense, Location, Email, application.Manager_Code FROM application JOIN manager ON application.Manager_Code = manager.Manager_Code WHERE application.Use_Code = \'Y\'';
+        var sql = 'SELECT Application_Code, Restaurant_Name, Businesslicense, Address, Email, application.Manager_Code FROM application JOIN manager ON application.Manager_Code = manager.Manager_Code WHERE application.Use_Code = \'Y\'';
         pool.getConnection(function(err, conn) {
             conn.query(sql, [], function(err, admins) { 
                 conn.release();   

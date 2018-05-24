@@ -26,8 +26,8 @@
             </div>
 
             <div class="mb-3">
-                <label for="inputLocation">Location</label>   
-                <input type="text" class="form-control" v-model="info.Location" id="inputLocation" placeholder="Location" required>                                          
+                <label for="inputAddress">Address</label>   
+                <input type="text" class="form-control" v-model="info.Address" id="inputAddress" placeholder="Address" required>                                          
             </div>
 
             <div class="mb-3">
@@ -79,7 +79,8 @@ export default {
   data() {
     return {
       info: {},
-      status: {status: ''}
+      status: {status: ''},
+      currentLocation : { lat : 0, lng : 0}
     }
   },
   created() {
@@ -100,6 +101,8 @@ export default {
       .catch(err => console.log(err));
     },
     updateInfo() {
+        this.searchLocation();
+        console.log(this.info);
         var response = confirm('Are you sure you want to edit?')
         
         if(response) {
@@ -126,6 +129,15 @@ export default {
         
       })
       .catch(err => console.log(err));
+    },
+    searchLocation: function() {
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode({'address': this.info.Address}, (results, status) => {
+            if (status === 'OK') {
+                this.info.Latitude = results[0].geometry.location.lat();
+                this.info.Longitude = results[0].geometry.location.lng();
+            }
+        });
     }
   }
 }
