@@ -40,16 +40,16 @@ import Order from './components/restaurant/Order.vue';
 import Image from './components/restaurant/Image.vue';
 
 var routes = [
-    // {
-    //     name: 'StartPage',
-    //     path: '/',
-    //     component: StartPage
-    // },
     {
-        name: 'Temp',
+        name: 'StartPage',
         path: '/',
-        component: Temp
+        component: StartPage
     },
+    // {
+    //     name: 'Temp',
+    //     path: '/',
+    //     component: Temp
+    // },
     // {
     //     name: 'GoogleMap',
     //     path: '/',
