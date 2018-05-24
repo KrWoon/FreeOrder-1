@@ -70,18 +70,18 @@ module.exports = function() {
             if(err){
                 return res.end('Error Upload file')
             }
-            console.log(req.file);
     
-            // upload.insertImage(req.file.filename, function (err, rows) {
-            //     if(err){
-            //         res.end(err)
-            //     } else {
-            //         res.json('db complete');
-            //     }
-            // })
+            upload.insertImage(req.file.filename, function (err, rows) {
+                if(err){
+                    res.end(err)
+                } else {
+                    res.json('db complete');
+                }
+            })
             res.json(req.file);
         })
     });
+
 
     return router;
 }
