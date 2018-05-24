@@ -1470,28 +1470,29 @@ module.exports = Cancel;
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     data() {
         return {
-            placeSearch: null,
-            autocomplete: null
+            currentLocation: { lat: 0, lng: 0 },
+            searchAddressInput: ''
         };
     },
     methods: {
-        initAutocomplete() {
-            // Create the autocomplete object, restricting the search to geographical
-            // location types.
-            autocomplete = new google.maps.places.Autocomplete(document.getElementById('autocomplete'), { types: ['geocode'] });
-            // When the user selects an address from the dropdown, populate the address
-            // fields in the form.
-            autocomplete.addListener('place_changed', fillInAddress);
+        searchLocation: function () {
+            var geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ 'address': this.searchAddressInput }, (results, status) => {
+                if (status === 'OK') {
+                    this.currentLocation.lat = results[0].geometry.location.lat();
+                    this.currentLocation.lng = results[0].geometry.location.lng();
+                }
+            });
         },
-        fillInAddress() {
-            // Get the place details from the autocomplete object.
-            var place = autocomplete.getPlace();
-            document.getElementById("lat").value = place.geometry.location.lat();
-            document.getElementById("lng").value = place.geometry.location.lng();
+        showLocation() {
+            this.searchLocation();
+            console.log(this.currentLocation);
         }
     }
 });
@@ -15359,30 +15360,45 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("div", { attrs: { id: "locationField" } }, [
-        _c("input", {
-          attrs: {
-            id: "autocomplete",
-            placeholder: "Enter your address",
-            type: "text"
+  return _c("div", [
+    _c(
+      "button",
+      {
+        staticClass: "geolocation",
+        on: {
+          click: function($event) {
+            _vm.showLocation()
           }
-        })
-      ]),
-      _vm._v(" "),
-      _c("input", { staticClass: "field", attrs: { id: "lat" } }),
-      _vm._v(" "),
-      _c("input", { staticClass: "field", attrs: { id: "lng" } })
+        }
+      },
+      [_vm._v("\r\n      gi\r\n    ")]
+    ),
+    _vm._v("\r\n    " + _vm._s(_vm.currentLocation) + "\r\n\r\n        "),
+    _c("div", { staticClass: "search" }, [
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.searchAddressInput,
+            expression: "searchAddressInput"
+          }
+        ],
+        attrs: { type: "text" },
+        domProps: { value: _vm.searchAddressInput },
+        on: {
+          input: function($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.searchAddressInput = $event.target.value
+          }
+        }
+      })
     ])
-  }
-]
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 if (false) {
