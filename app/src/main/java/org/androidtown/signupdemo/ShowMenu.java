@@ -2,6 +2,8 @@ package org.androidtown.signupdemo;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -11,6 +13,9 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -30,8 +35,12 @@ import java.util.ArrayList;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import javax.net.ssl.HttpsURLConnection;
+
 import Model.Menu;
 import Model.Order;
+import cz.msebera.android.httpclient.protocol.HTTP;
+import info.guardianproject.netcipher.NetCipher;
 import listadpater.MenuListAdapter;
 
 public class ShowMenu extends AppCompatActivity {
@@ -39,13 +48,14 @@ public class ShowMenu extends AppCompatActivity {
     String query;
     JSONObject jsonObject;
     JSONParser jsonParser;
-    JSONObject jsonObj ;
-    JSONArray menuArray ;
+    JSONObject jsonObj;
+    JSONArray menuArray;
     ListView mListView;
     Context mcontext;
     MenuListAdapter adapter;
     ArrayList<Menu> menulist = new ArrayList<>();
     Order order;
+    Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,32 +63,59 @@ public class ShowMenu extends AppCompatActivity {
         setContentView(R.layout.activity_menu);
         order = (Order) getIntent().getSerializableExtra("order");
         String rst_name = getIntent().getStringExtra("rst_name");
-        int rate = getIntent().getIntExtra("rate",1);
+        int rate = getIntent().getIntExtra("rate", 1);
         String opentime = getIntent().getStringExtra("opentime");
         String closetime = getIntent().getStringExtra(("closetime"));
-        String imgUrl = getIntent().getStringExtra("imgUrl");
+        final String imgUrl = getIntent().getStringExtra("imgUrl");
 
         TextView tv1 = (TextView) findViewById(R.id.textView1_menu);
         TextView tv2 = (TextView) findViewById(R.id.textView2_menu);
         TextView tv3 = (TextView) findViewById(R.id.textView3_menu);
         ImageView iv = (ImageView) findViewById(R.id.image_restaurant_menu);
         tv1.setText(rst_name);
-        tv2.setText(rate+"");
-        tv3.setText(opentime+"~"+closetime);
+        tv2.setText(rate + "");
+        tv3.setText(opentime + "~" + closetime);
+        //이미지로더
+        Thread mThread = new Thread() {
+            public void run() {
+                try {
+                    URL url = new URL("https://freeorder1010.herokuapp.com/images/" + imgUrl);
 
-        if(rst_name.equals("BBQ CHICKEN")) iv.setImageResource(R.drawable.bbq);
-        if(rst_name.equals("KFC")) iv.setImageResource(R.drawable.kfc);
-        if(rst_name.equals("DOMINO PIZZA")) iv.setImageResource(R.drawable.domino);
-        if(rst_name.equals("GOOBNE CHICKEN")) iv.setImageResource(R.drawable.goobne);
-        if(rst_name.equals("KYOCHON CHICKEN")) iv.setImageResource(R.drawable.kyochon);
-        if(rst_name.equals("MR.PIZZA")) iv.setImageResource(R.drawable.mrpizza);
-        if(rst_name.equals("PIZZA SCHOOL")) iv.setImageResource(R.drawable.pizzaschool);
+                    HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
+                    con.setDoInput(true);
+                    con.connect();
+
+                    InputStream is = con.getInputStream();
+                    bitmap = BitmapFactory.decodeStream(is);
+
+                } catch (MalformedURLException e) {
+                } catch (IOException e) {
+                }
+            }
+        };
+
+        mThread.start();
+        try {
+            mThread.join();
+            iv.setImageBitmap(bitmap);
+        } catch (InterruptedException e) {
+        }
+
+        //imageLoader.displayImage("https://freeorder1010.herokuapp.com/images/"+imgUrl, iv, options);
+
+//        if(rst_name.equals("BBQ CHICKEN")) iv.setImageResource(R.drawable.bbq);
+//        if(rst_name.equals("KFC")) iv.setImageResource(R.drawable.kfc);
+//        if(rst_name.equals("DOMINO PIZZA")) iv.setImageResource(R.drawable.domino);
+//        if(rst_name.equals("GOOBNE CHICKEN")) iv.setImageResource(R.drawable.goobne);
+//        if(rst_name.equals("KYOCHON CHICKEN")) iv.setImageResource(R.drawable.kyochon);
+//        if(rst_name.equals("MR.PIZZA")) iv.setImageResource(R.drawable.mrpizza);
+//        if(rst_name.equals("PIZZA SCHOOL")) iv.setImageResource(R.drawable.pizzaschool);
 
         jsonObject = new JSONObject();
         jsonObject.put("query", rst_name);
         mcontext = this;
         JSONTask task = new JSONTask();
-        task.execute("http://172.30.1.35:3000/auth/menu");//AsyncTask 시작시킴
+        task.execute("https://freeorder3.herokuapp.com/auth/menu");//AsyncTask 시작시킴
 
         FloatingActionButton fab =(FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -100,12 +137,15 @@ public class ShowMenu extends AppCompatActivity {
 
             try {
                 //JSONObject를 만들고 key value 형식으로 값을 저장해준다.
+
                 HttpURLConnection con = null;
                 BufferedReader reader = null;
                 try {
                     URL url = new URL(urls[0]);
                     //연결을 함
-                    con = (HttpURLConnection) url.openConnection();
+                    con = NetCipher.getHttpsURLConnection(url);
+
+//                    con = (HttpURLConnection) url.openConnection();
                     con.setRequestMethod("POST");//POST방식으로 보냄
                     con.setRequestProperty("Cache-Control", "no-cache");//캐시 설정
                     con.setRequestProperty("Content-Type", "application/json");//application JSON 형식으로 전송
@@ -166,7 +206,8 @@ public class ShowMenu extends AppCompatActivity {
                     JSONObject tempObj = (JSONObject) menuArray.get(i);
                     Menu tempMenu = new Menu(Integer.parseInt(tempObj.get("menucode").toString()),
                             tempObj.get("name").toString(),
-                            Integer.parseInt(tempObj.get("price").toString()));
+                            Integer.parseInt(tempObj.get("price").toString()),
+                            Integer.parseInt(tempObj.get("cookingTime").toString()));
                     menulist.add(tempMenu);
                 }
                 mListView = (ListView) findViewById(R.id.listview_Menu);
@@ -212,6 +253,7 @@ public class ShowMenu extends AppCompatActivity {
             order.setMenu_Code(a.getMenu_code());
             order.setMenu_Name(a.getMenu_name());
             order.setMenu_Price(a.getPrice());
+            order.setMenu_delayTime(a.getCookingTime());
             Intent i = new Intent(getApplicationContext(), ShowMenuOption.class);
             i.putExtra("order",order);
             startActivity(i);
