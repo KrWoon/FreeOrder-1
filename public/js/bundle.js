@@ -2947,10 +2947,8 @@ module.exports = Cancel;
                 const config = { headers: { 'Content-Type': 'multipart/form-data' } };
 
                 this.axios.post('/restaurant/upload/' + this.$route.params.id, fd).then(res => {
-                    console.log(res);
+                    alert('Upload image completely');
                 }).catch(err => console.log(err));
-            } else {
-                alert('Select image file');
             }
         },
         createImage(file) {
@@ -2975,6 +2973,8 @@ module.exports = Cancel;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+//
+//
 //
 //
 //
@@ -20592,80 +20592,90 @@ var render = function() {
       _vm._m(0),
       _vm._v(" "),
       _c("div", { staticClass: "mycontainer" }, [
-        _c("table", { staticClass: "table text-center" }, [
-          _vm._m(1),
-          _vm._v(" "),
-          _c(
-            "tbody",
-            _vm._l(_vm.menus, function(menu, index) {
-              return _c("tr", { key: menu.Menu_Code }, [
-                _c("td", [_vm._v(" " + _vm._s(index + 1) + " ")]),
-                _vm._v(" "),
-                _c("td", [_c("h3", [_vm._v(_vm._s(menu.Menu_Name) + " ")])]),
-                _vm._v(" "),
-                _c("td", [_c("h3", [_vm._v(_vm._s(menu.Menu_Price) + " ")])]),
-                _vm._v(" "),
+        _c(
+          "form",
+          {
+            on: {
+              submit: function($event) {
+                $event.preventDefault()
+                _vm.acceptOrder()
+              }
+            }
+          },
+          [
+            _c("table", { staticClass: "table text-center" }, [
+              _vm._m(1),
+              _vm._v(" "),
+              _c(
+                "tbody",
+                _vm._l(_vm.menus, function(menu, index) {
+                  return _c("tr", { key: menu.Menu_Code }, [
+                    _c("td", [_vm._v(" " + _vm._s(index + 1) + " ")]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _c("h3", [_vm._v(_vm._s(menu.Menu_Name) + " ")])
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _c("h3", [_vm._v(_vm._s(menu.Menu_Price) + " ")])
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "td",
+                      _vm._l(_vm.options, function(option) {
+                        return option.Menu_Code == menu.Menu_Code
+                          ? _c("p", { key: option.MenuOption_Code }, [
+                              _vm._v(
+                                "\n                                " +
+                                  _vm._s(option.MenuOption_Name) +
+                                  "\n                            "
+                              )
+                            ])
+                          : _vm._e()
+                      })
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "td",
+                      _vm._l(_vm.options, function(option) {
+                        return option.Menu_Code == menu.Menu_Code
+                          ? _c("p", { key: option.MenuOption_Code }, [
+                              _vm._v(
+                                "\n                                " +
+                                  _vm._s(option.MenuOption_Price) +
+                                  "\n                            "
+                              )
+                            ])
+                          : _vm._e()
+                      })
+                    )
+                  ])
+                })
+              )
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "text-right" },
+              [
                 _c(
-                  "td",
-                  _vm._l(_vm.options, function(option) {
-                    return option.Menu_Code == menu.Menu_Code
-                      ? _c("p", { key: option.MenuOption_Code }, [
-                          _vm._v(
-                            "\n                                " +
-                              _vm._s(option.MenuOption_Name) +
-                              "\n                            "
-                          )
-                        ])
-                      : _vm._e()
-                  })
+                  "button",
+                  { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+                  [_vm._v(" Accept ")]
                 ),
                 _vm._v(" "),
                 _c(
-                  "td",
-                  _vm._l(_vm.options, function(option) {
-                    return option.Menu_Code == menu.Menu_Code
-                      ? _c("p", { key: option.MenuOption_Code }, [
-                          _vm._v(
-                            "\n                                " +
-                              _vm._s(option.MenuOption_Price) +
-                              "\n                            "
-                          )
-                        ])
-                      : _vm._e()
-                  })
+                  "router-link",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { to: { name: "Order" }, replace: "" }
+                  },
+                  [_vm._v("\n                    Back\n                ")]
                 )
-              ])
-            })
-          )
-        ]),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "text-right" },
-          [
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-primary",
-                on: {
-                  click: function($event) {
-                    _vm.acceptOrder()
-                  }
-                }
-              },
-              [_vm._v(" Accept ")]
-            ),
-            _vm._v(" "),
-            _c(
-              "router-link",
-              {
-                staticClass: "btn btn-primary",
-                attrs: { to: { name: "Order" }, replace: "" }
-              },
-              [_vm._v("\n                    Back\n                ")]
+              ],
+              1
             )
-          ],
-          1
+          ]
         )
       ]),
       _vm._v(" "),

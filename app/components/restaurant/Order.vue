@@ -116,7 +116,7 @@ export default {
         }
     },
     created() {
-        this.fetchOrders();
+         this.fetchOrders();       
     },
     sockets:{
         connect: function(){

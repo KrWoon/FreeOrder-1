@@ -10,6 +10,7 @@
             </div>      
 
             <div class="mycontainer">
+                <form v-on:submit.prevent="acceptOrder()">
                 <table class="table text-center">
                     <thead>
                         <tr>
@@ -43,11 +44,12 @@
                     </tbody>
                 </table>
                 <div class="text-right">
-                    <button class="btn btn-primary" @click="acceptOrder()"> Accept </button>
+                    <button class="btn btn-primary" type="submit"> Accept </button>
                     <router-link :to="{ name: 'Order'}" class="btn btn-primary" replace>
                         Back
                     </router-link>
                 </div>
+                </form>
             </div>   <!-- /container -->    
 
             <hr>
