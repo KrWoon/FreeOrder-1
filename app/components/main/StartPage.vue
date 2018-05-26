@@ -2,6 +2,7 @@
 <div>
     <div class="container d-flex w-100 h-100 p-3 mx-auto flex-column text-center">
       <main role="main" class="inner cover" style="color:white"  v-if="this.info.login">
+        <img class="mb-4" v-bind:src="'/images/freeorder.png'" alt="" width="120" height="120">
         <h1 class="cover-heading">Free Order</h1>
         <p class="lead">Welcome, {{this.info.login.Manager_Name}} ! </p>
         <p class="lead">
@@ -14,6 +15,7 @@
         </p>
       </main>
       <main role="main" class="inner cover" style="color:white" v-else>
+        <img class="mb-4" v-bind:src="'/images/freeorder.png'" alt="" width="120" height="120">
         <h1 class="cover-heading">Free Order</h1>
         <p class="lead">Welcome to our web page</p>
         <p class="lead">
@@ -83,7 +85,7 @@ a:hover {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 30%;
+  height: 50%;
   margin: auto;
 }
 .cover .btn-lg {

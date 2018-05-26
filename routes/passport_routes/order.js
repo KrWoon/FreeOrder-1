@@ -1,11 +1,12 @@
 module.exports = function(io) {
     var router = require('express').Router();
     var pool = require('../../config/passport_config/db')();
+    var FCM = require('fcm-node');
 
     
     // show data
     router.get('/mobile/:rid', function(req, res) {
-        var sql = 'SELECT Email, TotalPrice, DATE_FORMAT(AddedDate, \'%Y-%m-%d %h:%i\') as Date FROM orderedinfo WHERE Restaurant_Code = ?';
+        var sql = 'SELECT Order_Code, Email, TotalPrice, OrderStatus, DATE_FORMAT(AddedDate, \'%Y-%m-%d %h:%i\') as Date FROM orderedinfo WHERE Restaurant_Code = ?';
         pool.getConnection(function(err, conn) {
             if(err) throw err;
 
@@ -20,8 +21,8 @@ module.exports = function(io) {
 
     // add mobile data
     router.post('/mobile', function(req, res) {
-        // var order = req.body.mobileOrders;
-        var order = req.body;
+        // var order = req.body.mobileOrder;
+        var order = req.body;   // web
         var totalOrder = [];
 
         // insert to orderedinfo table
@@ -153,27 +154,105 @@ module.exports = function(io) {
 
 
     //delete data
-    router.delete('/:id', function(req, res, next) {
-        var sql = 'SELECT UserID FROM users WHERE UserID = ?';
+    // router.delete('/:id', function(req, res, next) {
+    //     var sql = 'SELECT UserID FROM users WHERE UserID = ?';
+
+    //     pool.getConnection(function(err, conn) {
+    //         conn.query(sql, req.params.id, function(err, results) {
+    //            if(!results) {
+    //                res.json(err);
+    //             } else {
+    //                 sql = 'DELETE FROM users WHERE UserID = ' + req.params.id;
+    //                 conn.query(sql, [], function(err, result){
+    //                     req.session.save(function() {                        
+    //                         res.json({order: 'Delete Order Complete!'});
+    //                     });                        
+    //                 });
+    //             }
+
+    //            conn.release();
+    //         });
+    //     });    
+    // });
+
+
+    // get menu, menuoption of only one order
+    router.get('/:oid', function(req, res) {
+        var orderCode = req.params.oid;
+
+        var sql = 'SELECT distinct orderedmenu.Sequence, orderedmenu.Menu_Code,  menu.Menu_Name, menu.Price as Menu_Price FROM orderedinfo JOIN orderedmenu ON orderedinfo.Order_Code = orderedmenu.Order_Code JOIN menu ON orderedmenu.Menu_Code = menu.Menu_Code WHERE orderedinfo.Order_Code = 1271';
 
         pool.getConnection(function(err, conn) {
-            conn.query(sql, req.params.id, function(err, results) {
-               if(!results) {
-                   res.json(err);
-                } else {
-                    sql = 'DELETE FROM users WHERE UserID = ' + req.params.id;
-                    conn.query(sql, [], function(err, result){
-                        req.session.save(function() {                        
-                            res.json({order: 'Delete Order Complete!'});
-                        });                        
-                    });
-                }
+            if(err) console.log(err);            
+            conn.query(sql, orderCode, function(err, menus) {
+                if(err) console.log(err);
 
-               conn.release();
+                sql = 'SELECT orderedmenu.Menu_Code, menuoption.MenuOption_Name, menuoption.Price as MenuOption_Price FROM orderedinfo JOIN orderedmenu ON orderedinfo.Order_Code = orderedmenu.Order_Code JOIN menuoption ON orderedmenu.MenuOption_Code = menuoption.MenuOption_Code WHERE orderedinfo.Order_Code = 1271';
+                conn.query(sql, orderCode, function(err, options) {
+                    if(err) console.log(err);
+
+                    res.json({'menus': menus, 'options': options});
+                })
+                
             });
-        });    
+        });
     });
 
+
+    // accept order and push message to mobile
+    router.post('/accept/:oid', function(req, res) {
+        // req.on('data', (data) => {
+        //     inputdata = JSON.parse(data);
+        // });
+        
+        // req.on('end', () => {
+        //     console.log(inputdata.Token);
+        // });
+
+
+        /** 아래는 푸시메시지 발송절차 */
+
+        var serverKey = 'AAAAsA86ukc:APA91bHf-9yxdx-iTff1-xsWn2AWibinaLe0vTVJM322e-y1xNKeuHaFFICBL97wl_38lrxHjCx4g3iE6l5fSMBvi84pUqfG3QZCxXM1i7dPQlxZJrSwlMmDLy6hls4TnI01-ERfjZ-d';
+        //AAAAz8FUF8Y:APA91bGFPY5QzMXzFP6TeHg0fBF4DF0GIaBKIrX3wVjRcOk3Sag2RUeO3ZvlROrAVb1XN6_9LV3Y6FfU4XC61qGbYJs6ZevrNYg9tkb-XH7ZF02NghfPoPkxJ63zPwe4UjGDhBjdWNp-
+        var client_token = '';
+    
+        /** 발송할 Push 메시지 내용 */
+        var push_data = {
+            // 수신대상
+            to: client_token,
+            // App이 실행중이지 않을 때 상태바 알림으로 등록할 내용
+            notification: {
+                title: "Hello Node",
+                body: "Node로 발송하는 Push 메시지 입니다.",
+                sound: "default",
+                click_action: "FCM_PLUGIN_ACTIVITY",
+                icon: "fcm_push_icon"
+            },
+            // 메시지 중요도
+            priority: "high",
+            // App 패키지 이름
+            restricted_package_name: "study.cordova.fcmclient",
+            // App에게 전달할 데이터
+            data: {
+                num1: 2000,
+                num2: 3000
+            }
+        };
+
+
+        var fcm = new FCM(serverKey);
+
+        fcm.send(push_data, function(err, response) {
+            if (err) {
+                console.error('Push메시지 발송에 실패했습니다.');
+                console.error(err);
+                return;
+            }
+
+            console.log('Push메시지가 발송되었습니다.');
+            console.log(response);
+        });
+    });
 
     return router;
 }

@@ -13,13 +13,16 @@
 
     <div class="container">
         <div v-if="!image">
-            <input type="file" name="userfile" @change="onFileSelected">
-            <button @click="onUpload"> Upload </button>
+          <div class="custom-file">
+            <input type="file" class="custom-file-input" id="customFile" @change="onFileSelected">
+            <label class="custom-file-label" for="customFile">Choose your restaurant image</label>
+          </div>
         </div>
-        <div v-else>
+        <div class="text-center" v-else>
             <img :src="image" class="rounded mx-auto d-block">
-            <button @click="removeImage">Remove image</button>
-            <button @click="onUpload"> Upload </button>
+            <p><br/></p>
+            <button class="btn btn-danger" @click="removeImage">Reload image</button>
+            <button class="btn btn-primary" @click="onUpload"> Upload </button>
         </div>        
     </div>
     <!-- /container -->    
@@ -80,7 +83,7 @@ export default {
         },
       removeImage: function (e) {
             this.image = '';
-    }
+      }
     }
 }
 </script>

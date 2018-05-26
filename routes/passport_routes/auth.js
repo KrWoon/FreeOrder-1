@@ -38,7 +38,7 @@ module.exports = function(passport) {
                                         res.status(500);
                                     } else {
                                         req.session.save(function() {
-                                            res.redirect('/auth/login');
+                                            res.json('success');
                                         });
                                     }
                                     conn.release();
@@ -48,17 +48,12 @@ module.exports = function(passport) {
                      }
                      else {
                         req.session.save(function() {
-                            res.write('<script type="text/javascript"> alert("Input password correctly"); </script>')
-                            res.write('<script language=\"javascript\"> history.back(); </script>') 
-                            // res.redirect('/auth/register');
+                            res.json('password');
                         });
                      }
                 } else {
-                    console.log('ID already exists');
                     req.session.save(function() {
-                        res.write('<script type="text/javascript"> alert("ID already exists"); </script>')
-                        res.write('<script language=\"javascript\"> history.back(); </script>') 
-                        // res.redirect('/auth/register');
+                        res.json('id');
                     });
                 }
                 checkConn.release();

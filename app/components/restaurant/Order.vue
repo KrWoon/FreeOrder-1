@@ -13,36 +13,67 @@
         </div>
       </div>      
 
-    <div class="mycontainer">
-        <h3> Display Order </h3>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+            <h3> Not Accepted Order </h3>
 
-        <table class="table table-hover table-bordered  text-center">
-            <thead>
-                <tr>
-                    <th>No.</th>
-                    <th>Email</th>
-                    <th>Price</th>
-                    <th>Date</th>
-                    <th>View</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(order, index) in orders">
-                    <td>{{ index + 1 }}</td>
-                    <td>{{ order.Email }}</td>
-                    <td>{{ order.TotalPrice }}</td>
-                    <td>{{ order.Date }}</td>
-                    <td>
-                        <a href="#" class="btn btn-info"> 
-                            View 
-                        </a>         
-                                  
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        </div>
-    <!-- /container -->    
+            <table class="table table-hover table-bordered  text-center">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Email</th>
+                        <th>Price</th>
+                        <th>Date</th>
+                        <th>View</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(order, index) in noAcceptedOrders" v-if="order.OrderStatus == 'NoAccept'">
+                        <td>{{ index + 1 }}</td>
+                        <td>{{ order.Email }}</td>
+                        <td>{{ order.TotalPrice }}</td>
+                        <td>{{ order.Date }}</td>
+                        <td>
+                            <router-link :to="{ name: 'ViewAcceptedOrder', params: {id: order.Order_Code}}" class="btn btn-info" replace>
+                                View
+                            </router-link>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div> <!-- col-md-6 -->
+
+        <div class="col-md-6">
+            <h3> Accepted Order </h3>
+
+            <table class="table table-hover table-bordered  text-center">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Email</th>
+                        <th>Price</th>
+                        <th>Date</th>
+                        <th>View</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(order, index) in acceptedOrders" v-if="order.OrderStatus == 'Accept'">
+                        <td>{{ index + 1 }}</td>
+                        <td>{{ order.Email }}</td>
+                        <td>{{ order.TotalPrice }}</td>
+                        <td>{{ order.Date }}</td>
+                        <td>
+                           <router-link :to="{ name: 'ViewAcceptedOrder', params: {id: order.Order_Code}}" class="btn btn-info" replace>
+                                View
+                            </router-link>    
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div> <!-- col-md-6 -->
+      </div> <!-- row -->
+    </div>   <!-- /container -->    
 
         <hr>
     </main>
@@ -60,14 +91,16 @@ export default {
     data() {
         return {
             orders: [],
+            acceptedOrders: [],
+            noAcceptedOrders: [],
             mobileOrder: [
                 {
                     Email: "bro@naver.com",
                     Restaurant_Code: "212",
-                    Menu_Code: "391",
+                    Menu_Code: "501",
                     MenuOption_CodeList: [
                         { MenuOption_Code: "331" },
-                        { MenuOption_Code: "441" }
+                        { MenuOption_Code: "442" }
                     ]                    
                 },
                 {
@@ -101,8 +134,18 @@ export default {
             this.axios.get('/order/mobile/' + this.$route.params.id)
             .then(res => {
                 this.orders = res.data;
-                
-                console.log(this.orders);
+
+                this.acceptedOrders = this.orders.filter(function(item, index, array) {
+                    if(item.OrderStatus == 'Accept') {
+                        return item;
+                    }
+                });
+
+                this.noAcceptedOrders = this.orders.filter(function(item, index, array) {
+                    if(item.OrderStatus == 'NoAccept') {
+                        return item;
+                    }
+                });
             })
             .catch(err => console.log(err));
         },

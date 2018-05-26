@@ -13,7 +13,6 @@ import VueSocketio from 'vue-socket.io';
 import App from './App.vue';
 
 import StartPage from './components/main/StartPage.vue';
-import GoogleMap from './components/main/GoogleMap.vue';
 
 import Login from './components/auth/Login.vue';
 import Register from './components/auth/Register.vue';
@@ -35,6 +34,7 @@ import Home from './components/restaurant/Home.vue';
 import Menu from './components/restaurant/Menu.vue';
 import Order from './components/restaurant/Order.vue';
 import Image from './components/restaurant/Image.vue';
+import ViewAcceptedOrder from './components/restaurant/ViewAcceptedOrder.vue';
 
 var routes = [
     {
@@ -42,11 +42,6 @@ var routes = [
         path: '/',
         component: StartPage
     },
-    // {
-    //     name: 'GoogleMap',
-    //     path: '/',
-    //     component: GoogleMap
-    // },
     {
         name: 'Login',
         path: '/login',
@@ -122,10 +117,18 @@ var routes = [
         },
         beforeEnter (to, from, next) {
             if(!Vue.prototype.$socket) {
-                //Vue.use(VueSocketio, 'http://127.0.0.1:3000');
-                Vue.use(VueSocketio, 'https://freeorder1010.herokuapp.com');
+                Vue.use(VueSocketio, 'http://127.0.0.1:3000');
+                // Vue.use(VueSocketio, 'https://freeorder1010.herokuapp.com');
             }
             next()
+        }
+    },
+    {
+        name: 'ViewAcceptedOrder',
+        path: '/view/acceptedorder/:id',
+        components: {
+            default: ViewAcceptedOrder,
+            a: RestaurantTop
         }
     },
     {

@@ -114,7 +114,7 @@
                         <td> {{ option.MenuOption_Name }} </td>
                         <td> {{ option.Price }} </td>
                         <td>
-                            <input type="checkbox" :value="{Menu_Code: menuIsChecked, MenuOption_Code: option.MenuOption_Code}" v-model="details">
+                            <input type="checkbox"  :value="{Menu_Code: menuIsChecked, MenuOption_Code: option.MenuOption_Code}" v-model="details">
                         </td>       
                     </tr>                
                 </tbody>

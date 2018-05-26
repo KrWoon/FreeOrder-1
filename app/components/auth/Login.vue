@@ -17,7 +17,9 @@
       
             <div class="checkbox mb-3">
               <label>
-                <a href="/register"> <code> SignUp Now &raquo; </code> </a>
+                <router-link :to="{ name: 'Register'}">
+                  <code> SignUp Now &raquo; </code>
+                </router-link>
               </label>
             </div>
             <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
@@ -38,7 +40,9 @@ export default {
             .then(res => {
                 this.$router.replace({name:'StartPage'});
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+              console.log(err);
+            });
         }
     }
 }

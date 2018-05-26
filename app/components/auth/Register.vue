@@ -34,14 +34,25 @@
 export default {
     data() {
         return {
-            user: {}
+            user: {},
+            message: ''
         }
     },
     methods: {
         Register() {
             this.axios.post('/auth/register', this.user)
             .then(res => {
-                this.$router.replace({name:'StartPage'});
+                this.message = res.data;
+                if(this.message == 'success') {
+                  alert('SignUp complete');
+                  this.$router.replace({name:'StartPage'});
+                } 
+                else if(this.message == 'password') {
+                  alert('Input password correctly');
+                } 
+                else {
+                  alert('ID already exists');
+                }
             })
             .catch(err => {
                 console.log(err);
