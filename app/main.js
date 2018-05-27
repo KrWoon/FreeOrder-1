@@ -24,10 +24,6 @@ import DisplayApplication from './components/form/DisplayApplication.vue';
 import DisplayRestaurant from './components/form/DisplayRestaurant.vue';
 import ApplyForm from './components/form/ApplyForm.vue';
 
-import DisplayOrder from './components/order/DisplayOrder.vue';
-import CreateOrder from './components/order/CreateOrder.vue';
-import EditOrder from './components/order/EditOrder.vue';
-
 import RestaurantTop from './components/restaurant/RestaurantTop.vue';
 import Info from './components/restaurant/Info.vue';
 import Home from './components/restaurant/Home.vue';
@@ -138,24 +134,6 @@ var routes = [
             default: Image,
             a: RestaurantTop
         }
-    },
-    {
-        name: 'DisplayOrder',
-        path: '/view/order',
-        components: {
-            default: DisplayOrder,
-            a: RestaurantTop
-        }
-    },
-    {
-        name: 'CreateOrder',
-        path: '/create/order',
-        component: CreateOrder
-    },
-    {
-        name: 'EditOrder',
-        path: '/edit/order/:id',
-        component: EditOrder
     }
 ];
 

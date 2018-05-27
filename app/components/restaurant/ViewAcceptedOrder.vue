@@ -10,7 +10,6 @@
             </div>      
 
             <div class="mycontainer">
-                <form v-on:submit.prevent="acceptOrder()">
                 <table class="table text-center">
                     <thead>
                         <tr>
@@ -44,12 +43,11 @@
                     </tbody>
                 </table>
                 <div class="text-right">
-                    <button class="btn btn-primary" type="submit"> Accept </button>
+                    <button class="btn btn-primary" @click="acceptOrder()"> Accept </button>
                     <router-link :to="{ name: 'Order'}" class="btn btn-primary" replace>
                         Back
                     </router-link>
                 </div>
-                </form>
             </div>   <!-- /container -->    
 
             <hr>
@@ -78,6 +76,8 @@ export default {
             .then(res => {
                 this.menus = res.data.menus;
                 this.options = res.data.options;
+                console.log(this.menus);
+                console.log(this.options);
             })
             .catch(err => console.log(err));
         },
