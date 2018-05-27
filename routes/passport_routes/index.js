@@ -2,7 +2,7 @@ module.exports = function() {
     var router = require('express').Router();
     var pool = require('../../config/passport_config/db')();
     var multer = require('multer');
-
+    var FCM = require('fcm-push');
     
     router.get('/', function(req, res){
         res.json({'login' : req.user});
@@ -113,7 +113,6 @@ module.exports = function() {
                 body: "Node로 발송하는 Push 메시지 입니다."
             }
         };
-
 
         var fcm = new FCM(serverKey);
 
