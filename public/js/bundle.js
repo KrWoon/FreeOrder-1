@@ -1436,6 +1436,9 @@ module.exports = Cancel;
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     data() {
@@ -1450,6 +1453,11 @@ module.exports = Cancel;
         fetchInfo() {
             this.axios.get('/index').then(res => {
                 this.info = res.data;
+            }).catch(err => console.log(err));
+        },
+        acceptOrder() {
+            this.axios.post('/order/accept/1281').then(res => {
+                console.log(res);
             }).catch(err => console.log(err));
         }
     }
@@ -15132,7 +15140,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n/* Links */\na[data-v-62857bfb],\r\na[data-v-62857bfb]:focus,\r\na[data-v-62857bfb]:hover {\r\n  color: #fff;\n}\r\n\r\n/* Custom default button */\n.btn-secondary[data-v-62857bfb],\r\n.btn-secondary[data-v-62857bfb]:hover,\r\n.btn-secondary[data-v-62857bfb]:focus {\r\n  color: #333;\r\n  text-shadow: none; /* Prevent inheritance from `body` */\r\n  background-color: #fff;\r\n  border: .05rem solid #333;\n}\r\n\r\n/*\r\n * Cover\r\n */\n.cover[data-v-62857bfb] {\r\n  padding: 0 1.5rem;\r\n  position: absolute;\r\n  top: 0;\r\n  bottom: 0;\r\n  left: 0;\r\n  right: 0;\r\n  height: 50%;\r\n  margin: auto;\n}\n.cover .btn-lg[data-v-62857bfb] {\r\n  padding: .75rem 1.25rem;\r\n  font-weight: 700;\n}\r\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n/* Links */\na[data-v-62857bfb],\r\na[data-v-62857bfb]:focus,\r\na[data-v-62857bfb]:hover {\r\n  color: #fff;\n}\r\n\r\n/* Custom default button */\n.btn-secondary[data-v-62857bfb],\r\n.btn-secondary[data-v-62857bfb]:hover,\r\n.btn-secondary[data-v-62857bfb]:focus {\r\n  color: #333;\r\n  text-shadow: none; /* Prevent inheritance from `body` */\r\n  background-color: #fff;\r\n  border: .05rem solid #333;\n}\r\n\r\n/*\r\n * Cover\r\n */\n.cover[data-v-62857bfb] {\r\n  padding: 0 1.5rem;\r\n  position: absolute;\r\n  top: 0;\r\n  bottom: 0;\r\n  left: 0;\r\n  right: 0;\r\n  height: 50%;\r\n  margin: auto;\n}\n.cover .btn-lg[data-v-62857bfb] {\r\n  padding: .75rem 1.25rem;\r\n  font-weight: 700;\n}\r\n", ""]);
 
 // exports
 
@@ -15273,7 +15281,22 @@ var render = function() {
               ]
             )
       ]
-    )
+    ),
+    _vm._v(" "),
+    _c("div", [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-primary",
+          on: {
+            click: function($event) {
+              _vm.acceptOrder()
+            }
+          }
+        },
+        [_vm._v(" Accept ")]
+      )
+    ])
   ])
 }
 var staticRenderFns = []
