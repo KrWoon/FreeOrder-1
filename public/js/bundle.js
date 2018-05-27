@@ -1456,7 +1456,7 @@ module.exports = Cancel;
             }).catch(err => console.log(err));
         },
         acceptOrder() {
-            this.axios.post('/order/accept/1281').then(res => {
+            this.axios.post('/index/push').then(res => {
                 console.log(res);
             }).catch(err => console.log(err));
         }
