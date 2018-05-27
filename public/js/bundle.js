@@ -19798,7 +19798,7 @@ var staticRenderFns = [
       _c("tr", [
         _c("th", [_vm._v("Details")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Price")]),
+        _c("th", [_vm._v("Prices")]),
         _vm._v(" "),
         _c("th", [_vm._v("Operation")])
       ])

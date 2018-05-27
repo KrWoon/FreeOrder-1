@@ -105,7 +105,7 @@
                 <thead>
                     <tr>
                         <th>Details</th>
-                        <th>Price</th>
+                        <th>Prices</th>
                         <th>Operation</th>
                     </tr>
                 </thead>
