@@ -212,8 +212,8 @@ module.exports = function(io) {
 
         /** 아래는 푸시메시지 발송절차 */
 
-        var serverKey = 'AAAAsA86ukc:APA91bHf-9yxdx-iTff1-xsWn2AWibinaLe0vTVJM322e-y1xNKeuHaFFICBL97wl_38lrxHjCx4g3iE6l5fSMBvi84pUqfG3QZCxXM1i7dPQlxZJrSwlMmDLy6hls4TnI01-ERfjZ-d';
-        //AAAAz8FUF8Y:APA91bGFPY5QzMXzFP6TeHg0fBF4DF0GIaBKIrX3wVjRcOk3Sag2RUeO3ZvlROrAVb1XN6_9LV3Y6FfU4XC61qGbYJs6ZevrNYg9tkb-XH7ZF02NghfPoPkxJ63zPwe4UjGDhBjdWNp-
+        //var serverKey = 'AAAAsA86ukc:APA91bHf-9yxdx-iTff1-xsWn2AWibinaLe0vTVJM322e-y1xNKeuHaFFICBL97wl_38lrxHjCx4g3iE6l5fSMBvi84pUqfG3QZCxXM1i7dPQlxZJrSwlMmDLy6hls4TnI01-ERfjZ-d';
+        var serverKey = 'AAAAz8FUF8Y:APA91bGFPY5QzMXzFP6TeHg0fBF4DF0GIaBKIrX3wVjRcOk3Sag2RUeO3ZvlROrAVb1XN6_9LV3Y6FfU4XC61qGbYJs6ZevrNYg9tkb-XH7ZF02NghfPoPkxJ63zPwe4UjGDhBjdWNp-';
         var client_token = 'dIXL2_Y-FA0:APA91bFoHvAX94ByYdP_dGhbhx10T9lkswKZibU_maLClo14K_I08av8-DIMXkH-TznXYpKzWQ8r-rqzxu_Tpmky47AYpSPcnPwrVgBX9aqQzlHLDtPMpAwPp8boxhXegkE4hMagj0ru';
     
         /** 발송할 Push 메시지 내용 */
