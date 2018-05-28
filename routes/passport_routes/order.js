@@ -88,7 +88,6 @@ module.exports = function(io) {
 
                     // jiwoon
                     io.sockets.emit('customOrder', recent);
-                    sleep(20000);
                     res.write("req.body Ok");
                     res.end();
 
