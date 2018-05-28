@@ -7,6 +7,7 @@ module.exports = function() {
     router.get('/:rid', function(req,res){
         sql = 'SELECT * FROM restaurant WHERE Restaurant_Code = ? AND Use_Code = \'Y\'';
         pool.getConnection(function(err, conn) {
+            if(err) console.log(err);
             conn.query(sql, [req.params.rid], function(err, results) { 
                 if(err) throw err;              
                 conn.release();
@@ -38,7 +39,8 @@ module.exports = function() {
             closeTime : req.body.closeTime,
             Delay : req.body.Delay,
             Latitude : req.body.Latitude,
-            Longitude : req.body.Longitude
+            Longitude : req.body.Longitude,
+            PhoneNumber : req.body.PhoneNumber
         };
         
         var sql = 'UPDATE restaurant SET ? WHERE Use_Code = \'Y\' AND Restaurant_Code = ' + req.params.rid;
@@ -123,30 +125,6 @@ module.exports = function() {
             res.json(req.file);
         })
     });
-
-    // router.post('/:rid/info/changeStatus', function(req,res) {
-    //     var sql = 'SELECT count(*) as amount FROM menu WHERE Restaurant_Code = ' + req.params.rid;
-
-    //     pool.getConnection(function(err, conn) {
-    //         conn.query(sql, [], function(err, menus) {
-    //             if(err) throw err;
-
-    //             if(menus[0].amount > 2) {
-    //                 var sql = 'UPDATE restaurant SET BusinessStatus=? WHERE Restaurant_Code = ' + req.params.rid;
-    //                 conn.query(sql, [req.body.status], function(err, restaurant) {
-    //                     req.session.save(function() {
-    //                         res.redirect('/restaurant/' + req.params.rid);
-    //                     });                     
-    //                 });
-    //             } else {
-    //                 res.write('<script type="text/javascript"> alert("You must add Menu at least 3"); </script>')
-    //                 res.write('<script language=\"javascript\"> history.back(); </script>')                    
-    //             }   
-
-    //             conn.release();
-    //         });      
-    //     });
-    // });
 
     return router;
 }

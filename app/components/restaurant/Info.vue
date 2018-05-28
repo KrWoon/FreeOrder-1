@@ -42,6 +42,20 @@
               </div>      
           </div>   
 
+            <p>PhoneNumber</p>
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                  <input type="text" class="form-control text-center" v-model="phoneNumber[0]" size="4" maxlength="3" required>
+              </div>
+              <div class="col-md-4 mb-3">
+                  <input type="text" class="form-control text-center" v-model="phoneNumber[1]" size="4" maxlength="4" required>
+              </div>      
+              <div class="col-md-4 mb-3">
+                  <input type="text" class="form-control text-center" v-model="phoneNumber[2]" size="4" maxlength="4" required>
+              </div>
+            </div>
+
+
             <div class="mb-3">
                 <label for="inputCategory">Category</label>   
                 <input type="text" class="form-control" v-model="info.Category" id="inputCategory" placeholder="Category" required>                                          
@@ -92,7 +106,8 @@ export default {
     return {
       info: {},
       status: {status: ''},
-      currentLocation : { lat : 0, lng : 0}
+      currentLocation : { lat : 0, lng : 0},
+      phoneNumber: ''
     }
   },
   created() {
@@ -103,6 +118,7 @@ export default {
       this.axios.get('/restaurant/' + this.$route.params.id)
       .then(res => {
         this.info = res.data;
+        this.phoneNumber = this.info.PhoneNumber.split('-');
 
         if(this.info.BusinessStatus == 'open') {
           this.status.status = 'close'
@@ -113,11 +129,10 @@ export default {
       .catch(err => console.log(err));
     },
     updateInfo() {
-        console.log(this.info.Longitude);
-        console.log(this.info.Latitude);
-        var response = confirm('Are you sure you want to edit?')
+        var response = confirm('Are you sure you want to edit?');
         
         if(response) {
+            this.info.PhoneNumber = this.phoneNumber[0] + '-' + this.phoneNumber[1] + '-' + this.phoneNumber[2];
             this.axios.put('/restaurant/' + this.$route.params.id, this.info)
             .then(res => {
                 alert(res.data.restaurant);
@@ -167,6 +182,7 @@ body {
 </style>
 
 <style scoped>
+
 .mycontainer {
   padding-right: 15px;
   padding-left: 15px;

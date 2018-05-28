@@ -13,6 +13,7 @@ module.exports = function() {
         var sql = 'SELECT Signboard, Restaurant_Code FROM restaurant WHERE Manager_Code = ? AND Use_Code = \'Y\'';
         pool.getConnection(function(err, conn) {
             conn.query(sql, [req.user.Manager_Code], function(err, restaurants) {  
+                if(err) console.log(err);
                 conn.release();    
                 res.json({'login' : req.user, 'restaurants' : restaurants});
             });
@@ -41,61 +42,10 @@ module.exports = function() {
         });     
     }); 
 
-    
-    var upload = {
-        insertImage:function (data, callback) {
-            pool.getConnection(function(err, conn) {
-                conn.query("INSERT INTO users (UserID, UserName, UserLocation) VALUES (0, ?, 'N')", [data], function(err, row) {
-                    if(err) {console.log('error db')}
-                    return conn.release();
-                })
-            });            
-        }
-    };
-
-    var storage = multer.diskStorage({
-        destination: function (req, file, callback) {
-            callback(null, './public/images/')
-        },
-        filename: function (req, file, callback) {
-            callback(null, file.originalname)
-        }
-    });
-
-    var uploads = multer({ storage: storage }).single('image');
-
-
-    router.post('/upload', function (req, res, next) {
-        uploads(req, res, function (err) {
-            // if(err){
-            //     return res.end('Error Upload file')
-            // }
-    
-            upload.insertImage(req.file.filename, function (err, rows) {
-                if(err){
-                    res.end(err)
-                } else {
-                    res.json('db complete');
-                }
-            })
-            res.json(req.file);
-        })
-    });
 
     // accept order and push message to mobile
     router.post('/push', function(req, res) {
-        // req.on('data', (data) => {
-        //     inputdata = JSON.parse(data);
-        // });
-        
-        // req.on('end', () => {
-        //     console.log(inputdata.Token);
-        // });
-
-
         /** 아래는 푸시메시지 발송절차 */
-
-        //var serverKey = 'AAAAsA86ukc:APA91bHf-9yxdx-iTff1-xsWn2AWibinaLe0vTVJM322e-y1xNKeuHaFFICBL97wl_38lrxHjCx4g3iE6l5fSMBvi84pUqfG3QZCxXM1i7dPQlxZJrSwlMmDLy6hls4TnI01-ERfjZ-d';
         var serverKey = 'AAAAz8FUF8Y:APA91bGFPY5QzMXzFP6TeHg0fBF4DF0GIaBKIrX3wVjRcOk3Sag2RUeO3ZvlROrAVb1XN6_9LV3Y6FfU4XC61qGbYJs6ZevrNYg9tkb-XH7ZF02NghfPoPkxJ63zPwe4UjGDhBjdWNp-';
         var client_token = 'dIXL2_Y-FA0:APA91bFoHvAX94ByYdP_dGhbhx10T9lkswKZibU_maLClo14K_I08av8-DIMXkH-TznXYpKzWQ8r-rqzxu_Tpmky47AYpSPcnPwrVgBX9aqQzlHLDtPMpAwPp8boxhXegkE4hMagj0ru';
     
@@ -105,7 +55,7 @@ module.exports = function() {
             to: client_token,
             // App에게 전달할 데이터
             data: {
-                num1: 2000
+                order: "Accept"
             },
             // App이 실행중이지 않을 때 상태바 알림으로 등록할 내용
             notification: {

@@ -10,6 +10,9 @@ Vue.use(VueAxios, axios);
 
 import VueSocketio from 'vue-socket.io';
 
+Vue.use(VueSocketio, 'http://127.0.0.1:3000');
+// Vue.use(VueSocketio, 'https://freeorder1010.herokuapp.com');
+
 import App from './App.vue';
 
 import StartPage from './components/main/StartPage.vue';
@@ -30,7 +33,7 @@ import Home from './components/restaurant/Home.vue';
 import Menu from './components/restaurant/Menu.vue';
 import Order from './components/restaurant/Order.vue';
 import Image from './components/restaurant/Image.vue';
-import ViewAcceptedOrder from './components/restaurant/ViewAcceptedOrder.vue';
+import ViewOrder from './components/restaurant/ViewOrder.vue';
 
 var routes = [
     {
@@ -110,20 +113,13 @@ var routes = [
         components: {
             default: Order,
             a: RestaurantTop
-        },
-        beforeEnter (to, from, next) {
-            if(!Vue.prototype.$socket) {
-                // Vue.use(VueSocketio, 'http://127.0.0.1:3000');
-                Vue.use(VueSocketio, 'https://freeorder1010.herokuapp.com');
-            }
-            next()
         }
     },
     {
-        name: 'ViewAcceptedOrder',
-        path: '/view/acceptedorder/:id',
+        name: 'ViewOrder',
+        path: '/view/order/:id/detail/:oid',
         components: {
-            default: ViewAcceptedOrder,
+            default: ViewOrder,
             a: RestaurantTop
         }
     },

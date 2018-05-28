@@ -35,7 +35,7 @@
                         <td>{{ order.TotalPrice }}</td>
                         <td>{{ order.Date }}</td>
                         <td>
-                            <router-link :to="{ name: 'ViewAcceptedOrder', params: {id: order.Order_Code}}" class="btn btn-info" replace>
+                            <router-link :to="{ name: 'ViewOrder', params: {oid: order.Order_Code}}" class="btn btn-info" replace>
                                 View
                             </router-link>
                         </td>
@@ -64,7 +64,7 @@
                         <td>{{ order.TotalPrice }}</td>
                         <td>{{ order.Date }}</td>
                         <td>
-                           <router-link :to="{ name: 'ViewAcceptedOrder', params: {id: order.Order_Code}}" class="btn btn-info" replace>
+                           <router-link :to="{ name: 'ViewOrder', params: {oid: order.Order_Code}}" class="btn btn-info" replace>
                                 View
                             </router-link>    
                         </td>
@@ -95,6 +95,7 @@ export default {
             noAcceptedOrders: [],
             mobileOrder: [
                 {
+                    ClientToken: "HI",
                     Email: "bro@naver.com",
                     Restaurant_Code: "212",
                     Menu_Code: "501",
@@ -104,6 +105,7 @@ export default {
                     ]                    
                 },
                 {
+                    ClientToken: "HI",
                     Email: "bro@naver.com",
                     Restaurant_Code: "212",
                     Menu_Code: "401",
@@ -146,41 +148,25 @@ export default {
                         return item;
                     }
                 });
+
+                console.log(this.acceptedOrders);
+                console.log(this.noAcceptedOrders);
             })
             .catch(err => console.log(err));
         },
         updatePriceAndDelay(orderId) {
             this.axios.put('/order/mobile/' + orderId)
             .then(res => {                
+                console.log(res);
                 this.fetchOrders();
             })
             .catch(err => console.log(err));
-        },
-        deleteOrder(id) {
-            var response = confirm('Are you sure you want to delete?');
-
-            if(response) {
-                this.axios.delete('/order/' + id)
-                .then(res => {
-                    var deletedOrder = null;
-
-                    this.orders.forEach(function(n) {
-                        if(n.UserID == id) {
-                            deletedOrder = n;
-                        }
-                    });
-
-                    this.orders.splice(this.orders.indexOf(deletedOrder), 1)
-                })
-                .catch(err => console.log(err));
-            }
-            return;
         },
         sendMobileOrders() {
             console.log(this.mobileOrder);
             this.axios.post('/order/mobile', this.mobileOrder)
             .then(res => {
-                console.log('send complete');
+                console.log(res);
             })
             .catch(err => console.log(err));
         }

@@ -25,9 +25,6 @@
         </p>
       </main>
     </div>
-    <div>
-        <button class="btn btn-primary" @click="acceptOrder()"> Accept </button>
-    </div>
 </div>
 </template>
 
@@ -46,13 +43,6 @@ export default {
             this.axios.get('/index')
             .then(res => {
                 this.info = res.data;
-            })
-            .catch(err => console.log(err));
-        },
-        acceptOrder() {
-            this.axios.post('/index/push')
-            .then(res => {
-                console.log(res);
             })
             .catch(err => console.log(err));
         }

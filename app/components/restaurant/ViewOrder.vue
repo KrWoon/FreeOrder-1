@@ -4,8 +4,9 @@
             <!-- Main jumbotron for a primary marketing message or call to action -->
             <div class="jumbotron">
                 <div class="container">
-                    <h1 class="display-3"> Order </h1>
-                    <button class="btn btn-info btn-lg disabled">Order &raquo;</button>
+                    <h1 class="display-3" v-if="status"> Accpeted Order </h1>
+                    <h1 class="display-3" v-else> Not Accpeted Order </h1>
+                    <h3> <br/> </h3>
                 </div>
             </div>      
 
@@ -43,7 +44,8 @@
                     </tbody>
                 </table>
                 <div class="text-right">
-                    <button class="btn btn-primary" @click="acceptOrder()"> Accept </button>
+                    <button class="btn btn-primary" @click="orderIsReady()" v-if="status"> Ready </button>
+                    <button class="btn btn-primary" @click="acceptOrder()" v-else> Accept </button>
                     <router-link :to="{ name: 'Order'}" class="btn btn-primary" replace>
                         Back
                     </router-link>
@@ -64,7 +66,8 @@ export default {
     data() {
         return {
             menus: [],
-            options :[]
+            options: [],
+            status: 0
         }
     },
     created() {
@@ -72,21 +75,45 @@ export default {
     },
     methods: {
         fetchOrder() {
-            this.axios.get('/order/' + this.$route.params.id)
+            this.axios.get('/order/' + this.$route.params.oid)
             .then(res => {
                 this.menus = res.data.menus;
                 this.options = res.data.options;
+
+                if(this.menus[0].OrderStatus == 'Accept') {
+                    this.status = 1;
+                } else {
+                    this.status = 0;
+                }
                 console.log(this.menus);
                 console.log(this.options);
+                console.log(this.status);
             })
             .catch(err => console.log(err));
         },
         acceptOrder() {
-            this.axios.post('/order/accept/' + this.$route.params.id)
-            .then(res => {
-                console.log(res);
-            })
-            .catch(err => console.log(err));
+            var response = confirm('Are you sure you want to accept this order?');
+
+            if(response) {
+                this.axios.put('/order/accept/' + this.$route.params.oid)
+                .then(res => {
+                    alert(res.data);
+                })
+                .catch(err => console.log(err));
+            }
+            return;
+        },
+        orderIsReady() {
+            var response = confirm('Are you sure you send ready message to customer?');
+
+            if(response) {
+                this.axios.post('/order/ready/' + this.$route.params.oid)
+                .then(res => {
+                    alert(res.data);
+                })
+                .catch(err => console.log(err));
+            }
+            return;
         }
     }
 }
