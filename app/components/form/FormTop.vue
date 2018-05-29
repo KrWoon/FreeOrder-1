@@ -19,7 +19,7 @@
             </router-link>
           </li>      
         </ul>
-        <a href="/" class="btn btn-success" v-on:click="Logout()"> 
+         <a href="/" class="btn btn-success" v-confirm="{loader: true, ok: dialog => Logout(dialog),  message: 'Are you sure want to logout?'}">
            Logout
          </a>
       </div>               
@@ -35,18 +35,15 @@ export default {
       }
     },
     methods: {
-      Logout() {
-        var response = confirm("Are you sure want to logout?");
-
-        if(response) {
+      Logout(dialog) {
           this.axios.post('/auth/logout')
           .then(res => {
-            
+            dialog.close();
+            location.href = "/"
           })
           .catch(err => {
             console.log(err);
           })
-        }
       }
     }
 }

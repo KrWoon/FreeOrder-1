@@ -61,7 +61,7 @@ export default {
         Apply() {
             this.axios.post('/form/apply', this.form)
             .then(res => {
-                alert(res.data.application);
+                this.$dialog.alert(res.data.application);
                 this.$router.replace({name:'DisplayApplication'});
             })
             .catch(err => {

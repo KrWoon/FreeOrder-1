@@ -6,7 +6,7 @@
         <div class="container">
           <h1 class="display-3"> Order </h1>
           <p>You can set your restaurant information in here</p>
-          <button class="btn btn-info btn-lg disabled">Order &raquo;</button>
+          <p> <br/> </p>
         <button class="btn btn-primary" v-on:click="sendMobileOrders()"> 
             Send 
         </button>    
@@ -77,7 +77,6 @@
 
         <hr>
     </main>
-
     <footer class="container">
       <p>&copy; BBGoo 2018</p>
     </footer>
@@ -127,8 +126,8 @@ export default {
         customOrder: function(val){
           this.socketData = val;
           console.log('eg: io.emit("customOrder", data)')
-          console.log('socket menu: ' + this.socketData.Order_Code);
-          this.updatePriceAndDelay(this.socketData.Order_Code);
+          console.log('socket menu: ' + this.socketData);
+          this.fetchOrders();
         },
     },
     methods: {
@@ -154,16 +153,7 @@ export default {
             })
             .catch(err => console.log(err));
         },
-        updatePriceAndDelay(orderId) {
-            this.axios.put('/order/mobile/' + orderId)
-            .then(res => {                
-                console.log(res);
-                this.fetchOrders();
-            })
-            .catch(err => console.log(err));
-        },
         sendMobileOrders() {
-            console.log(this.mobileOrder);
             this.axios.post('/order/mobile', this.mobileOrder)
             .then(res => {
                 console.log(res);

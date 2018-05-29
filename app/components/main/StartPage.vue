@@ -38,6 +38,11 @@ export default {
     created() {
         this.fetchInfo();
     },
+    sockets:{
+        connect: function(){
+            console.log('connection2 success')
+        }
+    },
     methods: {
         fetchInfo() {
             this.axios.get('/index')

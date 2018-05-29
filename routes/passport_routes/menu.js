@@ -2,28 +2,6 @@ module.exports = function (io) {
     var router = require('express').Router();
     var pool = require('../../config/passport_config/db')();
 
-    // router.get(['/:rid', '/:rid/:mid/detail'], function (req, res) {
-    //     var sql = 'SELECT * FROM menu WHERE Restaurant_Code = ? AND Use_Code = \'Y\'';
-    //     pool.getConnection(function (err, conn) {
-    //         conn.query(sql, [req.params.rid], function (err, menus) {
-    //             sql = 'SELECT * FROM menuoption WHERE Restaurant_Code = ? AND Use_Code = \'Y\'';
-
-    //             conn.query(sql, [req.params.rid], function (err, options) {
-    //                 if (req.params.mid) {
-    //                     sql = 'SELECT * FROM menuoption INNER JOIN menu_menuoption ON menuoption.MenuOption_Code = menu_menuoption.MenuOption_Code WHERE menu_menuoption.Menu_Code = ? AND menu_menuoption.Use_Code = \'Y\''
-
-    //                     conn.query(sql, [req.params.mid], function (err, menuDetails) {
-    //                         res.render('menu/mLayout', { 'menu': menus, 'menuDetail': menuDetails, 'menuOption': options, 'r_Code': req.params.rid, 'm_Code': req.params.mid, 'login' : req.user });
-    //                     });
-    //                 } else {
-    //                     res.render('menu/mLayout', { 'menu': menus, 'menuOption': options, 'r_Code': req.params.rid, 'm_Code': 'None', 'login' : req.user  });
-    //                 }
-    //             });
-    //             conn.release();
-    //         });
-    //     });
-    // });
-
     // get menus
     router.get('/:rid', function (req, res) {
         var sql = 'SELECT Menu_Code, Menu_Name, Price, CookingTime FROM menu WHERE Restaurant_Code = ? AND Use_Code = \'Y\'';
@@ -137,48 +115,8 @@ module.exports = function (io) {
                         });
                     }            
                     conn.release();
-                    res.json({detail : "detail receive complete"});
+                    res.json("Detail option save complete");
                 });
-            });
-        });
-    });
-
-    router.post('/:rid/:mid/detail/add', function (req, res) {
-        var details = req.body.detail;
-        var sql = 'DELETE FROM menu_menuoption WHERE Menu_Code = ? AND Use_Code = \'Y\'';
-
-        pool.getConnection(function (err, conn) {
-            conn.query(sql, [req.params.mid], function (err, results) {
-                if (details) {
-                    if (!Array.isArray(details)) {
-                        details = [details];
-                    }
-
-                    for (var i = 0; i < details.length; i++) {
-                        var newDetail = {
-                            Menu_Code: req.params.mid,
-                            MenuOption_Code: details[i]
-                        };
-
-                        sql = 'INSERT INTO menu_menuoption SET ?';
-                        conn.query(sql, newDetail, function (err, results) {
-                            if (err) {
-                                console.log('db err');
-                                res.status(500);
-                            }
-                        });
-                    }
-
-                    req.session.save(function () {
-                        res.redirect('/menu/' + req.params.rid + '/' + req.params.mid + '/detail');
-                    });
-                } else {
-                    req.session.save(function () {
-                        res.redirect('/menu/' + req.params.rid + '/' + req.params.mid + '/detail');
-                    });
-                }
-
-                conn.release();
             });
         });
     });

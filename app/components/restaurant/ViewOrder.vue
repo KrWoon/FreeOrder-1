@@ -6,7 +6,7 @@
                 <div class="container">
                     <h1 class="display-3" v-if="status"> Accpeted Order </h1>
                     <h1 class="display-3" v-else> Not Accpeted Order </h1>
-                    <h3> <br/> </h3>
+                    <p> <br/> </p>
                 </div>
             </div>      
 
@@ -44,8 +44,10 @@
                     </tbody>
                 </table>
                 <div class="text-right">
-                    <button class="btn btn-primary" @click="orderIsReady()" v-if="status"> Ready </button>
-                    <button class="btn btn-primary" @click="acceptOrder()" v-else> Accept </button>
+                    <!-- <button class="btn btn-primary" @click="orderIsReady()" v-if="status"> Ready </button> -->
+                    <button class="btn btn-primary" v-if="status" v-confirm="{loader: true, ok: dialog => orderIsReady(dialog),  message: 'Are you sure you send ready message to customer?'}"> Ready </button>
+                    <!-- <button class="btn btn-primary" @click="acceptOrder()" v-else> Accept </button> -->
+                    <button class="btn btn-primary" v-else v-confirm="{loader: true, ok: dialog => acceptOrder(dialog),  message: 'Are you sure you want to accept this order?'}"> Accept </button>
                     <router-link :to="{ name: 'Order'}" class="btn btn-primary" replace>
                         Back
                     </router-link>
@@ -87,33 +89,45 @@ export default {
                 }
                 console.log(this.menus);
                 console.log(this.options);
-                console.log(this.status);
             })
             .catch(err => console.log(err));
         },
-        acceptOrder() {
-            var response = confirm('Are you sure you want to accept this order?');
+        acceptOrder(dialog) {
+            this.$socket.emit('hello');                
+            this.axios.put('/order/accept/' + this.$route.params.oid)
+            .then(res => {
+                dialog.close();
+            })
+            .catch(err => console.log(err));
+            // var response = confirm('Are you sure you want to accept this order?');
 
-            if(response) {
-                this.axios.put('/order/accept/' + this.$route.params.oid)
-                .then(res => {
-                    alert(res.data);
-                })
-                .catch(err => console.log(err));
-            }
-            return;
+            // if(response) {
+            //     this.$socket.emit('hello');                
+            //     this.axios.put('/order/accept/' + this.$route.params.oid)
+            //     .then(res => {
+            //         this.$dialog.alert(res.data);
+            //     })
+            //     .catch(err => console.log(err));
+            // }
+            // return;
         },
-        orderIsReady() {
-            var response = confirm('Are you sure you send ready message to customer?');
+        orderIsReady(dialog) {
+            this.axios.post('/order/ready/' + this.$route.params.oid)
+            .then(res => {
+                dialog.close();
+            })
+            .catch(err => console.log(err));
 
-            if(response) {
-                this.axios.post('/order/ready/' + this.$route.params.oid)
-                .then(res => {
-                    alert(res.data);
-                })
-                .catch(err => console.log(err));
-            }
-            return;
+            // var response = confirm('Are you sure you send ready message to customer?');
+
+            // if(response) {
+            //     this.axios.post('/order/ready/' + this.$route.params.oid)
+            //     .then(res => {
+            //         this.$dialog.alert(res.data);
+            //     })
+            //     .catch(err => console.log(err));
+            // }
+            // return;
         }
     }
 }

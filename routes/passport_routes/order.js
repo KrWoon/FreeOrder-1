@@ -19,11 +19,14 @@ module.exports = function(io) {
         });    
     });
 
+    var msg = 0;
+    
     // add mobile data
     router.post('/mobile', function(req, res) {
         // var order = req.body.mobileOrder;
         var order = req.body;   // web
         var totalOrder = [];
+        var orderCode;
 
         // insert to orderedinfo table
         var First_func = function(){
@@ -35,8 +38,10 @@ module.exports = function(io) {
                 conn.query(sql, [order[0].ClientToken, order[0].Email, order[0].Restaurant_Code], function(err, results) {
                     if(err) throw err;
 
-                    console.log('insert orderedinfo complete');
-                    Second_func();
+                    console.log('insert orderedinfo complete');   
+                    setImmediate(() => {
+                        Second_func();
+                    });                
                     conn.release();
                 });
             });
@@ -53,12 +58,13 @@ module.exports = function(io) {
                     if(err) throw err;
 
                     var recent = orderCodes[orderCodes.length - 1];
+                    orderCode = recent.Order_Code;
 
                     for(var i=0; i<order.length; i++) {
                         if(order[i].MenuOption_CodeList != 0) {
                             for(var j=0; j<order[i].MenuOption_CodeList.length; j++) {
                                 orderedMenu = {
-                                    Order_Code: recent.Order_Code,
+                                    Order_Code: orderCode,
                                     Sequence: i,
                                     Menu_Code: order[i].Menu_Code,
                                     MenuOption_Code: order[i].MenuOption_CodeList[j].MenuOption_Code
@@ -67,7 +73,7 @@ module.exports = function(io) {
                             }
                         } else {
                             orderedMenu = {
-                                Order_Code: recent.Order_Code,
+                                Order_Code: orderCode,
                                 Sequence: i,
                                 Menu_Code: order[i].Menu_Code
                             }
@@ -86,27 +92,19 @@ module.exports = function(io) {
                         })    
                     }
 
-                    // jiwoon
-                    io.sockets.emit('customOrder', recent);
-                    res.write("req.body Ok");
-                    res.end();
+                    setImmediate(() => {
+                        Third_func();
+                    });
 
                     conn.release();
                 });
             });
-        };
-        
-        First_func();
-    });
+        };        
 
-
-    // update price
-    router.put('/mobile/:oid', function(req, res) {
-        var orderCode = req.params.oid;
 
         // get totalPrice
-        var First_func = function() {
-            var totalPrice = 0;
+        var Third_func = function() {
+            var totalPrice= 0 ;
 
             var sql = 'select distinct menu.Menu_Code, menu.Price from menu join orderedmenu on menu.Menu_Code = orderedmenu.Menu_Code join orderedinfo on orderedinfo.Order_Code = orderedmenu.Order_Code where orderedmenu.Order_Code = ?';
             pool.getConnection(function(err, conn) {
@@ -127,30 +125,61 @@ module.exports = function(io) {
                             totalPrice += option[i].Price;
                         }
 
-                        Second_func(totalPrice);
+                        console.log(totalPrice);
+                        setImmediate(() => {
+                            Fourth_func(totalPrice);
+                        });
+                        
                         conn.release();
                     });
                 });
             });  
-        }  
-
+        }
+        
         // insert price into orderedinfo table
-        var Second_func = function(Price){
+        var Fourth_func = function(totalPrice){
             var sql = 'UPDATE orderedinfo SET TotalPrice = ? WHERE Order_Code = ?';
             pool.getConnection(function(err, conn) {
                 if(err) throw err;
 
-                conn.query(sql, [Price, orderCode], function(err, results) {
+                conn.query(sql, [totalPrice, orderCode], function(err, results) {
                     if(err) throw err;
 
+                    setImmediate(() => {
+                        // jiwoon
+                        io.sockets.emit('customOrder', orderCode);
+                        const timer = setTimeout(() => {
+                            console.log('timer out');  
+                            if(msg == 0) {
+                                console.log('msg', msg);
+                            }                    
+                            else {
+                                console.log('msg', msg);
+                                res.write("req body");
+                                msg = 0;
+                            }      
+                            res.end();
+                        }, 10000);
+
+                    });
+
                     conn.release();
-                    res.json('good');   
                 });
             });            
         }
 
         First_func();
     });
+
+    
+    io.on('connection', (socket) => {
+        socket.on('hello', function(data) {
+            msg = 1;    
+            console.log('msg', msg);
+        });
+        console.log('Socket Connect22');        
+    });
+
 
     // get menu, menuoption of only one order
     router.get('/:oid', function(req, res) {

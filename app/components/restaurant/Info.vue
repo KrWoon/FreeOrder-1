@@ -19,7 +19,7 @@
       </div>      
 
         <div class="mycontainer">
-        <form v-on:submit.prevent="updateInfo()">
+        <form>
             <div class="mb-3">
                 <label for="inputName">Restaurant name</label>   
                 <input type="text" class="form-control" v-model="info.Signboard" id="inputName" placeholder="Restaurant name" required autofocus>                                          
@@ -83,7 +83,7 @@
             </div>      
         </div>   
 
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Update</button>        
+            <button class="btn btn-lg btn-primary btn-block" type="submit" v-confirm="{ok: updateInfo, message: 'Are you sure you want to edit?'}">Update</button>        
         </form>     
 
      
@@ -129,23 +129,18 @@ export default {
       .catch(err => console.log(err));
     },
     updateInfo() {
-        var response = confirm('Are you sure you want to edit?');
-        
-        if(response) {
-            this.info.PhoneNumber = this.phoneNumber[0] + '-' + this.phoneNumber[1] + '-' + this.phoneNumber[2];
-            this.axios.put('/restaurant/' + this.$route.params.id, this.info)
-            .then(res => {
-                alert(res.data.restaurant);
-              console.log(this.info);
-            })
-            .catch(err => console.log(err));
-        }
-        return;
+      this.info.PhoneNumber = this.phoneNumber[0] + '-' + this.phoneNumber[1] + '-' + this.phoneNumber[2];
+      this.axios.put('/restaurant/' + this.$route.params.id, this.info)
+      .then(res => {
+          this.$dialog.alert(res.data.restaurant);
+          console.log(this.info);
+      })
+      .catch(err => console.log(err));
     },
     changeStatus() {
       this.axios.post('/restaurant/changeStatus/' + this.$route.params.id, this.status)
       .then(res => {
-        alert(res.data.message);
+        this.$dialog.alert(res.data.message);
 
         if(res.data.change == 1) {
           if(this.status.status == 'open') {

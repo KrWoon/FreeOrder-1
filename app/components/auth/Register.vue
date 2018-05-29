@@ -44,14 +44,14 @@ export default {
             .then(res => {
                 this.message = res.data;
                 if(this.message == 'success') {
-                  alert('SignUp complete');
+                  this.$dialog.alert('SignUp complete');
                   this.$router.replace({name:'StartPage'});
                 } 
                 else if(this.message == 'password') {
-                  alert('Input password correctly');
+                  this.$dialog.alert('Input password correctly');
                 } 
                 else {
-                  alert('ID already exists');
+                  this.$dialog.alert('ID already exists');
                 }
             })
             .catch(err => {

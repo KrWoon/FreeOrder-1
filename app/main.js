@@ -13,6 +13,11 @@ import VueSocketio from 'vue-socket.io';
 Vue.use(VueSocketio, 'http://127.0.0.1:3000');
 // Vue.use(VueSocketio, 'https://freeorder1010.herokuapp.com');
 
+import VuejsDialog from "vuejs-dialog"
+ 
+// Tell Vue to install the plugin.
+Vue.use(VuejsDialog)
+
 import App from './App.vue';
 
 import StartPage from './components/main/StartPage.vue';

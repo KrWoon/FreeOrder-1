@@ -9,7 +9,7 @@
             <div class="col-md-4">
               <h1 class="display-3"> Menu </h1>
               <p>You can view, add, edit, and delete menu in here</p>
-              <button class="btn btn-info btn-lg" disabled>Menu &raquo;</button>
+               <p> <br/> </p>
             </div>
 
             <div class="col-md-8">
@@ -56,18 +56,19 @@
                         <th>Menu</th>
                         <th>Price</th>
                         <th>CookingTime</th>
-                        <th>Operation</th>
+                        <th>Delete</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="(menu, index ) in menus">
                         <td> {{ index+1 }} </td>
-                        <td> <button class="btn btn-outline-dark btn-block" v-on:click="clickMenu(menu.Menu_Code, menu.Menu_Name)"> {{ menu.Menu_Name }} </button> </td>
+                        <td> <button class="btn btn-block" v-on:click="clickMenu(menu.Menu_Code, menu.Menu_Name)"> {{ menu.Menu_Name }} </button> </td>
                         <td> {{ menu.Price }} </td>
                         <td> {{ menu.CookingTime }} </td>
                         <td>
-                            <button class="btn btn-outline-danger" v-on:click="deleteMenu(menu.Menu_Code)"> 
-                                Delete 
+                            <!-- <button class="btn btn-outline-danger" v-on:click="deleteMenu(menu.Menu_Code)">  -->
+                              <button class="btn btn-outline-danger" v-confirm="{loader: true, ok: dialog => deleteMenu(dialog, menu.Menu_Code),  message: 'Are you sure you want to delete this menu?'}">
+                                x 
                             </button>   
                         </td>
                     </tr>
@@ -80,7 +81,7 @@
                         <th>No.</th>
                         <th>Option</th>
                         <th>Price</th>
-                        <th>Operation</th>
+                        <th>Delete</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -89,13 +90,14 @@
                         <td> {{ option.MenuOption_Name }} </td>
                         <td> {{ option.Price }} </td>
                         <td>
-                            <button class="btn btn-outline-danger" v-on:click="deleteOption(option.MenuOption_Code)"> 
-                                Delete 
-                            </button>   
+                            <!-- <button class="btn btn-outline-danger" @click="deleteOption(option.MenuOption_Code)">  -->
+                              <button class="btn btn-outline-danger" v-confirm="{loader: true, ok: dialog => deleteOption(dialog, option.MenuOption_Code),  message: 'Are you sure you want to delete this option?'}">
+                                x 
+                            </button>  
                         </td>
                     </tr>
                 </tbody>
-            </table>
+            </table> 
             </div>
 
         <div class="col-md-5" v-if="menuIsChecked">
@@ -208,34 +210,56 @@ export default {
     addDetails(id) {
       this.axios.post('/menu/details/' + id, this.details)
       .then(res => {
-        console.log(res);
+        this.$dialog.alert(res.data);
       })
       .catch(err => console.log(err));
-
-      console.log(id)
-      console.log(this.details);
     },
-    deleteMenu(id) {
-      var response = confirm('Are you sure you want to delete this menu?');
-
-      if(response) {
+    deleteMenu(dialog, id) {
         this.axios.delete('/menu/' + id)
         .then(res => {
           this.fetchMenus();
+          dialog.close();
         })
         .catch(err => console.log(err));
-      }
-    },
-    deleteOption(id) {
-      var response = confirm('Are you sure you want to delete this option?');
 
-      if(response) {
-        this.axios.delete('/menu/option/' + id)
-        .then(res => {
-          this.fetchOptions();
-        })
-        .catch(err => console.log(err));
-      }
+      // var response = confirm('Are you sure you want to delete this menu?');
+
+      // if(response) {
+      //   this.axios.delete('/menu/' + id)
+      //   .then(res => {
+      //     this.fetchMenus();
+      //   })
+      //   .catch(err => console.log(err));
+      // }
+    },
+    deleteOption(dialog, id) {
+      // var boolnum = 0;
+      // this.$dialog.confirm('Are you sure you want to delete this option?')
+      //   .then(function () {
+      //     console.log(id);
+      //     boolnum = 1;
+      //     console.log(boolnum);    
+      //   })
+      //   .catch(function () {
+      //     console.log('Clicked on cancel')
+      //   });
+
+          this.axios.delete('/menu/option/' + id)
+          .then(res => {
+            this.fetchOptions();
+            dialog.close();
+          })
+          .catch(err => console.log(err));
+          
+      // var response = confirm('Are you sure you want to delete this option?');
+
+      // if(response) {
+      //   this.axios.delete('/menu/option/' + id)
+      //   .then(res => {
+      //     this.fetchOptions();
+      //   })
+      //   .catch(err => console.log(err));
+      // }
     }
   }
 }

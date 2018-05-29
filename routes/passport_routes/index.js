@@ -45,37 +45,22 @@ module.exports = function() {
 
     // accept order and push message to mobile
     router.post('/push', function(req, res) {
-        /** 아래는 푸시메시지 발송절차 */
-        var serverKey = 'AAAAz8FUF8Y:APA91bGFPY5QzMXzFP6TeHg0fBF4DF0GIaBKIrX3wVjRcOk3Sag2RUeO3ZvlROrAVb1XN6_9LV3Y6FfU4XC61qGbYJs6ZevrNYg9tkb-XH7ZF02NghfPoPkxJ63zPwe4UjGDhBjdWNp-';
-        var client_token = 'dIXL2_Y-FA0:APA91bFoHvAX94ByYdP_dGhbhx10T9lkswKZibU_maLClo14K_I08av8-DIMXkH-TznXYpKzWQ8r-rqzxu_Tpmky47AYpSPcnPwrVgBX9aqQzlHLDtPMpAwPp8boxhXegkE4hMagj0ru';
-    
-        /** 발송할 Push 메시지 내용 */
-        var push_data = {
-            // 수신대상
-            to: client_token,
-            // App에게 전달할 데이터
-            data: {
-                order: "Accept"
-            },
-            // App이 실행중이지 않을 때 상태바 알림으로 등록할 내용
-            notification: {
-                title: "Hello Node",
-                body: "Node로 발송하는 Push 메시지 입니다."
-            }
-        };
-
-        var fcm = new FCM(serverKey);
-
-        fcm.send(push_data, function(err, response) {
-            if (err) {
-                console.error('Push메시지 발송에 실패했습니다.');
-                console.error(err);
-                return;
-            }
-
-            console.log('Push메시지가 발송되었습니다.');
-            console.log(response);
+        console.log('1');
+        setImmediate(() => {
+            console.log('2');
+            console.log('3');
+            setImmediate(() => {
+                console.log('4');
+                console.log('5');
+            });
+            console.log('9');
         });
+        console.log('6');
+        setImmediate(() => {
+            console.log('7');
+            console.log('8');
+        });
+        res.json('hi');
     });
 
     return router;

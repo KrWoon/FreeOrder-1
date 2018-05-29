@@ -62,7 +62,7 @@ export default {
             
             this.axios.post('/restaurant/upload/' + this.$route.params.id, fd)
             .then(res => {
-                alert('Upload image completely');
+                this.$dialog.alert('Upload image completely');
             })
             .catch(err => console.log(err));
           }

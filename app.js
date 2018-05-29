@@ -17,13 +17,13 @@ server.listen(port, function() {
     console.log('Server On!');
 });
 
-io.on('connection', (socket) => {
-    console.log('Socket Connect');
+// io.on('connection', (socket) => {
+//     console.log('Socket Connect');
 
-    socket.on('disconnect', function(){
-        console.log('Socket Disconnected');
-    });
-});
+//     socket.on('disconnect', function(){
+//         console.log('Socket Disconnected');
+//     });
+// });
 
 // set view
 app.set('views',  './views/passport_views');
