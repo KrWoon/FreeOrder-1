@@ -23,8 +23,8 @@ module.exports = function(io) {
     
     // add mobile data
     router.post('/mobile', function(req, res) {
-        // var order = req.body.mobileOrders; // mobile
-        var order = req.body;   // web
+        var order = req.body.mobileOrders; // mobile
+        // var order = req.body;   // web
         var totalOrder = [];
         var orderCode;
 
