@@ -2755,6 +2755,10 @@ module.exports = Cancel;
             console.log('eg: io.emit("customOrder", data)');
             console.log('socket menu: ' + this.socketData);
             this.fetchOrders();
+        },
+        reFetchOrders: function () {
+            console.log('reFetch');
+            this.fetchOrders();
         }
     },
     methods: {
@@ -2943,7 +2947,6 @@ module.exports = Cancel;
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     data() {
@@ -2972,37 +2975,12 @@ module.exports = Cancel;
             }).catch(err => console.log(err));
         },
         acceptOrder(dialog) {
-            this.$socket.emit('hello');
+            var orderCode = this.$route.params.oid;
+            this.$socket.emit('accept', orderCode);
             this.axios.put('/order/accept/' + this.$route.params.oid).then(res => {
                 dialog.close();
+                this.$router.replace({ name: 'Order' });
             }).catch(err => console.log(err));
-            // var response = confirm('Are you sure you want to accept this order?');
-
-            // if(response) {
-            //     this.$socket.emit('hello');                
-            //     this.axios.put('/order/accept/' + this.$route.params.oid)
-            //     .then(res => {
-            //         this.$dialog.alert(res.data);
-            //     })
-            //     .catch(err => console.log(err));
-            // }
-            // return;
-        },
-        orderIsReady(dialog) {
-            this.axios.post('/order/ready/' + this.$route.params.oid).then(res => {
-                dialog.close();
-            }).catch(err => console.log(err));
-
-            // var response = confirm('Are you sure you send ready message to customer?');
-
-            // if(response) {
-            //     this.axios.post('/order/ready/' + this.$route.params.oid)
-            //     .then(res => {
-            //         this.$dialog.alert(res.data);
-            //     })
-            //     .catch(err => console.log(err));
-            // }
-            // return;
         }
     }
 });
@@ -3040,6 +3018,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__components_restaurant_Order_vue__ = __webpack_require__(125);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__components_restaurant_Image_vue__ = __webpack_require__(131);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__components_restaurant_ViewOrder_vue__ = __webpack_require__(137);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__components_restaurant_PushOrder_vue__ = __webpack_require__(144);
 
 
 
@@ -3059,6 +3038,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].use(__WEBPACK_IMPORTED_MODU
 
 // Tell Vue to install the plugin.
 __WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].use(__WEBPACK_IMPORTED_MODULE_5_vuejs_dialog___default.a);
+
 
 
 
@@ -3155,6 +3135,13 @@ var routes = [{
     path: '/view/order/:id/detail/:oid',
     components: {
         default: __WEBPACK_IMPORTED_MODULE_22__components_restaurant_ViewOrder_vue__["a" /* default */],
+        a: __WEBPACK_IMPORTED_MODULE_16__components_restaurant_RestaurantTop_vue__["a" /* default */]
+    }
+}, {
+    name: 'PushOrder',
+    path: '/view/order/:id/push/:oid',
+    components: {
+        default: __WEBPACK_IMPORTED_MODULE_23__components_restaurant_PushOrder_vue__["a" /* default */],
         a: __WEBPACK_IMPORTED_MODULE_16__components_restaurant_RestaurantTop_vue__["a" /* default */]
     }
 }, {
@@ -19457,7 +19444,7 @@ var render = function() {
                                   staticClass: "btn btn-info",
                                   attrs: {
                                     to: {
-                                      name: "ViewOrder",
+                                      name: "PushOrder",
                                       params: { oid: order.Order_Code }
                                     },
                                     replace: ""
@@ -20015,52 +20002,28 @@ var render = function() {
           "div",
           { staticClass: "text-right" },
           [
-            _vm.status
-              ? _c(
-                  "button",
+            _c(
+              "button",
+              {
+                directives: [
                   {
-                    directives: [
-                      {
-                        name: "confirm",
-                        rawName: "v-confirm",
-                        value: {
-                          loader: true,
-                          ok: function(dialog) {
-                            return _vm.orderIsReady(dialog)
-                          },
-                          message:
-                            "Are you sure you send ready message to customer?"
-                        },
-                        expression:
-                          "{loader: true, ok: dialog => orderIsReady(dialog),  message: 'Are you sure you send ready message to customer?'}"
-                      }
-                    ],
-                    staticClass: "btn btn-primary"
-                  },
-                  [_vm._v(" Ready ")]
-                )
-              : _c(
-                  "button",
-                  {
-                    directives: [
-                      {
-                        name: "confirm",
-                        rawName: "v-confirm",
-                        value: {
-                          loader: true,
-                          ok: function(dialog) {
-                            return _vm.acceptOrder(dialog)
-                          },
-                          message: "Are you sure you want to accept this order?"
-                        },
-                        expression:
-                          "{loader: true, ok: dialog => acceptOrder(dialog),  message: 'Are you sure you want to accept this order?'}"
-                      }
-                    ],
-                    staticClass: "btn btn-primary"
-                  },
-                  [_vm._v(" Accept ")]
-                ),
+                    name: "confirm",
+                    rawName: "v-confirm",
+                    value: {
+                      loader: true,
+                      ok: function(dialog) {
+                        return _vm.acceptOrder(dialog)
+                      },
+                      message: "Are you sure you want to accept this order?"
+                    },
+                    expression:
+                      "{loader: true, ok: dialog => acceptOrder(dialog),  message: 'Are you sure you want to accept this order?'}"
+                  }
+                ],
+                staticClass: "btn btn-primary"
+              },
+              [_vm._v(" Accept ")]
+            ),
             _vm._v(" "),
             _c(
               "router-link",
@@ -20121,6 +20084,417 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-4ece2c57", { render: render, staticRenderFns: staticRenderFns })
+  }
+}
+
+/***/ }),
+/* 143 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+    data() {
+        return {
+            menus: [],
+            options: [],
+            status: 0
+        };
+    },
+    created() {
+        this.fetchOrder();
+    },
+    methods: {
+        fetchOrder() {
+            this.axios.get('/order/' + this.$route.params.oid).then(res => {
+                this.menus = res.data.menus;
+                this.options = res.data.options;
+
+                if (this.menus[0].OrderStatus == 'Accept') {
+                    this.status = 1;
+                } else {
+                    this.status = 0;
+                }
+                console.log(this.menus);
+                console.log(this.options);
+            }).catch(err => console.log(err));
+        },
+        orderIsReady(dialog) {
+            this.axios.post('/order/ready/' + this.$route.params.oid).then(res => {
+                dialog.close();
+                this.$router.replace({ name: 'Order' });
+            }).catch(err => console.log(err));
+        }
+    }
+});
+
+/***/ }),
+/* 144 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_PushOrder_vue__ = __webpack_require__(143);
+/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_2f7828fc_hasScoped_true_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_PushOrder_vue__ = __webpack_require__(149);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(2);
+var disposed = false
+function injectStyle (context) {
+  if (disposed) return
+  __webpack_require__(145)
+  __webpack_require__(147)
+}
+/* script */
+
+
+/* template */
+
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-2f7828fc"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+
+var Component = Object(__WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__["a" /* default */])(
+  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_PushOrder_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_2f7828fc_hasScoped_true_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_PushOrder_vue__["a" /* render */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_2f7828fc_hasScoped_true_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_PushOrder_vue__["b" /* staticRenderFns */],
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "app\\components\\restaurant\\PushOrder.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-2f7828fc", Component.options)
+  } else {
+    hotAPI.reload("data-v-2f7828fc", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+/* harmony default export */ __webpack_exports__["a"] = (Component.exports);
+
+
+/***/ }),
+/* 145 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(146);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var add = __webpack_require__(1).default
+var update = add("e0b044e0", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"optionsId\":\"0\",\"vue\":true,\"scoped\":false,\"sourceMap\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PushOrder.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"optionsId\":\"0\",\"vue\":true,\"scoped\":false,\"sourceMap\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PushOrder.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 146 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\nbody {\r\n  padding-top: 3.5rem;\r\n  background-color:white;\n}\n.textColor {\r\n  color: #fff;\n}\r\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 147 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(148);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var add = __webpack_require__(1).default
+var update = add("51a412cb", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"optionsId\":\"0\",\"vue\":true,\"id\":\"data-v-2f7828fc\",\"scoped\":true,\"sourceMap\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=1!./PushOrder.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"optionsId\":\"0\",\"vue\":true,\"id\":\"data-v-2f7828fc\",\"scoped\":true,\"sourceMap\":false}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=1!./PushOrder.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 148 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.mycontainer[data-v-2f7828fc] {\r\n  padding-right: 15px;\r\n  padding-left: 15px;\r\n  margin-right: auto;\r\n  margin-left: auto;\n}\n@media (min-width: 768px) {\n.mycontainer[data-v-2f7828fc] {\r\n    width: 750px;\n}\n}\n@media (min-width: 992px) {\n.mycontainer[data-v-2f7828fc] {\r\n    width: 600px;\n}\n}\n@media (min-width: 1200px) {\n.mycontainer[data-v-2f7828fc] {\r\n    width: 600px;\n}\n}\n.border-top[data-v-2f7828fc] { border-top: 1px solid #e5e5e5;\n}\n.border-bottom[data-v-2f7828fc] { border-bottom: 1px solid #e5e5e5;\n}\n.border-top-gray[data-v-2f7828fc] { border-top-color: #adb5bd;\n}\n.box-shadow[data-v-2f7828fc] { box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);\n}\n.lh-condensed[data-v-2f7828fc] { line-height: 1.25;\n}\r\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 149 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("main", { attrs: { role: "main" } }, [
+      _c("div", { staticClass: "jumbotron" }, [
+        _c("div", { staticClass: "container" }, [
+          _vm.status
+            ? _c("h1", { staticClass: "display-3" }, [
+                _vm._v(" Accpeted Order ")
+              ])
+            : _c("h1", { staticClass: "display-3" }, [
+                _vm._v(" Not Accpeted Order ")
+              ]),
+          _vm._v(" "),
+          _vm._m(0)
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "mycontainer" }, [
+        _c("table", { staticClass: "table text-center" }, [
+          _vm._m(1),
+          _vm._v(" "),
+          _c(
+            "tbody",
+            _vm._l(_vm.menus, function(menu, index) {
+              return _c("tr", { key: menu.Menu_Code }, [
+                _c("td", [_vm._v(" " + _vm._s(index + 1) + " ")]),
+                _vm._v(" "),
+                _c("td", [_c("h3", [_vm._v(_vm._s(menu.Menu_Name) + " ")])]),
+                _vm._v(" "),
+                _c("td", [_c("h3", [_vm._v(_vm._s(menu.Menu_Price) + " ")])]),
+                _vm._v(" "),
+                _c(
+                  "td",
+                  _vm._l(_vm.options, function(option) {
+                    return option.Menu_Code == menu.Menu_Code
+                      ? _c("p", { key: option.MenuOption_Code }, [
+                          _vm._v(
+                            "\n                                " +
+                              _vm._s(option.MenuOption_Name) +
+                              "\n                            "
+                          )
+                        ])
+                      : _vm._e()
+                  })
+                ),
+                _vm._v(" "),
+                _c(
+                  "td",
+                  _vm._l(_vm.options, function(option) {
+                    return option.Menu_Code == menu.Menu_Code
+                      ? _c("p", { key: option.MenuOption_Code }, [
+                          _vm._v(
+                            "\n                                " +
+                              _vm._s(option.MenuOption_Price) +
+                              "\n                            "
+                          )
+                        ])
+                      : _vm._e()
+                  })
+                )
+              ])
+            })
+          )
+        ]),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "text-right" },
+          [
+            _c(
+              "button",
+              {
+                directives: [
+                  {
+                    name: "confirm",
+                    rawName: "v-confirm",
+                    value: {
+                      loader: true,
+                      ok: function(dialog) {
+                        return _vm.orderIsReady(dialog)
+                      },
+                      message:
+                        "Are you sure you send ready message to customer?"
+                    },
+                    expression:
+                      "{loader: true, ok: dialog => orderIsReady(dialog),  message: 'Are you sure you send ready message to customer?'}"
+                  }
+                ],
+                staticClass: "btn btn-primary"
+              },
+              [_vm._v(" Ready ")]
+            ),
+            _vm._v(" "),
+            _c(
+              "router-link",
+              {
+                staticClass: "btn btn-primary",
+                attrs: { to: { name: "Order" }, replace: "" }
+              },
+              [_vm._v("\n                    Back\n                ")]
+            )
+          ],
+          1
+        )
+      ]),
+      _vm._v(" "),
+      _c("hr")
+    ]),
+    _vm._v(" "),
+    _vm._m(2)
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [_c("br")])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("No. ")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Menu")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Menu Price")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Option ")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Option Price ")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("footer", { staticClass: "container" }, [
+      _c("p", [_vm._v("© BBGoo 2018")])
+    ])
+  }
+]
+render._withStripped = true
+
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-2f7828fc", { render: render, staticRenderFns: staticRenderFns })
   }
 }
 

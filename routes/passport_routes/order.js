@@ -19,11 +19,11 @@ module.exports = function(io) {
         });    
     });
 
-    var msg = 0;
+    var orderlist = [];
     
     // add mobile data
     router.post('/mobile', function(req, res) {
-        // var order = req.body.mobileOrder;
+        // var order = req.body.mobileOrders; // mobile
         var order = req.body;   // web
         var totalOrder = [];
         var orderCode;
@@ -149,17 +149,19 @@ module.exports = function(io) {
                         // jiwoon
                         io.sockets.emit('customOrder', orderCode);
                         const timer = setTimeout(() => {
-                            console.log('timer out');  
-                            if(msg == 0) {
-                                console.log('msg', msg);
-                            }                    
-                            else {
-                                console.log('msg', msg);
-                                res.write("req body");
-                                msg = 0;
-                            }      
+                            if(orderlist.indexOf(orderCode) != -1) {
+                                console.log(orderlist.indexOf(orderCode));
+                                res.json({response : "cancel"});
+                                orderlist.splice(orderlist.indexOf(orderCode), 1);
+                            } else {
+                                sql= 'DELETE FROM orderedinfo WHERE Order_Code = ?';
+
+                                conn.query(sql, [orderCode], function(err, rows) {
+                                    io.sockets.emit('reFetchOrders', 0);
+                                });
+                            }
                             res.end();
-                        }, 10000);
+                        }, 20000);
 
                     });
 
@@ -173,9 +175,8 @@ module.exports = function(io) {
 
     
     io.on('connection', (socket) => {
-        socket.on('hello', function(data) {
-            msg = 1;    
-            console.log('msg', msg);
+        socket.on('accept', function(data) {
+            orderlist.push(data);
         });
         console.log('Socket Connect22');        
     });
@@ -203,6 +204,7 @@ module.exports = function(io) {
         });
     });
 
+    // accept order
     router.put('/accept/:oid', function(req, res) {
         var orderCode = req.params.oid;
 
@@ -219,13 +221,27 @@ module.exports = function(io) {
         });
     });
 
+    var client_token = '';
 
-    // accept order and push message to mobile
+    // push message to mobile
     router.post('/ready/:oid', function(req, res) {
         /** 아래는 푸시메시지 발송절차 */
         var serverKey = 'AAAAz8FUF8Y:APA91bGFPY5QzMXzFP6TeHg0fBF4DF0GIaBKIrX3wVjRcOk3Sag2RUeO3ZvlROrAVb1XN6_9LV3Y6FfU4XC61qGbYJs6ZevrNYg9tkb-XH7ZF02NghfPoPkxJ63zPwe4UjGDhBjdWNp-';
         // var client_token = 'dIXL2_Y-FA0:APA91bFoHvAX94ByYdP_dGhbhx10T9lkswKZibU_maLClo14K_I08av8-DIMXkH-TznXYpKzWQ8r-rqzxu_Tpmky47AYpSPcnPwrVgBX9aqQzlHLDtPMpAwPp8boxhXegkE4hMagj0ru';
-        var client_token = ''
+
+        var sql = 'SELECT ClientToken FROM orderedinfo WHERE Order_Code = ?';
+
+        pool.getConnection(function(err, conn) {
+            if(err) console.log(err);
+            conn.query(sql, [req.params.oid], function(err, row) {
+                if(err) console.log(err);
+
+                conn.release();
+                client_token = row[0].ClientToken;
+                console.log(client_token);
+            });
+        });
+
 
         /** 발송할 Push 메시지 내용 */
         var push_data = {
@@ -237,8 +253,8 @@ module.exports = function(io) {
             },
             // App이 실행중이지 않을 때 상태바 알림으로 등록할 내용
             notification: {
-                title: "Hello Node",
-                body: "Node로 발송하는 Push 메시지 입니다."
+                title: "Food is ready",
+                body: "Your food is ready"
             }
         };
 

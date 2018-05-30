@@ -42,26 +42,5 @@ module.exports = function() {
         });     
     }); 
 
-
-    // accept order and push message to mobile
-    router.post('/push', function(req, res) {
-        console.log('1');
-        setImmediate(() => {
-            console.log('2');
-            console.log('3');
-            setImmediate(() => {
-                console.log('4');
-                console.log('5');
-            });
-            console.log('9');
-        });
-        console.log('6');
-        setImmediate(() => {
-            console.log('7');
-            console.log('8');
-        });
-        res.json('hi');
-    });
-
     return router;
 }

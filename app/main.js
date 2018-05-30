@@ -39,6 +39,7 @@ import Menu from './components/restaurant/Menu.vue';
 import Order from './components/restaurant/Order.vue';
 import Image from './components/restaurant/Image.vue';
 import ViewOrder from './components/restaurant/ViewOrder.vue';
+import PushOrder from './components/restaurant/PushOrder.vue';
 
 var routes = [
     {
@@ -125,6 +126,14 @@ var routes = [
         path: '/view/order/:id/detail/:oid',
         components: {
             default: ViewOrder,
+            a: RestaurantTop
+        }
+    },
+    {
+        name: 'PushOrder',
+        path: '/view/order/:id/push/:oid',
+        components: {
+            default: PushOrder,
             a: RestaurantTop
         }
     },

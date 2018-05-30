@@ -36,39 +36,6 @@ module.exports = function() {
         });        
     });
 
-
-    router.post('/apply/:id/edit', function(req,res){
-        var license = req.body.license1 + '-' + req.body.license2 + '-' + req.body.license3;
-        // 식당 중복 체크        
-        var checkSql = 'SELECT * FROM application WHERE Businesslicense = ? AND Application_Code = ? AND Use_Code = \'Y\'';
-        pool.getConnection(function(err, conn) {
-            conn.query(checkSql, [license], function(err, restaurant, fields) {
-                // 중복된 식당이 없다면
-                if(!restaurant[0]) {    
-                    var sql = 'UPDATE application SET Restaurant_Name=?, Businesslicense=? WHERE Application_Code = ? AND Use_Code = \'Y\'';
-                    conn.query(sql, [req.body.rname, license, req.params.id], function(err, results, fields) {
-                        if(err) {
-                            console.log(err);
-                            res.status(500);
-                        } else {
-                            req.session.save(function() {
-                                res.redirect('/');
-                            });
-                        }
-                    });     
-                } else {
-                    // 중복된 식당이 있다면
-                    console.log('Restaurant already exists')
-                    req.session.save(function() {
-                        res.redirect('/form/apply/'+req.params.id+'/edit');
-                    });
-                }
-                conn.release();
-            });
-        });        
-    });
-
-
     // delete apply restaurant
     router.delete('/apply/:id', function(req, res, next){
         var id = req.params.id;

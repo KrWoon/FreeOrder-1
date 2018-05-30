@@ -64,7 +64,7 @@
                         <td>{{ order.TotalPrice }}</td>
                         <td>{{ order.Date }}</td>
                         <td>
-                           <router-link :to="{ name: 'ViewOrder', params: {oid: order.Order_Code}}" class="btn btn-info" replace>
+                           <router-link :to="{ name: 'PushOrder', params: {oid: order.Order_Code}}" class="btn btn-info" replace>
                                 View
                             </router-link>    
                         </td>
@@ -129,6 +129,10 @@ export default {
           console.log('socket menu: ' + this.socketData);
           this.fetchOrders();
         },
+        reFetchOrders: function() {
+            console.log('reFetch');
+            this.fetchOrders();
+        }
     },
     methods: {
         fetchOrders() {
