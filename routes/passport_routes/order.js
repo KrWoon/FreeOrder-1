@@ -155,13 +155,13 @@ module.exports = function(io) {
                                 orderlist.splice(orderlist.indexOf(orderCode), 1);
                             } else {
                                 res.json({response : "cancel"});
+                                res.end();
                                 sql= 'DELETE FROM orderedinfo WHERE Order_Code = ?';
 
                                 conn.query(sql, [orderCode], function(err, rows) {
                                     io.sockets.emit('reFetchOrders', 0);
                                 });
                             }
-                            res.end();
                         }, 20000);
 
                     });
