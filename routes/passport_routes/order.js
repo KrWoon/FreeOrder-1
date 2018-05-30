@@ -148,12 +148,13 @@ module.exports = function(io) {
                     setImmediate(() => {
                         // jiwoon
                         io.sockets.emit('customOrder', orderCode);
+
                         const timer = setTimeout(() => {
                             if(orderlist.indexOf(orderCode) != -1) {
                                 console.log(orderlist.indexOf(orderCode));
-                                res.json({response : "cancel"});
                                 orderlist.splice(orderlist.indexOf(orderCode), 1);
                             } else {
+                                res.json({response : "cancel"});
                                 sql= 'DELETE FROM orderedinfo WHERE Order_Code = ?';
 
                                 conn.query(sql, [orderCode], function(err, rows) {
