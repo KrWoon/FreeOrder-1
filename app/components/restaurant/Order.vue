@@ -7,9 +7,6 @@
           <h1 class="display-3"> Order </h1>
           <p>You can set your restaurant information in here</p>
           <p> <br/> </p>
-        <button class="btn btn-primary" v-on:click="sendMobileOrders()"> 
-            Send 
-        </button>    
         </div>
       </div>      
 
@@ -92,27 +89,6 @@ export default {
             orders: [],
             acceptedOrders: [],
             noAcceptedOrders: [],
-            mobileOrders: [
-                {
-                    ClientToken: "HI",
-                    Email: "bro@naver.com",
-                    Restaurant_Code: "212",
-                    Menu_Code: "501",
-                    MenuOption_CodeList: [
-                        { MenuOption_Code: "331" },
-                        { MenuOption_Code: "442" }
-                    ]                    
-                },
-                {
-                    ClientToken: "HI",
-                    Email: "bro@naver.com",
-                    Restaurant_Code: "212",
-                    Menu_Code: "401",
-                    MenuOption_CodeList: [
-                        
-                    ]                    
-                }
-            ],
             socketData: 0
         }
     },
@@ -154,13 +130,6 @@ export default {
 
                 console.log(this.acceptedOrders);
                 console.log(this.noAcceptedOrders);
-            })
-            .catch(err => console.log(err));
-        },
-        sendMobileOrders() {
-            this.axios.post('/order/mobile', this.mobileOrder)
-            .then(res => {
-                console.log(res);
             })
             .catch(err => console.log(err));
         }
