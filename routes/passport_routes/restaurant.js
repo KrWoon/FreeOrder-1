@@ -17,17 +17,6 @@ module.exports = function() {
         });     
     });
 
-    router.get('/:rid/info', function(req, res) {
-        sql = 'SELECT * FROM restaurant WHERE Restaurant_Code = ? AND Use_Code = \'Y\'';
-        pool.getConnection(function(err, conn) {
-            conn.query(sql, [req.params.rid], function(err, results) {
-                if(err) throw err;
-                res.render('restaurant/info', {'myRestaurant' : results[0], 'login' : req.user});                
-                conn.release();
-            });
-        }); 
-    });
-
     // update restaurant
     router.put('/:rid', function(req, res) {
         var updateRestaurant = {
