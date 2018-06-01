@@ -151,7 +151,7 @@ module.exports = function(io) {
 
                         const timer = setTimeout(() => {
                             if(orderlist.indexOf(orderCode) != -1) {
-                                console.log(orderlist.indexOf(orderCode));
+                                res.json({response : "accept"});
                                 orderlist.splice(orderlist.indexOf(orderCode), 1);
                             } else {
                                 res.json({response : "cancel"});
