@@ -48,6 +48,7 @@ export default {
             this.axios.get('/index')
             .then(res => {
                 this.info = res.data;
+		console.log('hi');
             })
             .catch(err => console.log(err));
         }
