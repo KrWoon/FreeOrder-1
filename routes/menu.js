@@ -1,6 +1,6 @@
 module.exports = function (io) {
     var router = require('express').Router();
-    var pool = require('../../config/passport_config/db')();
+    var pool = require('../config/db')();
 
     // get menus
     router.get('/:rid', function (req, res) {

@@ -55,19 +55,19 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 // set routes
-var passport = require('./config/passport_config/passport')(app);
-var auth = require('./routes/passport_routes/auth')(passport);
+var passport = require('./config/passport')(app);
+var auth = require('./routes/auth')(passport);
 app.use('/auth/', auth);
-var form = require('./routes/passport_routes/form')();
+var form = require('./routes/form')();
 app.use('/form', form);
-var index = require('./routes/passport_routes/index')();
+var index = require('./routes/index')();
 app.use('/index', index);
-var restaurant = require('./routes/passport_routes/restaurant')();
+var restaurant = require('./routes/restaurant')();
 app.use('/restaurant', restaurant);
-var menu = require('./routes/passport_routes/menu')(io);
+var menu = require('./routes/menu')(io);
 app.use('/menu', menu);
 
-var order = require('./routes/passport_routes/order')(io);
+var order = require('./routes/order')(io);
 app.use('/order', order);
 
 

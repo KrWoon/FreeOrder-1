@@ -2,7 +2,7 @@ module.exports = function(passport) {
     var router = require('express').Router();
     var bkfd2Password = require('pbkdf2-password');
     var hasher = bkfd2Password();
-    var pool = require('../../config/passport_config/db')();
+    var pool = require('../config/db')();
     
     router.post('/logout', function(req, res) {
         req.logout();

@@ -1,6 +1,6 @@
 module.exports = function() {
     var router = require('express').Router();
-    var pool = require('../../config/passport_config/db')();
+    var pool = require('../config/db')();
     
     // apply restaurant
     router.post('/apply', function(req,res){

@@ -1,6 +1,6 @@
 module.exports = function(io) {
     var router = require('express').Router();
-    var pool = require('../../config/passport_config/db')();
+    var pool = require('../config/db')();
     var FCM = require('fcm-push');
     var sleep = require('system-sleep');
     
