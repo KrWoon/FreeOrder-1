@@ -1517,9 +1517,7 @@ module.exports = Cancel;
         this.fetchInfo();
     },
     sockets: {
-        connect: function () {
-            console.log('connection2 success');
-        }
+        connect: function () {}
     },
     methods: {
         fetchInfo() {
@@ -1918,10 +1916,6 @@ module.exports = Cancel;
   created() {
     this.fetchInfos();
   },
-  watch: {
-    // 라우트가 변경되면 메소드를 다시 호출됩니다.
-    '$route': 'fetchInfos'
-  },
   methods: {
     fetchInfos() {
       this.axios.get('/index/applications').then(res => {
@@ -1999,10 +1993,6 @@ module.exports = Cancel;
     },
     created() {
         this.fetchInfos();
-    },
-    watch: {
-        // 라우트가 변경되면 메소드를 다시 호출됩니다.
-        '$route': 'fetchInfos'
     },
     methods: {
         fetchInfos() {
@@ -2096,7 +2086,6 @@ module.exports = Cancel;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-//
 //
 //
 //
@@ -2295,7 +2284,6 @@ module.exports = Cancel;
       this.info.PhoneNumber = this.phoneNumber[0] + '-' + this.phoneNumber[1] + '-' + this.phoneNumber[2];
       this.axios.put('/restaurant/' + this.$route.params.id, this.info).then(res => {
         this.$dialog.alert(res.data.restaurant);
-        console.log(this.info);
       }).catch(err => console.log(err));
     },
     changeStatus() {
@@ -2360,10 +2348,6 @@ module.exports = Cancel;
   created() {
     this.fetchInfo();
   },
-  watch: {
-    // 라우트가 변경되면 메소드를 다시 호출됩니다.
-    '$route': 'fetchInfo'
-  },
   methods: {
     fetchInfo() {
       this.axios.get('/restaurant/' + this.$route.params.id).then(res => {
@@ -2378,8 +2362,6 @@ module.exports = Cancel;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-//
-//
 //
 //
 //
@@ -2549,13 +2531,11 @@ module.exports = Cancel;
     fetchMenus() {
       this.axios.get('/menu/' + this.$route.params.id).then(res => {
         this.menus = res.data;
-        console.log(this.menus);
       }).catch(err => console.log(err));
     },
     fetchOptions() {
       this.axios.get('/menu/option/' + this.$route.params.id).then(res => {
         this.options = res.data;
-        console.log(this.options);
       }).catch(err => console.log(err));
     },
     clickMenu(id, name) {
@@ -2563,8 +2543,6 @@ module.exports = Cancel;
         this.details = res.data;
         this.menuIsChecked = id;
         this.clickedMenuName = name;
-
-        console.log(this.details);
       }).catch(err => console.log(err));
     },
     addMenu() {
@@ -2587,43 +2565,12 @@ module.exports = Cancel;
         this.fetchMenus();
         dialog.close();
       }).catch(err => console.log(err));
-
-      // var response = confirm('Are you sure you want to delete this menu?');
-
-      // if(response) {
-      //   this.axios.delete('/menu/' + id)
-      //   .then(res => {
-      //     this.fetchMenus();
-      //   })
-      //   .catch(err => console.log(err));
-      // }
     },
     deleteOption(dialog, id) {
-      // var boolnum = 0;
-      // this.$dialog.confirm('Are you sure you want to delete this option?')
-      //   .then(function () {
-      //     console.log(id);
-      //     boolnum = 1;
-      //     console.log(boolnum);    
-      //   })
-      //   .catch(function () {
-      //     console.log('Clicked on cancel')
-      //   });
-
       this.axios.delete('/menu/option/' + id).then(res => {
         this.fetchOptions();
         dialog.close();
       }).catch(err => console.log(err));
-
-      // var response = confirm('Are you sure you want to delete this option?');
-
-      // if(response) {
-      //   this.axios.delete('/menu/option/' + id)
-      //   .then(res => {
-      //     this.fetchOptions();
-      //   })
-      //   .catch(err => console.log(err));
-      // }
     }
   }
 });
@@ -2736,7 +2683,6 @@ module.exports = Cancel;
         },
         customOrder: function (val) {
             this.socketData = val;
-            console.log('eg: io.emit("customOrder", data)');
             console.log('socket menu: ' + this.socketData);
             this.fetchOrders();
         },
@@ -2761,9 +2707,6 @@ module.exports = Cancel;
                         return item;
                     }
                 });
-
-                console.log(this.acceptedOrders);
-                console.log(this.noAcceptedOrders);
             }).catch(err => console.log(err));
         }
     }
@@ -2827,7 +2770,6 @@ module.exports = Cancel;
             if (!files.length) return;
             this.createImage(files[0]);
             this.file = event.target.files[0];
-            console.log(this.file);
         },
         onUpload() {
             if (this.file) {
@@ -2847,7 +2789,6 @@ module.exports = Cancel;
 
             reader.onload = e => {
                 vm.image = e.target.result;
-                // console.log(vm.image);
             };
             reader.readAsDataURL(file);
         },
@@ -2924,8 +2865,6 @@ module.exports = Cancel;
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     data() {
@@ -2949,13 +2888,12 @@ module.exports = Cancel;
                 } else {
                     this.status = 0;
                 }
-                console.log(this.menus);
-                console.log(this.options);
             }).catch(err => console.log(err));
         },
         acceptOrder(dialog) {
             var orderCode = this.$route.params.oid;
             this.$socket.emit('accept', orderCode);
+
             this.axios.put('/order/accept/' + this.$route.params.oid).then(res => {
                 dialog.close();
                 this.$router.replace({ name: 'Order' });
@@ -3031,8 +2969,6 @@ module.exports = Cancel;
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     data() {
@@ -3056,8 +2992,6 @@ module.exports = Cancel;
                 } else {
                     this.status = 0;
                 }
-                console.log(this.menus);
-                console.log(this.options);
             }).catch(err => console.log(err));
         },
         orderIsReady(dialog) {
@@ -3115,8 +3049,8 @@ __WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].use(__WEBPACK_IMPORTED_MODU
 
 
 
-__WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].use(__WEBPACK_IMPORTED_MODULE_4_vue_socket_io___default.a, 'http://127.0.0.1:3000');
-// Vue.use(VueSocketio, 'https://freeorder1010.herokuapp.com');
+// Vue.use(VueSocketio, 'http://127.0.0.1:3000');
+__WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].use(__WEBPACK_IMPORTED_MODULE_4_vue_socket_io___default.a, 'https://freeorder1010.herokuapp.com');
 
 
 
@@ -17628,7 +17562,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
