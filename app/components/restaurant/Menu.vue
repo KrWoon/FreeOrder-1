@@ -66,7 +66,6 @@
                         <td> {{ menu.Price }} </td>
                         <td> {{ menu.CookingTime }} </td>
                         <td>
-                            <!-- <button class="btn btn-outline-danger" v-on:click="deleteMenu(menu.Menu_Code)">  -->
                               <button class="btn btn-outline-danger" v-confirm="{loader: true, ok: dialog => deleteMenu(dialog, menu.Menu_Code),  message: 'Are you sure you want to delete this menu?'}">
                                 x 
                             </button>   
@@ -90,7 +89,6 @@
                         <td> {{ option.MenuOption_Name }} </td>
                         <td> {{ option.Price }} </td>
                         <td>
-                            <!-- <button class="btn btn-outline-danger" @click="deleteOption(option.MenuOption_Code)">  -->
                               <button class="btn btn-outline-danger" v-confirm="{loader: true, ok: dialog => deleteOption(dialog, option.MenuOption_Code),  message: 'Are you sure you want to delete this option?'}">
                                 x 
                             </button>  
@@ -170,7 +168,6 @@ export default {
       this.axios.get('/menu/' + this.$route.params.id)
       .then(res => {
         this.menus = res.data;
-        console.log(this.menus);
       })
       .catch(err => console.log(err));
     },
@@ -178,7 +175,6 @@ export default {
       this.axios.get('/menu/option/' + this.$route.params.id)
       .then(res => {
         this.options = res.data;
-        console.log(this.options);
       })
       .catch(err => console.log(err));
     },
@@ -188,8 +184,6 @@ export default {
         this.details = res.data;
         this.menuIsChecked = id;
         this.clickedMenuName = name;
-
-        console.log(this.details);
       })
       .catch(err => console.log(err));
     },
@@ -215,51 +209,20 @@ export default {
       .catch(err => console.log(err));
     },
     deleteMenu(dialog, id) {
-        this.axios.delete('/menu/' + id)
-        .then(res => {
-          this.fetchMenus();
-          dialog.close();
-        })
-        .catch(err => console.log(err));
-
-      // var response = confirm('Are you sure you want to delete this menu?');
-
-      // if(response) {
-      //   this.axios.delete('/menu/' + id)
-      //   .then(res => {
-      //     this.fetchMenus();
-      //   })
-      //   .catch(err => console.log(err));
-      // }
+      this.axios.delete('/menu/' + id)
+      .then(res => {
+        this.fetchMenus();
+        dialog.close();
+      })
+      .catch(err => console.log(err));
     },
     deleteOption(dialog, id) {
-      // var boolnum = 0;
-      // this.$dialog.confirm('Are you sure you want to delete this option?')
-      //   .then(function () {
-      //     console.log(id);
-      //     boolnum = 1;
-      //     console.log(boolnum);    
-      //   })
-      //   .catch(function () {
-      //     console.log('Clicked on cancel')
-      //   });
-
-          this.axios.delete('/menu/option/' + id)
-          .then(res => {
-            this.fetchOptions();
-            dialog.close();
-          })
-          .catch(err => console.log(err));
-          
-      // var response = confirm('Are you sure you want to delete this option?');
-
-      // if(response) {
-      //   this.axios.delete('/menu/option/' + id)
-      //   .then(res => {
-      //     this.fetchOptions();
-      //   })
-      //   .catch(err => console.log(err));
-      // }
+      this.axios.delete('/menu/option/' + id)
+      .then(res => {
+        this.fetchOptions();
+        dialog.close();
+      })
+      .catch(err => console.log(err));          
     }
   }
 }

@@ -30,10 +30,6 @@ export default {
   created() {
     this.fetchInfo();
   },
-  watch: {
-    // 라우트가 변경되면 메소드를 다시 호출됩니다.
-    '$route': 'fetchInfo'
-  },
   methods: {
     fetchInfo() {
       this.axios.get('/restaurant/' + this.$route.params.id)

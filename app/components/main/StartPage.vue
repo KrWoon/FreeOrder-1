@@ -40,7 +40,7 @@ export default {
     },
     sockets:{
         connect: function(){
-            console.log('connection2 success')
+            
         }
     },
     methods: {

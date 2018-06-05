@@ -47,10 +47,6 @@ export default {
     created() {
         this.fetchInfos();
     },
-    watch: {
-      // 라우트가 변경되면 메소드를 다시 호출됩니다.
-      '$route': 'fetchInfos'
-    },
     methods: {
         fetchInfos() {
             this.axios.get('/index/restaurants')            

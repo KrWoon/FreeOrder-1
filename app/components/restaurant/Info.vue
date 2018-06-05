@@ -133,7 +133,6 @@ export default {
       this.axios.put('/restaurant/' + this.$route.params.id, this.info)
       .then(res => {
           this.$dialog.alert(res.data.restaurant);
-          console.log(this.info);
       })
       .catch(err => console.log(err));
     },

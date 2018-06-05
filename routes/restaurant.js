@@ -10,9 +10,9 @@ module.exports = function() {
             if(err) console.log(err);
             conn.query(sql, [req.params.rid], function(err, results) { 
                 if(err) throw err;              
+
                 conn.release();
                 res.json(results[0]);
-                // res.json({'restaurant' : results[0], 'login' : req.user}); 
             });
         });     
     });
@@ -99,11 +99,7 @@ module.exports = function() {
 
 
     router.post('/upload/:rid', function (req, res, next) {
-        uploads(req, res, function (err) {
-            // if(err){
-            //     return res.end('Error Upload file')
-            // }
-    
+        uploads(req, res, function (err) {    
             upload.insertImage(req.file.filename, req.params.rid ,function (err, rows) {
                 if(err){
                     res.end(err)

@@ -101,7 +101,6 @@ export default {
         },
         customOrder: function(val){
           this.socketData = val;
-          console.log('eg: io.emit("customOrder", data)')
           console.log('socket menu: ' + this.socketData);
           this.fetchOrders();
         },
@@ -128,8 +127,6 @@ export default {
                     }
                 });
 
-                console.log(this.acceptedOrders);
-                console.log(this.noAcceptedOrders);
             })
             .catch(err => console.log(err));
         }

@@ -52,7 +52,6 @@ export default {
             return;
         this.createImage(files[0]);
         this.file = event.target.files[0];
-        console.log(this.file);
       },
       onUpload() {
           if(this.file) {
@@ -75,7 +74,6 @@ export default {
 
             reader.onload = (e) => {
                 vm.image = e.target.result;
-                // console.log(vm.image);
             };
             reader.readAsDataURL(file);
         },

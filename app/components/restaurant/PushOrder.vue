@@ -44,9 +44,7 @@
                     </tbody>
                 </table>
                 <div class="text-right">
-                    <!-- <button class="btn btn-primary" @click="orderIsReady()" v-if="status"> Ready </button> -->
                     <button class="btn btn-primary" v-confirm="{loader: true, ok: dialog => orderIsReady(dialog),  message: 'Are you sure you send ready message to customer?'}" > Ready </button>
-                    <!-- <button class="btn btn-primary" @click="acceptOrder()" v-else> Accept </button> -->
                     <router-link :to="{ name: 'Order'}" class="btn btn-primary" replace>
                         Back
                     </router-link>
@@ -86,8 +84,6 @@ export default {
                 } else {
                     this.status = 0;
                 }
-                console.log(this.menus);
-                console.log(this.options);
             })
             .catch(err => console.log(err));
         },

@@ -95,8 +95,6 @@ module.exports = function (io) {
 
     // add details except duplication
     router.post('/details/:mid', function (req, res) {
-        console.log(req.body);
-
         pool.getConnection(function (err, conn) {     
             if(err) throw err;
 
@@ -111,7 +109,6 @@ module.exports = function (io) {
                     for(var i=0; i<req.body.length; i++) {
                         conn.query(sql, [req.body[i].Menu_Code, req.body[i].MenuOption_Code], function (err, details) {
                             if(err) throw err;
-                            console.log('complete');
                         });
                     }            
                     conn.release();

@@ -34,7 +34,6 @@
             </router-link>
           </li>   
         </ul>
-        <!-- <a href="/" class="btn btn-success" v-on:click="Logout()">  -->
          <a href="/" class="btn btn-success" v-confirm="{loader: true, ok: dialog => Logout(dialog),  message: 'Are you sure want to logout?'}">
            Logout
          </a>

@@ -37,7 +37,6 @@ module.exports = function(io) {
                 conn.query(sql, [order[0].ClientToken, order[0].Email, order[0].Restaurant_Code], function(err, results) {
                     if(err) throw err;
 
-                    console.log('insert orderedinfo complete');   
                     setImmediate(() => {
                         Second_func();
                     });                
@@ -86,7 +85,7 @@ module.exports = function(io) {
                             if(err) {
                                 console.log(err);
                             } else {
-                                console.log('complete');
+
                             }
                         })    
                     }
@@ -124,7 +123,6 @@ module.exports = function(io) {
                             totalPrice += option[i].Price;
                         }
 
-                        console.log(totalPrice);
                         setImmediate(() => {
                             Fourth_func(totalPrice);
                         });
@@ -178,7 +176,6 @@ module.exports = function(io) {
         socket.on('accept', function(data) {
             orderlist.push(data);
         });
-        console.log('Socket Connect22');        
     });
 
 
@@ -227,7 +224,6 @@ module.exports = function(io) {
     router.post('/ready/:oid', function(req, res) {
         /** 아래는 푸시메시지 발송절차 */
         var serverKey = 'AAAAz8FUF8Y:APA91bGFPY5QzMXzFP6TeHg0fBF4DF0GIaBKIrX3wVjRcOk3Sag2RUeO3ZvlROrAVb1XN6_9LV3Y6FfU4XC61qGbYJs6ZevrNYg9tkb-XH7ZF02NghfPoPkxJ63zPwe4UjGDhBjdWNp-';
-        // var client_token = 'dIXL2_Y-FA0:APA91bFoHvAX94ByYdP_dGhbhx10T9lkswKZibU_maLClo14K_I08av8-DIMXkH-TznXYpKzWQ8r-rqzxu_Tpmky47AYpSPcnPwrVgBX9aqQzlHLDtPMpAwPp8boxhXegkE4hMagj0ru';
 
         var sql = 'SELECT ClientToken FROM orderedinfo WHERE Order_Code = ?';
 
@@ -238,7 +234,6 @@ module.exports = function(io) {
 
                 conn.release();
                 client_token = row[0].ClientToken;
-                console.log(client_token);
             });
         });
 
@@ -262,13 +257,11 @@ module.exports = function(io) {
 
         fcm.send(push_data, function(err, response) {
             if (err) {
-                console.error('Push메시지 발송에 실패했습니다.');
                 console.error(err);
                 res.json('Send ready message fail');
                 return;
             }
 
-            console.log('Push메시지가 발송되었습니다.');
             console.log(response);
             res.json('Send ready message completely');
         });
