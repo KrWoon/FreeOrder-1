@@ -3115,8 +3115,8 @@ __WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].use(__WEBPACK_IMPORTED_MODU
 
 
 
-// Vue.use(VueSocketio, 'http://127.0.0.1:3000');
-__WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].use(__WEBPACK_IMPORTED_MODULE_4_vue_socket_io___default.a, 'https://freeorder1010.herokuapp.com');
+__WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].use(__WEBPACK_IMPORTED_MODULE_4_vue_socket_io___default.a, 'http://127.0.0.1:3000');
+// Vue.use(VueSocketio, 'https://freeorder1010.herokuapp.com');
 
 
 
