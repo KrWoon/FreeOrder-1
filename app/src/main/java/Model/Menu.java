@@ -7,6 +7,7 @@ package Model;
 public class Menu {
     private String menu_name;
     private int price;
+    private int cookingTime;
 
     public int getMenu_code() {
         return menu_code;
@@ -19,10 +20,11 @@ public class Menu {
     private int menu_code;
 
 
-    public Menu(int menu_code, String menu_name, int price){
+    public Menu(int menu_code, String menu_name, int price, int cookingTime){
         this.menu_code = menu_code;
         this.menu_name = menu_name;
         this.price = price;
+        this.cookingTime = cookingTime;
     }
 
     public String getMenu_name() {
@@ -39,5 +41,13 @@ public class Menu {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public int getCookingTime() {
+        return cookingTime;
+    }
+
+    public void setCookingTime(int cookingTime) {
+        this.cookingTime = cookingTime;
     }
 }

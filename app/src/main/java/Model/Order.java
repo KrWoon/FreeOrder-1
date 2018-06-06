@@ -23,9 +23,41 @@ public class Order implements Serializable {
     private String Restaurant_Category;
     private String Restaurant_OpenTime;
     private String Restaurant_CloseTime;
+
+
+    public String getRestaurant_Tel() {
+        return Restaurant_Tel;
+    }
+
+    public void setRestaurant_Tel(String restaurant_Tel) {
+        Restaurant_Tel = restaurant_Tel;
+    }
+
+    private String Restaurant_Tel;
+
+    public float getRestaurant_Longitude() {
+        return Restaurant_Longitude;
+    }
+
+    public void setRestaurant_Longitude(float restaurant_Longitude) {
+        Restaurant_Longitude = restaurant_Longitude;
+    }
+
+    public float getRestaurant_Latitude() {
+        return Restaurant_Latitude;
+    }
+
+    public void setRestaurant_Latitude(float restaurant_Latitude) {
+        Restaurant_Latitude = restaurant_Latitude;
+    }
+
+    private float Restaurant_Latitude;
+    private float Restaurant_Longitude;
     private int Restaurant_rate;
     private int Restaurant_NumTable;
     private int Quantity;
+    private int Restaurant_delayTime;
+    private int Menu_delayTime;
 
     public int getQuantity() {
         return Quantity;
@@ -236,4 +268,19 @@ public class Order implements Serializable {
     }
 
 
+    public int getRestaurant_delayTime() {
+        return Restaurant_delayTime;
+    }
+
+    public void setRestaurant_delayTime(int restaurant_delayTime) {
+        Restaurant_delayTime = restaurant_delayTime;
+    }
+
+    public int getMenu_delayTime() {
+        return Menu_delayTime;
+    }
+
+    public void setMenu_delayTime(int menu_delayTime) {
+        Menu_delayTime = menu_delayTime;
+    }
 }

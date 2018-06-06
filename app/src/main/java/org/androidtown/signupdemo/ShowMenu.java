@@ -10,6 +10,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -56,6 +57,8 @@ public class ShowMenu extends AppCompatActivity {
     ArrayList<Menu> menulist = new ArrayList<>();
     Order order;
     Bitmap bitmap;
+    String imgUrl;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,28 +69,28 @@ public class ShowMenu extends AppCompatActivity {
         int rate = getIntent().getIntExtra("rate", 1);
         String opentime = getIntent().getStringExtra("opentime");
         String closetime = getIntent().getStringExtra(("closetime"));
-        final String imgUrl = getIntent().getStringExtra("imgUrl");
+        imgUrl = getIntent().getStringExtra("imgUrl");
 
         TextView tv1 = (TextView) findViewById(R.id.textView1_menu);
         TextView tv2 = (TextView) findViewById(R.id.textView2_menu);
         TextView tv3 = (TextView) findViewById(R.id.textView3_menu);
         ImageView iv = (ImageView) findViewById(R.id.image_restaurant_menu);
+        Button btnReview = (Button) findViewById(R.id.button4);
         tv1.setText(rst_name);
         tv2.setText(rate + "");
         tv3.setText(opentime + "~" + closetime);
-        //이미지로더
+
+        //레스토랑 이미지로더 bitmap으로 불러오기
         Thread mThread = new Thread() {
             public void run() {
                 try {
-                    URL url = new URL("https://freeorder1010.herokuapp.com/images/" + imgUrl);
 
-                    HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
+                    URL url = new URL("https://freeorder1010.herokuapp.com/images/" + imgUrl);
+                    HttpURLConnection con = (HttpURLConnection) url.openConnection();
                     con.setDoInput(true);
                     con.connect();
-
                     InputStream is = con.getInputStream();
                     bitmap = BitmapFactory.decodeStream(is);
-
                 } catch (MalformedURLException e) {
                 } catch (IOException e) {
                 }
@@ -101,38 +104,42 @@ public class ShowMenu extends AppCompatActivity {
         } catch (InterruptedException e) {
         }
 
-        //imageLoader.displayImage("https://freeorder1010.herokuapp.com/images/"+imgUrl, iv, options);
-
-//        if(rst_name.equals("BBQ CHICKEN")) iv.setImageResource(R.drawable.bbq);
-//        if(rst_name.equals("KFC")) iv.setImageResource(R.drawable.kfc);
-//        if(rst_name.equals("DOMINO PIZZA")) iv.setImageResource(R.drawable.domino);
-//        if(rst_name.equals("GOOBNE CHICKEN")) iv.setImageResource(R.drawable.goobne);
-//        if(rst_name.equals("KYOCHON CHICKEN")) iv.setImageResource(R.drawable.kyochon);
-//        if(rst_name.equals("MR.PIZZA")) iv.setImageResource(R.drawable.mrpizza);
-//        if(rst_name.equals("PIZZA SCHOOL")) iv.setImageResource(R.drawable.pizzaschool);
-
         jsonObject = new JSONObject();
         jsonObject.put("query", rst_name);
         mcontext = this;
         JSONTask task = new JSONTask();
         task.execute("https://freeorder3.herokuapp.com/auth/menu");//AsyncTask 시작시킴
 
-        FloatingActionButton fab =(FloatingActionButton) findViewById(R.id.fab);
+        btnReview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent Intent = new Intent(ShowMenu.this,ShowReview.class);
+                Intent.putExtra("order",order);
+                Intent.putExtra("imgUrl",imgUrl);
+                startActivity(Intent);
+            }
+        });
+
+        FloatingActionButton fab =(FloatingActionButton) findViewById(R.id.fab2);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent cartIntent = new Intent(ShowMenu.this,ShowCart.class);
+                cartIntent.putExtra("order",order);
                 startActivity(cartIntent);
             }
         });
 
 
     }
+//    public void reviewButtonAction(){
+//        Intent intent = new Intent(ShowMenu.this, ShowReview.class);
+//        intent.putExtra("order", order);
+//        startActivity(intent);
+//    }
 
     public class JSONTask extends AsyncTask<String, String, String> {
-
         @Override
-
         protected String doInBackground(String... urls) {
 
             try {

@@ -12,6 +12,8 @@ package org.androidtown.signupdemo;
         import android.widget.EditText;
         import android.widget.Toast;
 
+        import com.google.firebase.iid.FirebaseInstanceId;
+        import com.google.firebase.messaging.FirebaseMessaging;
         import com.loopj.android.http.RequestParams;
 
         import org.json.JSONException;
@@ -38,6 +40,8 @@ public class Login2 extends AppCompatActivity {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        //FirebaseMessaging.getInstance().subscribeToTopic("news");
+        //FirebaseInstanceId.getInstance().getToken();
         setTitle("Login2");
 
         username = (EditText) findViewById(R.id.login_email);
@@ -60,7 +64,7 @@ public class Login2 extends AppCompatActivity {
         params.put("username", username.getText().toString());
         params.put("password", password.getText().toString());
         System.out.println("2");
-        AsyncClient.post("http://172.30.1.35:3000/auth/andlogin", params, new mJsonHttpResponseHandler(this) {
+        AsyncClient.post("https://freeorder3.herokuapp.com/auth/andlogin", params, new mJsonHttpResponseHandler(this) {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {

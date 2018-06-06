@@ -1,14 +1,13 @@
 package org.androidtown.signupdemo;
 
-
+/**
+ * Created by wnlwn on 2018-05-26.
+ */
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.text.InputType;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.util.Log;
+
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.FirebaseInstanceIdService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,66 +24,46 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import info.guardianproject.netcipher.NetCipher;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 
-public class SignUp extends AppCompatActivity {
-    EditText username ;
-    EditText useremail ;
-    EditText userpw ;
-    EditText confirmpw ;
-    String page;
+public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     JSONObject jsonObject;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_up);
-         username = (EditText)findViewById(R.id.userName);
-         useremail = (EditText)findViewById(R.id.userEmail);
-         userpw = (EditText)findViewById(R.id.userPassword);
-        userpw.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-         confirmpw = (EditText)findViewById(R.id.confirmPassword);
-        confirmpw.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-         page="signup";
 
-
-        Button btn = (Button)findViewById(R.id.signUpButton);
-        btn.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-
-            public void onClick(View view) {
-                if(username.getText().toString().length() == 0 ||
-                        useremail.getText().toString().length() == 0 ||
-                        userpw.getText().toString().length() == 0 ||
-                        confirmpw.getText().toString().length() == 0
-                        ) Toast.makeText(getApplicationContext(),"Fill the blank",Toast.LENGTH_LONG).show();
-                else if(!userpw.getText().toString().equals(confirmpw.getText().toString())){
-                    Toast.makeText(getApplicationContext(),"Confirmpassword is not match",Toast.LENGTH_LONG).show();
-                }
-                else {
-                    jsonObject = new JSONObject();
-                    try {
-                        jsonObject.accumulate("username", username.getText().toString());
-                        jsonObject.accumulate("email", useremail.getText().toString());
-                        jsonObject.accumulate("password", userpw.getText().toString());
-                        jsonObject.accumulate("page", page);
-                    }
-                    catch (JSONException e1) {
-
-                    // TODO Auto-generated catch block
-
-                    e1.printStackTrace();
-
-                }
-
-                    JSONTask task = new JSONTask();
-                    task.execute("https://freeorder3.herokuapp.com/auth/android/register");//AsyncTask 시작시킴
-                }
-                }
-
-        });
+    public static String getRealtoken() {
+        return realtoken;
     }
 
+    static String realtoken;
+    private static final String TAG = "MyFirebaseIIDService";
 
+    // [START refresh_token]
+    @Override
+    public void onTokenRefresh() {
+        // Get updated InstanceID token.
+        String token = FirebaseInstanceId.getInstance().getToken();
+        realtoken = token;
+        Log.d(TAG, "Refreshed token: " + token);
+
+
+        // 생성등록된 토큰을 개인 앱서버에 보내 저장해 두었다가 추가 뭔가를 하고 싶으면 할 수 있도록 한다.
+        //sendRegistrationToServer(token);
+    }
+
+    private void sendRegistrationToServer(String token) {
+        // Add custom implementation, as needed.
+
+        jsonObject = new JSONObject();
+        try {
+            jsonObject.put("Token", token);
+        }catch (JSONException e){}
+
+        JSONTask task = new JSONTask();
+        task.execute("https://freeorder3.herokuapp.com/auth/yes");
+
+    }
     public class JSONTask extends AsyncTask<String, String, String> {
 
         @Override
@@ -98,8 +77,9 @@ public class SignUp extends AppCompatActivity {
                 try {
                     URL url = new URL(urls[0]);
                     //연결을 함
-                    con = NetCipher.getHttpsURLConnection(url);
                     //con = (HttpURLConnection) url.openConnection();
+
+                    con = NetCipher.getHttpsURLConnection(url);
                     con.setRequestMethod("POST");//POST방식으로 보냄
                     con.setRequestProperty("Cache-Control", "no-cache");//캐시 설정
                     con.setRequestProperty("Content-Type", "application/json");//application JSON 형식으로 전송
@@ -120,6 +100,8 @@ public class SignUp extends AppCompatActivity {
                     reader = new BufferedReader(new InputStreamReader(stream));
                     StringBuffer buffer = new StringBuffer();
                     String line = "";
+
+
                     while ((line = reader.readLine()) != null) {
                         buffer.append(line);
                     }
@@ -145,13 +127,5 @@ public class SignUp extends AppCompatActivity {
             }
             return null;
         }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            Toast.makeText(getApplicationContext(),result,Toast.LENGTH_LONG).show();
-        }
     }
 }
-
-

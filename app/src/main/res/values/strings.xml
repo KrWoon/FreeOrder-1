@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SignUpDemo</string>
+    <string name="app_name">FreeOrder</string>
     <string name="sharedPreferences">com.petersoboyejo.mobilepassport</string>
     <string name="code_0">Connection timeout</string>
     <string name="code_404">Resource not avaliable</string>

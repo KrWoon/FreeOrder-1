@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -33,6 +34,7 @@ import org.json.simple.JSONObject;
 import Database.Database;
 import Model.MenuOption;
 import Model.Order;
+import info.guardianproject.netcipher.NetCipher;
 import listadpater.MenuOptionListAdapter;
 
 public class ShowMenuOption extends AppCompatActivity {
@@ -77,7 +79,7 @@ public class ShowMenuOption extends AppCompatActivity {
         jsonObject.put("query", menuCode);
         mcontext = this;
         JSONTask task = new JSONTask();
-        task.execute("http://172.30.1.35:3000/auth/menuoption");//AsyncTask 시작시킴
+        task.execute("https://freeorder3.herokuapp.com/auth/menuoption");//AsyncTask 시작시킴
 
 
 
@@ -96,7 +98,9 @@ public class ShowMenuOption extends AppCompatActivity {
                 try {
                     URL url = new URL(urls[0]);
                     //연결을 함
-                    con = (HttpURLConnection) url.openConnection();
+                    con = NetCipher.getHttpsURLConnection(url);
+
+//                    con = (HttpURLConnection) url.openConnection();
                     con.setRequestMethod("POST");//POST방식으로 보냄
                     con.setRequestProperty("Cache-Control", "no-cache");//캐시 설정
                     con.setRequestProperty("Content-Type", "application/json");//application JSON 형식으로 전송
@@ -166,11 +170,14 @@ public class ShowMenuOption extends AppCompatActivity {
                 adapter = new MenuOptionListAdapter(mcontext, R.layout.listview_menuoption,menuOptionList);
                 mListView.setAdapter(adapter);
                 mListView.setOnItemClickListener(mItemClickListener);
+
+                //액티비티 inflate 후 카트버튼 리스너
                 btnCart = (Button) findViewById(R.id.btn_addToCart);
                 btnCancel = (Button) findViewById(R.id.btn_cancel);
                 btnCancel.setOnClickListener(new View.OnClickListener(){
                     public void onClick(View view){
-                        new Database(getBaseContext()).cleanCart();
+                        finish();
+                        //new Database(getBaseContext()).cleanCart();
                     }
                 });
                 btnCart.setOnClickListener(new View.OnClickListener(){
@@ -178,6 +185,8 @@ public class ShowMenuOption extends AppCompatActivity {
                     public void onClick(View view){
 
                             Order tempOrder = new Order();
+                            tempOrder.setRestaurant_delayTime(order.getRestaurant_delayTime());
+                            tempOrder.setMenu_delayTime(order.getMenu_delayTime());
                             tempOrder.setEmail(order.getEmail());
                             tempOrder.setMenu_Code(order.getMenu_Code());
                             tempOrder.setMenu_Price(order.getMenu_Price());
@@ -185,9 +194,10 @@ public class ShowMenuOption extends AppCompatActivity {
                             tempOrder.setRestaurant_Code(order.getRestaurant_Code());
                             tempOrder.setMenuOption_List(menuOptionList2);
                             orderList.add(tempOrder);
-                        for(int i=0; i<orderList.size(); i++){
+                        for(int i=0; i<orderList.size(); i++) {
                             new Database(getBaseContext()).addToCart(orderList.get(i));
                         }
+                        Toast.makeText(mcontext,"Added to basket",Toast.LENGTH_LONG).show();
                     }
                 });
 

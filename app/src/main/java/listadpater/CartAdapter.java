@@ -49,7 +49,6 @@ class CartViewHolder extends RecyclerView.ViewHolder implements View.OnClickList
         txt_option_name=(TextView) itemView.findViewById(R.id.cart_item_option);
         txt_price=(TextView) itemView.findViewById(R.id.cart_price);
 
-
     }
     public void onClick(View view){
        }
@@ -83,7 +82,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartViewHolder> {
         holder.txt_price.setText(fmt.format(price));
         holder.txt_cart_name.setText(listData.get(position).getMenu_Name());
         holder.txt_option_name.setText(listData.get(position).getSumMenuOptionName());
-    }
+         }
 
     @Override
     public int getItemCount() {

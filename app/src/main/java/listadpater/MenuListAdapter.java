@@ -31,6 +31,7 @@ public class MenuListAdapter extends ArrayAdapter<Menu> {
     private  static class ViewHolder{
         TextView name;
         TextView price;
+        TextView cookingTime;
     }
 
     public MenuListAdapter(Context context, int resource, ArrayList<Menu> objects){
@@ -44,7 +45,7 @@ public class MenuListAdapter extends ArrayAdapter<Menu> {
 
         String name = getItem(position).getMenu_name();
         int price = getItem(position).getPrice();
-
+        int cookingTime = getItem(position).getCookingTime();
         final View result;
 
         ViewHolder holder;
@@ -56,6 +57,7 @@ public class MenuListAdapter extends ArrayAdapter<Menu> {
             holder = new ViewHolder();
             holder.name = (TextView) convertView.findViewById(R.id.textView_menu1);
             holder.price = (TextView) convertView.findViewById(R.id.textView_menu2);
+            holder.cookingTime = (TextView) convertView.findViewById(R.id.textView_cookingTime);
 
             result = convertView;
             convertView.setTag(holder); //holder에 textview위치 입력
@@ -69,7 +71,8 @@ public class MenuListAdapter extends ArrayAdapter<Menu> {
         result.startAnimation(animation);
         lastPosition = position;
         holder.name.setText(name);
-        holder.price.setText(price+"");
+        holder.price.setText(price+"WON");
+        holder.cookingTime.setText("CookingTime: "+cookingTime+"m");
         return convertView;
     }
 }

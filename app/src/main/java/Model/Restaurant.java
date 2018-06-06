@@ -13,6 +13,39 @@ public class Restaurant {
     private int rst_code;
 
 
+    public String getTel() {
+        return tel;
+    }
+
+    public void setTel(String tel) {
+        this.tel = tel;
+    }
+
+    private String tel;
+
+    public float getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(float latitude) {
+        this.latitude = latitude;
+    }
+
+    private float latitude;
+
+    public float getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(float longitude) {
+        this.longitude = longitude;
+    }
+
+    private float longitude;
+
+    private int delayTime;
+
+
     public String getClosetime() {
         return closetime;
     }
@@ -21,13 +54,18 @@ public class Restaurant {
         this.closetime = closetime;
     }
 
-    public Restaurant(String name, int rate, String opentime, String closetime, String imgURL ,int rst_code ){
+    public Restaurant(String name, int rate, String opentime, String closetime, String imgURL ,int rst_code, int delayTime,
+                      float latitude, float longitude, String tel){
         this.rst_name=name;
         this.rate=rate;
         this.opentime=opentime;
         this.imgURL=imgURL;
         this.closetime = closetime;
         this.rst_code = rst_code;
+        this.delayTime = delayTime;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.tel = tel;
     }
 
     public int getRst_code() {
@@ -67,5 +105,13 @@ public class Restaurant {
 
     public void setImgURL(String imgURL) {
         this.imgURL = imgURL;
+    }
+
+    public int getDelayTime() {
+        return delayTime;
+    }
+
+    public void setDelayTime(int delayTime) {
+        this.delayTime = delayTime;
     }
 }

@@ -8,10 +8,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+//import com.google.firebase.database.DatabaseReference;
+//import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,31 +36,39 @@ import java.util.List;
 import java.util.Locale;
 
 import Model.Order;
+import Model.Restaurant;
+import info.guardianproject.netcipher.NetCipher;
 import listadpater.CartAdapter;
 import Database.Database;
+import listadpater.RestaurantListAdapter;
 
 public class ShowCart extends AppCompatActivity {
+    TextView txt_expectedTime;
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
 
-    FirebaseDatabase database;
-    DatabaseReference request;
+//    FirebaseDatabase database;
+//    DatabaseReference request;
 
     TextView txtTotalPrice;
     Button btnOrder;
+    Button btnClean;
 
     List<Order> cart = new ArrayList<>();
     CartAdapter adapter;
     JSONObject jsonObject;
+    int expectedTime;
+    Order globalOrder;
+    String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity__cart);
 
-        database = FirebaseDatabase.getInstance();
-        request = database.getReference("Request");
-
+        //database = FirebaseDatabase.getInstance();
+        //request = database.getReference("Request");
+        globalOrder = (Order) getIntent().getSerializableExtra("order");
         recyclerView = (RecyclerView) findViewById(R.id.listCart);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
@@ -66,27 +76,51 @@ public class ShowCart extends AppCompatActivity {
 
         txtTotalPrice = (TextView) findViewById(R.id.total);
         btnOrder = (Button) findViewById(R.id.btnOrder);
+        txt_expectedTime = (TextView) findViewById(R.id.expectedTime);
+        btnClean = (Button) findViewById(R.id.btnClean);
         loadListOrder();
 
+        token = MyFirebaseInstanceIDService.getRealtoken();
+        //Toast.makeText(getApplicationContext(), token, Toast.LENGTH_LONG).show();
+
+
+        //txt_expectedTime.setText();
     }
     private void loadListOrder() {
         cart = new Database(this).getCarts();
         adapter = new CartAdapter(cart, this);
         recyclerView.setAdapter(adapter);
+        int restaurantDelay=0;
+        int menuCookingTime=0;
+        expectedTime=0;
+
+        for(Order order : cart){
+            int tempDelay = order.getRestaurant_delayTime();
+            int tempCooking = order.getMenu_delayTime();
+            if(expectedTime < tempDelay+tempCooking) {
+                restaurantDelay=tempDelay;
+                menuCookingTime = tempCooking;
+                expectedTime= tempCooking+tempDelay;}
+        }
 
         int total = 0;
         for (Order order : cart)
             total += (order.getMenu_Price() + order.getSumMenuOptionPrice());
-        Locale locale = new Locale("en", "US");
-        NumberFormat fmt = NumberFormat.getCurrencyInstance(locale);
+//        Locale locale = new Locale("en", "US");
+//        NumberFormat fmt = NumberFormat.getCurrencyInstance(locale);
 
-        txtTotalPrice.setText(fmt.format(total));
+        txtTotalPrice.setText(total+"won");
+        txt_expectedTime.setText(expectedTime+"minutes");
+        btnClean.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                new Database(getBaseContext()).cleanCart();
+                loadListOrder();
+            }
+        });
 
         btnOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
                  jsonObject = new JSONObject();
                  try{
                     JSONArray jArray = new JSONArray();
@@ -95,12 +129,13 @@ public class ShowCart extends AppCompatActivity {
                         JSONArray jArray2 = new JSONArray();
                         for (int j = 0; j < cart.get(i).getMenuOption_ListNum(); j++) {
                             JSONObject jsonObject2 = new JSONObject();
-                            jsonObject2.put("MenuOption_Code", cart.get(i).getMenuOption_Code() + "");
+                            jsonObject2.put("MenuOption_Code", cart.get(i).getMenuOption_List().get(j).getMenuoption_code() + "");
                             jArray2.put(jsonObject2);
                         }
                         jsonObject1.put("Email", cart.get(i).getEmail());
                         jsonObject1.put("Restaurant_Code", cart.get(i).getRestaurant_Code());
                         jsonObject1.put("Menu_Code", cart.get(i).getMenu_Code());
+                        jsonObject1.put("ClientToken", token);
                         jsonObject1.put("MenuOption_CodeList", jArray2);
 
                         jArray.put(jsonObject1);
@@ -109,8 +144,15 @@ public class ShowCart extends AppCompatActivity {
 
                 }catch (JSONException e){}
                 JSONTask task = new JSONTask();
-                task.execute("http://172.30.1.35:3000/auth/yes");//AsyncTask 시작시킴
-
+                task.execute("https://freeorder1010.herokuapp.com/order/mobile");//AsyncTask 시작시킴
+                //task.execute("http://172.16.20.141:3000/auth/yes");//AsyncTask 시작시킴
+                //
+//                MyFirebaseMessagingService.setOrder(globalOrder,expectedTime);
+                Intent i = new Intent(getApplicationContext(), ShowWaiting.class);
+                i.putExtra("globalOrder", globalOrder);
+                i.putExtra("expectedTime", expectedTime);
+               // i.putExtra("order",getIntent().getSerializableExtra("order"));
+                startActivity(i);
             }
         });
 
@@ -130,7 +172,11 @@ public class ShowCart extends AppCompatActivity {
                 try {
                     URL url = new URL(urls[0]);
                     //연결을 함
-                    con = (HttpURLConnection) url.openConnection();
+                    //con = (HttpURLConnection) url.openConnection();
+
+                    con = NetCipher.getHttpsURLConnection(url);
+                    con.setConnectTimeout(40000);
+                    con.setReadTimeout(30000);
                     con.setRequestMethod("POST");//POST방식으로 보냄
                     con.setRequestProperty("Cache-Control", "no-cache");//캐시 설정
                     con.setRequestProperty("Content-Type", "application/json");//application JSON 형식으로 전송
@@ -160,7 +206,11 @@ public class ShowCart extends AppCompatActivity {
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
-                    e.printStackTrace();
+//                    Intent cartIntent = new Intent(getApplicationContext(),ShowCart.class);
+//                    cartIntent.putExtra("order",globalOrder);
+//                    startActivity(cartIntent);
+                    //Toast.makeText(getApplicationContext(), "Your Order has been accepted!", Toast.LENGTH_LONG).show();
+                    //e.printStackTrace();
                 } finally {
                     if (con != null) {
                         con.disconnect();
@@ -178,5 +228,37 @@ public class ShowCart extends AppCompatActivity {
             }
             return null;
         }
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+
+            //Toast.makeText(getApplicationContext(), "gimochi", Toast.LENGTH_LONG).show();
+            try{
+
+                    JSONParser jsonParser = new JSONParser();
+                    org.json.simple.JSONObject jsonObj = (org.json.simple.JSONObject) jsonParser.parse(result);
+                    String a = jsonObj.get("response").toString();
+                    //Toast.makeText(getApplicationContext(), a, Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), "Your Order has been accepted!", Toast.LENGTH_LONG).show();
+
+
+                if (a.equals("cancel")) {
+                        Intent cartIntent = new Intent(getApplicationContext(), ShowCart.class);
+                        cartIntent.putExtra("order", globalOrder);
+                        startActivity(cartIntent);
+                        Toast.makeText(getApplicationContext(), "Sorry... Your order has been denyed.", Toast.LENGTH_LONG).show();
+                    }
+                if (a.equals("accept")) {
+
+                }
+
+
+            }
+            catch(ParseException e){
+                e.printStackTrace();
+            }
+            catch(NullPointerException e){}
+        }
     }
+
 }

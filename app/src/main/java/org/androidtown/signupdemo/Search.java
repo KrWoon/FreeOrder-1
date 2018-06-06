@@ -40,6 +40,7 @@ import org.json.simple.JSONObject;
 
 import Model.Order;
 import Model.Restaurant;
+import info.guardianproject.netcipher.NetCipher;
 import listadpater.RestaurantListAdapter;
 
 public class Search extends AppCompatActivity
@@ -63,14 +64,24 @@ public class Search extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+//            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
+//        FloatingActionButton fab =(FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent cartIntent = new Intent(getApplicationContext(), ShowCart.class);
+//                cartIntent.putExtra("order",order);
+//                startActivity(cartIntent);
+//            }
+//        });
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -85,7 +96,7 @@ public class Search extends AppCompatActivity
         jsonObject.put("query", query);
         mcontext = this;
         JSONTask task = new JSONTask();
-        task.execute("http://172.30.1.35:3000/auth/search");//AsyncTask 시작시킴
+        task.execute("https://freeorder3.herokuapp.com/auth/search");//AsyncTask 시작시킴
         //192.168.43.209
 
     }
@@ -160,7 +171,9 @@ public class Search extends AppCompatActivity
                 try {
                     URL url = new URL(urls[0]);
                     //연결을 함
-                    con = (HttpURLConnection) url.openConnection();
+                    con = NetCipher.getHttpsURLConnection(url);
+
+                   //con = (HttpURLConnection) url.openConnection();
                     con.setRequestMethod("POST");//POST방식으로 보냄
                     con.setRequestProperty("Cache-Control", "no-cache");//캐시 설정
                     con.setRequestProperty("Content-Type", "application/json");//application JSON 형식으로 전송
@@ -224,7 +237,9 @@ public class Search extends AppCompatActivity
                      JSONObject tempObj = (JSONObject) restaurantArray.get(i);
                      Restaurant tempRst = new Restaurant(tempObj.get("name").toString(),Integer.parseInt(tempObj.get("rate").toString()),
                              tempObj.get("opentime").toString(),tempObj.get("closetime").toString(),tempObj.get("imgUrl").toString(),
-                             Integer.parseInt(tempObj.get("rstcode").toString()));
+                             Integer.parseInt(tempObj.get("rstcode").toString()),Integer.parseInt(tempObj.get("delayTime").toString()),
+                             Float.parseFloat(tempObj.get("latitude").toString()),Float.parseFloat(tempObj.get("longitude").toString()),
+                             tempObj.get("tel").toString());
                      restaurantlist.add(tempRst);
                  }
                 mListView = (ListView) findViewById(R.id.listview);
@@ -252,6 +267,10 @@ public class Search extends AppCompatActivity
             order.setRestaurant_OpenTime(a.getOpentime());
             order.setRestaurant_CloseTime(a.getClosetime());
             order.setRestaurant_Code(a.getRst_code());
+            order.setRestaurant_delayTime(a.getDelayTime());
+            order.setRestaurant_Latitude(a.getLatitude());
+            order.setRestaurant_Longitude(a.getLongitude());
+            order.setRestaurant_Tel(a.getTel());
             i.putExtra("order",order);
             i.putExtra("rst_name",a.getRst_name());
             i.putExtra("rate",a.getRate());

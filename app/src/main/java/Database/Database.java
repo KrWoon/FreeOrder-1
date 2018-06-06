@@ -19,7 +19,7 @@ import Model.Order;
 
 public class Database extends SQLiteAssetHelper {
     private static final String DB_NAME="orderDB.db";
-    private static final int DB_VER=8;
+    private static final int DB_VER=10;
 //    public void onUpgrade(SQLiteDatabase db,int oldVersion,int newVersion){
 //        db.execSQL("DROP TABLE IF EXISTS OrderDetail");
 //        db.execSQL("DROP TABLE IF EXISTS MenuOption");
@@ -43,9 +43,6 @@ public class Database extends SQLiteAssetHelper {
         Cursor c = db.rawQuery("SELECT OrderID FROM OrderDetail",null);
         final List<Integer> orderId = new ArrayList<>();
         final List<Order> result = new ArrayList<>();
-
-
-
         if(c.moveToFirst()){
             do{
                 orderId.add(c.getInt(c.getColumnIndex("OrderID")));
@@ -55,14 +52,16 @@ public class Database extends SQLiteAssetHelper {
         for(int i=0; i<orderId.size(); i++) {
             List<MenuOption> menuOptionList = new ArrayList<>();
             Order order = new Order();
-            Cursor c2 = db.rawQuery("SELECT Email, RestaurantCode, MenuCode, MenuOptionCode, MenuName, MenuOptionName, MenuPrice, MenuOptionPrice FROM OrderDetail, MenuOptionLink, MenuOption WHERE " +
+            Cursor c2 = db.rawQuery("SELECT Email, RestaurantCode, RestaurantDelay, MenuCode, MenuCookingTime, MenuOptionCode, MenuName, MenuOptionName, MenuPrice, MenuOptionPrice FROM OrderDetail, MenuOptionLink, MenuOption WHERE " +
                     "OrderDetail.OrderID = MenuOptionLink.OrderID AND MenuOptionLink.MenuOptionID =" +
                     "MenuOption.MenuOptionID AND OrderDetail.OrderID = "+orderId.get(i)+";" , null);
             if(c2.moveToFirst()){
                 do{
                     order.setEmail(c2.getString(c2.getColumnIndex("Email")));
                     order.setRestaurant_Code(c2.getInt(c2.getColumnIndex("RestaurantCode")));
+                    order.setRestaurant_delayTime(c2.getInt(c2.getColumnIndex("RestaurantDelay")));
                     order.setMenu_Code(c2.getInt(c2.getColumnIndex("MenuCode")));
+                    order.setMenu_delayTime(c2.getInt(c2.getColumnIndex("MenuCookingTime")));
                     order.setMenu_Name(c2.getString(c2.getColumnIndex("MenuName")));
                     order.setMenu_Price(c2.getInt(c2.getColumnIndex("MenuPrice")));
                     MenuOption tempMenuOption = new MenuOption();
@@ -82,12 +81,15 @@ public class Database extends SQLiteAssetHelper {
     public void addToCart(Order order){
         SQLiteDatabase db= getReadableDatabase();
 
-        String query = String.format("INSERT INTO OrderDetail(Email,RestaurantCode,MenuCode,MenuName,MenuPrice) VALUES('%s',%d,%d,'%s',%d);",
+        String query = String.format("INSERT INTO OrderDetail(Email,RestaurantCode,RestaurantDelay,MenuCode,MenuName,MenuPrice,MenuCookingTime) VALUES('%s',%d,%d,%d,'%s',%d,%d);",
                 order.getEmail(),
                 order.getRestaurant_Code(),
+                order.getRestaurant_delayTime(),
                 order.getMenu_Code(),
                 order.getMenu_Name(),
-                order.getMenu_Price());
+                order.getMenu_Price(),
+                order.getMenu_delayTime()
+        );
         db.execSQL(query);
 
         for(int i=0; i<order.getMenuOption_ListNum(); i++){
@@ -117,9 +119,6 @@ public class Database extends SQLiteAssetHelper {
         if (c.moveToLast()) {
                 MenuOptionID = c.getInt(c.getColumnIndex("OrderID"));
         }
-
-
-
         String[] sqlSelect2 = {"MenuOptionID"};
         sqlTable="MenuOption";
         qb.setTables(sqlTable);
