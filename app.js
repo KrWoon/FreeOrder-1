@@ -17,18 +17,9 @@ server.listen(port, function() {
     console.log('Server On!');
 });
 
-// io.on('connection', (socket) => {
-//     console.log('Socket Connect');
-
-//     socket.on('disconnect', function(){
-//         console.log('Socket Disconnected');
-//     });
-// });
-
 // set view
 app.set('views',  './views/passport_views');
 app.set("view engine", 'ejs');
-
 
  // set middlewares
 app.use(cors());

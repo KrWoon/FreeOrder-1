@@ -222,11 +222,8 @@ module.exports = function(io) {
 
     // push message to mobile
     router.post('/ready/:oid', function(req, res) {
-        /** 아래는 푸시메시지 발송절차 */
-        var serverKey = 'AAAAz8FUF8Y:APA91bGFPY5QzMXzFP6TeHg0fBF4DF0GIaBKIrX3wVjRcOk3Sag2RUeO3ZvlROrAVb1XN6_9LV3Y6FfU4XC61qGbYJs6ZevrNYg9tkb-XH7ZF02NghfPoPkxJ63zPwe4UjGDhBjdWNp-';
-
+        // get client Token
         var sql = 'SELECT ClientToken FROM orderedinfo WHERE Order_Code = ?';
-
         pool.getConnection(function(err, conn) {
             if(err) console.log(err);
             conn.query(sql, [req.params.oid], function(err, row) {
@@ -237,16 +234,12 @@ module.exports = function(io) {
             });
         });
 
-
-        /** 발송할 Push 메시지 내용 */
+        var serverKey = 'AAAAz8FUF8Y:APA91bGFPY5QzMXzFP6TeHg0fBF4DF0GIaBKIrX3wVjRcOk3Sag2RUeO3ZvlROrAVb1XN6_9LV3Y6FfU4XC61qGbYJs6ZevrNYg9tkb-XH7ZF02NghfPoPkxJ63zPwe4UjGDhBjdWNp-';
         var push_data = {
-            // 수신대상
             to: client_token,
-            // App에게 전달할 데이터
             data: {
                 order: "Accept"
             },
-            // App이 실행중이지 않을 때 상태바 알림으로 등록할 내용
             notification: {
                 title: "Food is ready",
                 body: "Your food is ready"
