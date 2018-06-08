@@ -8,7 +8,7 @@ module.exports = function(app) {
     app.use(passport.initialize());
     app.use(passport.session());
 
-    // 로그인
+    // Login
     passport.serializeUser(function(user, done) {
         done(null, user.Email);
     });

@@ -11,15 +11,15 @@ module.exports = function(passport) {
         });
     });
 
-    // 회원가입
+    // Sign Up
     router.post('/register', function(req, res) { 
-        // 중복 아이디 체크
+        // Check duplicated ID
         var checkSql = 'SELECT * FROM manager WHERE Email = ? AND Use_Code = \'Y\'';
         pool.getConnection(function(err, checkConn) {
             checkConn.query(checkSql, [req.body.username], function(err, rows, fields) {
-                // db에 아이디가 없다면
+                // If there is no ID in database
                 if(!rows[0]) {
-                    // 비밀번호랑 비밀번호확인이 같으면 입력
+                    // "password" and "confirm password" is same
                     if(req.body.password == req.body.confirmPassword) {
                         hasher({password:req.body.password}, function(err, pass, salt, hash) {
                             var newuser = {

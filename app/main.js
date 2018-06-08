@@ -15,7 +15,6 @@ Vue.use(VueSocketio, 'https://freeorder1010.herokuapp.com');
 
 import VuejsDialog from "vuejs-dialog"
  
-// Tell Vue to install the plugin.
 Vue.use(VuejsDialog)
 
 import App from './App.vue';

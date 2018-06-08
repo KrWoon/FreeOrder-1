@@ -3054,7 +3054,6 @@ __WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].use(__WEBPACK_IMPORTED_MODU
 
 
 
-// Tell Vue to install the plugin.
 __WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].use(__WEBPACK_IMPORTED_MODULE_5_vuejs_dialog___default.a);
 
 
